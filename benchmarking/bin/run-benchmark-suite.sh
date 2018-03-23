@@ -42,6 +42,7 @@ run-benchmark(){
     RUN_VERSION="$3"
     TIMES="$4"
     ANALYSIS_NAME="$5"
+    CLEAN_FLAG="$6"
 
     BENCHMARK_DIR="$BENCHMARKS_DIR/$NAME"
 
@@ -71,6 +72,11 @@ run-benchmark(){
 
     if [ -n  "$ANALYSIS_NAME" ]; then
         "$BENCHMARK_DIR"/analysis.sh "$INSTALL_VERSION" "$RUN_VERSION" "$ANALYSIS_NAME"
+    fi
+
+    if [ "$CLEAN_FLAG" == "clean" ]; then
+         echo "echo cleaning up run directory"
+        "$SCRIPTS_DIR"/clean.sh --run "$NAME" > "$VERBOSE_FILE"
     fi
 }
 

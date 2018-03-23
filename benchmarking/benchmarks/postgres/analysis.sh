@@ -16,6 +16,7 @@ ANALYSIS_NAME="$3"
 
 
 BENCHMARKS_DIR="`realpath $SCRIPTS_DIR/install-v$INSTALL_VERSION`"
+ANALYSIS_DIR="$BENCHMARKS_DIR/run-v$RUN_VERSION/analysis"
 RESULT_DIR="$BENCHMARKS_DIR/run-v$RUN_VERSION/out"
 if [ -z "$INSTALL_VERSION" ]; then
 	echo "install version must be specified" >&2
@@ -33,9 +34,12 @@ if [ -z "$ANALYSIS_NAME" ]; then
 fi
 
 
-ANALYSIS="$RESULT_DIR/$ANALYSIS_NAME"
+mkdir -p "$ANALYSIS_DIR"
+ANALYSIS="$ANALYSIS_DIR/$ANALYSIS_NAME"
 
-echo "# transactions per second" | tee "$VERBOSE_FILE" > "$ANALYSIS"
+if [ ! -e "$ANALYSIS" ]; then
+    echo "# transactions per second" | tee "$VERBOSE_FILE" > "$ANALYSIS"
+fi
 
 
 echo -e "${GREEN}analyzing iv$INSTALL_VERSION-rv$RUN_VERSION into $ANALYSIS${NC}"
