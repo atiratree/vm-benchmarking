@@ -18,6 +18,8 @@ ANALYSIS_NAME="$3"
 BENCHMARKS_DIR="`realpath $SCRIPTS_DIR/install-v$INSTALL_VERSION`"
 ANALYSIS_DIR="$BENCHMARKS_DIR/run-v$RUN_VERSION/analysis"
 RESULT_DIR="$BENCHMARKS_DIR/run-v$RUN_VERSION/out"
+SETTINGS_ENV="$SCRIPTS_DIR/settings.env"
+
 if [ -z "$INSTALL_VERSION" ]; then
 	echo "install version must be specified" >&2
 	exit 1
@@ -38,13 +40,23 @@ mkdir -p "$ANALYSIS_DIR"
 ANALYSIS="$ANALYSIS_DIR/$ANALYSIS_NAME"
 
 if [ ! -e "$ANALYSIS" ]; then
-    echo "# transactions per second" | tee "$VERBOSE_FILE" > "$ANALYSIS"
+    sed -e '/^$/d; /#.*/d; s/^/# /g' "$SETTINGS_ENV" > "$ANALYSIS"
+    echo "#" >> "$ANALYSIS"
+    echo "# transactions per second" | tee "$VERBOSE_FILE" >> "$ANALYSIS"
 fi
 
 
 echo -e "${GREEN}analyzing iv$INSTALL_VERSION-rv$RUN_VERSION into $ANALYSIS${NC}"
 
+if [ ! -d "$RESULT_DIR" ]; then
+    echo "out directory does not exist" >&2
+    exit 4
+fi
+
 for OUT_DIR in  "$RESULT_DIR"/*/; do
+    if [ ! -d "$OUT_DIR" ]; then
+		continue
+	fi
 	OUTPUT="$OUT_DIR/output"
 	OUTPUT_RUN="$OUT_DIR/output-run"
 	LIBVIRT_XML="$OUT_DIR/libvirt.xml"

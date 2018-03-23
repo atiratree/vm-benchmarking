@@ -23,7 +23,7 @@ cleanup(){
     CLONED_DISK="`"$UTIL_DIR/get-clone-disk-filename.sh" "$BASE_VM" "$VM"`"
     sync # wait in case script is in the middle of creating image
     "$IMAGE_MANAGEMENT_DIR/delete-vm.sh" "$VM" "$CLONED_DISK"
-    exit 2
+    exit 3
 }
 
 SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -35,6 +35,10 @@ source "$SCRIPTS_DIR/config.env"
 
 SUITE="$BENCHMARKS_DIR/benchmark-suite.cfg"
 
+if [ ! -e "$SUITE" ]; then
+	echo "$SUITE must be specified" >&2
+	exit 1
+fi
 
 run-benchmark(){
     NAME="$1"
@@ -47,7 +51,7 @@ run-benchmark(){
     BENCHMARK_DIR="$BENCHMARKS_DIR/$NAME"
 
     if [ -z "$NAME" ] || [ -z "$TIMES" ] || [ ${NAME:0:1} == "#" ]; then
-        return 1
+        return 2
     fi
 
     echo -e "${GREEN}running `"$UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"` $TIMES times${NC}"
@@ -75,7 +79,7 @@ run-benchmark(){
     fi
 
     if [ "$CLEAN_FLAG" == "clean" ]; then
-         echo "echo cleaning up run directory"
+         echo "cleaning up run directory"
         "$SCRIPTS_DIR"/clean.sh --run "$NAME" > "$VERBOSE_FILE"
     fi
 }

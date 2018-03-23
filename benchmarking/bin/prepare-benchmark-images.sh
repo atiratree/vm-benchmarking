@@ -27,6 +27,12 @@ IMAGE_MANAGEMENT_DIR="$SCRIPTS_DIR/image-management"
 source "$SCRIPTS_DIR/config.env"
 SUITE="$BENCHMARKS_DIR/benchmark-images.cfg"
 
+
+if [ ! -e "$SUITE" ]; then
+	echo "$SUITE must be specified" >&2
+	exit 1
+fi
+
 lines=`cat "$SUITE" | wc -l`
 for i in `seq 1 $lines`
     do

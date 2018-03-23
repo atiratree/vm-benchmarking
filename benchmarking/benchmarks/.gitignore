@@ -1,3 +1,6 @@
 */install-v*/out/
 */install-v*/run-v*/out/
 */install-v*/run-v*/analysis/
+*/settings.env
+benchmark-images.cfg
+benchmark-suite.cfg

@@ -1,0 +1,5 @@
+# $NAME    $INSTALL_VERSION    $RUN_VERSION    $TIMES    $ANALYSIS_NAME    $CLEAN_FLAG
+
+postgres     1-buffer         1-baseline        1      analysis-result         clean
+postgres     2-memory         1-baseline        1      analysis-result         clean
+postgres     3-disk           1-baseline        1      analysis-result         clean

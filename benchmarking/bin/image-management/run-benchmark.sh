@@ -81,7 +81,7 @@ if [ ! -e "$RUN_SCRIPT" ]; then
 fi
 
 if [ ! -e "$SETTINGS_ENV" ]; then
-	echo "settings.env $SETTINGS_ENV must be specified" >&2
+	echo "$SETTINGS_ENV must be specified" >&2
 	exit 5
 fi
 

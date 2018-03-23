@@ -1,0 +1,5 @@
+# $BASE_IMAGE        $NAME       $INSTALL_VERSION
+
+centos-base       postgres       1-buffer
+centos-base       postgres       2-memory
+centos-base       postgres       3-disk
