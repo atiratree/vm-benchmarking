@@ -1,7 +1,7 @@
 #!/bin/bash
 
 UTIL_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-source "$UTIL_DIR/../../environment.cfg"
+source "$UTIL_DIR/../../config.env"
 
 NAME="$1"
 

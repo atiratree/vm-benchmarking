@@ -8,12 +8,9 @@ exitIfFailed(){
 	fi
 }
 
-GREEN='\033[0;32m'
-NC='\033[0m' # No Color
-
 SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 UTIL_DIR="$SCRIPTS_DIR/util"
-source "$SCRIPTS_DIR/../environment.cfg"
+source "$SCRIPTS_DIR/../config.env"
 
 OLD_NAME="$1"
 NEW_NAME="$2"
@@ -33,8 +30,8 @@ if [ -z "$SPARSE" ]; then
 	# --nonsparse param not working
 	# https://ask.fedoraproject.org/en/question/89689/why-does-virt-clone-make-qcow2-images-smaller/
 	echo "copying full disk"
-	OLD_DISK_FILENAME="`virsh dumpxml "$OLD_NAME" | grep "/.*/*$OLD_NAME.qcow2" -o`"
-	DISK_FILENAME="`echo "$OLD_DISK_FILENAME"  | sed  "s/$OLD_NAME/$NEW_NAME/"`"
+	OLD_DISK_FILENAME="`"$UTIL_DIR"/get-disk-filename.sh "$OLD_NAME"`"
+	DISK_FILENAME="`"$UTIL_DIR"/get-clone-disk-filename.sh "$OLD_NAME" "$NEW_NAME"`"
 
 	virsh vol-clone --prealloc-metadata "$OLD_DISK_FILENAME"  "$NEW_NAME".qcow2
 
@@ -44,4 +41,3 @@ else
 	virt-clone -o "$OLD_NAME" -n "$NEW_NAME" --auto-clone
 fi
 
-exit 0

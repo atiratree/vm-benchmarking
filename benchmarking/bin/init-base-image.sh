@@ -42,5 +42,4 @@ ssh-copy-id -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null" -i "
 
 ssh -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null" -i "$ID_RSA" "root@$IP" "bash -s" -- < "$BASE_IMAGE_INSTALL"
 
-echo -e "powering off"
-ssh -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null" -i "$ID_RSA" "root@$IP" "poweroff"
+virsh shutdown "$NAME"

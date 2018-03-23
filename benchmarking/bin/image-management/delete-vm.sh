@@ -1,26 +1,24 @@
 #!/bin/bash
 
-exitIfFailed(){
-	if [ "$1" != 0 ]; then
-		exit "$1"
-	fi
-}
-
-GREEN='\033[0;32m'
-NC='\033[0m' # No Color
-
 SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 UTIL_DIR="$SCRIPTS_DIR/util"
-source "$SCRIPTS_DIR/../environment.cfg"
+source "$SCRIPTS_DIR/../config.env"
 
 NAME="$1"
+DISK_FILENAME="$2"
+
+
+if [ -z "$NAME" ]; then
+	echo "name of vm must be specified" >&2
+	exit 1
+fi
 
 echo -e "${GREEN}$LIBVIRT_DEFAULT_URI: deleting $NAME${NC}"
 
-"$UTIL_DIR/assert-vm.sh" "$NAME"
-exitIfFailed $?
-
-DISK_FILENAME="`virsh dumpxml "$NAME" | grep "/.*/*$NAME.qcow2" -o`"
+if [ -z "$DISK_FILENAME" ]; then
+    DISK_FILENAME="`"$UTIL_DIR"/get-disk-filename.sh "$NAME"`"
+fi
 
 virsh destroy "$NAME" 2> /dev/null
-virsh undefine "$NAME" && virsh vol-delete "$DISK_FILENAME"
+virsh undefine "$NAME"
+virsh vol-delete "$DISK_FILENAME"

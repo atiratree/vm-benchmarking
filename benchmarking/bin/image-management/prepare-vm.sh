@@ -24,18 +24,13 @@ runScript(){
 	rm -f "$SCRIPT_WITH_ENV_FILE"
 }
 
-GREEN='\033[0;32m'
-NC='\033[0m' # No Color
-
 SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 UTIL_DIR="$SCRIPTS_DIR/util"
-source "$SCRIPTS_DIR/../environment.cfg"
-
+source "$SCRIPTS_DIR/../config.env"
 
 BASE_VM="$1"
 NAME="$2"
 INSTALL_VERSION="$3"
-VERBOSE="$4"
 
 if [ -z "$BASE_VM" ]; then
 	echo "base vm must be specified" >&2
@@ -65,12 +60,7 @@ SETTINGS_ENV="$BENCHMARK_DIR/settings.env"
 RESULTS_DIR="$VERSIONED_INSTALL_DIR/out"
 RESULT="$RESULTS_DIR/output"
 
-ID_RSA="$SCRIPTS_DIR/../generated/id_rsa"
-
-
-if [ -n "$VERBOSE" ]; then
-	export VERBOSE_FILE="/dev/tty"
-fi
+ID_RSA="`realpath $SCRIPTS_DIR/../generated/id_rsa`"
 
 if [ ! -e "$INSTALL_SCRIPT" ]; then
 	echo "install script $INSTALL_SCRIPT must be specified" >&2
@@ -123,11 +113,7 @@ if [ -e "$VERSIONED_INSTALL_SCRIPT" ]; then
 	runScript "$IP" "$ID_RSA" "$VERSIONED_INSTALL_SCRIPT" "$SETTINGS_ENV"
 fi
 
-if [ -z "$VERBOSE" ]; then
-	echo -e "powering off"
-	ssh -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null" -i "$ID_RSA" "root@$IP" "poweroff"
-fi
+virsh shutdown "$NAME"
 
 echo -e "${GREEN}Install output can be found in `realpath $RESULTS_DIR`${NC}"
 
-exit 0

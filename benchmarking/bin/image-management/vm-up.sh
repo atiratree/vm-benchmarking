@@ -8,11 +8,11 @@ exitIfFailed(){
 
 SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 UTIL_DIR="$SCRIPTS_DIR/util"
-source "$SCRIPTS_DIR/../environment.cfg"
+source "$SCRIPTS_DIR/../config.env"
 
 
 NAME="`"$UTIL_DIR/get-name.sh" "$@"`"
-ID_RSA="$SCRIPTS_DIR/../generated/id_rsa"
+ID_RSA="`realpath $SCRIPTS_DIR/../generated/id_rsa`"
 
 "$UTIL_DIR/assert-vm.sh" "$NAME"
 exitIfFailed $?
@@ -24,5 +24,3 @@ virsh start "$NAME" 2>/dev/null
 IP="`"$UTIL_DIR/get-ip.sh" "$NAME" "$ID_RSA"`"
 
 ssh -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null" -i "$ID_RSA" "root@$IP"
-
-exit 0

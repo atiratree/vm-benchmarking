@@ -24,14 +24,13 @@ SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BENCHMARKS_DIR="`realpath $SCRIPTS_DIR/../benchmarks/`"
 IMAGE_MANAGEMENT_DIR="$SCRIPTS_DIR/image-management"
 
-source "$SCRIPTS_DIR/environment.cfg"
+source "$SCRIPTS_DIR/config.env"
 SUITE="$BENCHMARKS_DIR/benchmark-images.cfg"
 
-lines=`cat $SUITE | wc -l`
+lines=`cat "$SUITE" | wc -l`
 for i in `seq 1 $lines`
     do
     variable="'$i""q;d' $SUITE"
     prepare-vm `eval sed "$variable"`
 done
 
-exit 0

@@ -7,7 +7,7 @@ exitIfFailed(){
 }
 
 UTIL_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-source "$UTIL_DIR/../../environment.cfg"
+source "$UTIL_DIR/../../config.env"
 MAX_WAIT_TIME_FOR_CONNECTION="${MAX_WAIT_TIME_FOR_CONNECTION:120}"
 
 NAME="$1"
@@ -35,7 +35,7 @@ while [ -z "$IP" ]; do
 		if grep -q "(ECDSA) to the list of known hosts" <<< "$OUTPUT"; then
 			break
 		fi
-		if grep -q "$IP" <<< "$OUTPUT"; then # something wrong happend  (e.g. Connection refused)
+		if grep -q "$IP" <<< "$OUTPUT"; then # something wrong happened  (e.g. Connection refused)
 			IP=""
 		fi
 	elif [ "$counter" == "$MAX_WAIT_TIME_FOR_CONNECTION" ]; then
@@ -45,5 +45,3 @@ while [ -z "$IP" ]; do
 	sleep 1
 	counter=$(("$counter" + 1))
 done
-
-exit 0
