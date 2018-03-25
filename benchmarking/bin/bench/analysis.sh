@@ -1,0 +1,129 @@
+#!/bin/bash
+
+function log(){
+	echo "$1" | tee "$VERBOSE_FILE" >> "$ANALYSIS"
+}
+
+function logDetailed(){
+	echo "$1" | tee "$VERBOSE_FILE" >> "$DETAILED_ANALYSIS"
+}
+
+
+function logBoth(){
+	log "$1"
+	logDetailed "$1"
+}
+
+NAME="$1"
+INSTALL_VERSION="$2"
+RUN_VERSION="$3"
+ANALYSIS_NAME="$4"
+
+SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+IMAGE_MANAGEMENT_DIR="`realpath $SCRIPTS_DIR/../image-management`"
+UTIL_DIR="$IMAGE_MANAGEMENT_DIR/util"
+source "$SCRIPTS_DIR/../config.env"
+
+BENCHMARKS_DIR="`realpath $SCRIPTS_DIR/../../benchmarks`"
+RUN_DIR_PART="`DIR=TRUE "$UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"`"
+BENCHMARK_DIR="$BENCHMARKS_DIR/$NAME"
+RUN_DIR="$BENCHMARKS_DIR/$RUN_DIR_PART"
+
+ANALYSIS_SCRIPT="$BENCHMARK_DIR/analysis.sh"
+SETTINGS_ENV="$BENCHMARK_DIR/settings.env"
+ANALYSIS_DIR="$RUN_DIR/analysis"
+RESULT_DIR="$RUN_DIR/out"
+
+if [ -z "$NAME" ]; then
+	echo "name must be specified" >&2
+	exit 1
+fi
+
+if [ -z "$INSTALL_VERSION" ]; then
+	echo "install version must be specified" >&2
+	exit 2
+fi
+
+if [ -z "$RUN_VERSION" ]; then
+	echo "run version must be specified" >&2
+	exit 3
+fi
+
+if [ -z "$ANALYSIS_NAME" ]; then
+	echo "analysis name must be specified" >&2
+	exit 4
+fi
+
+if [ ! -d "$RESULT_DIR" ]; then
+    echo "out directory does not exist" >&2
+    exit 5
+fi
+
+if [ ! -e "$ANALYSIS_SCRIPT" ]; then
+	echo "$ANALYSIS_SCRIPT must be specified" >&2
+	exit 6
+fi
+
+if [ ! -e "$SETTINGS_ENV" ]; then
+	echo "$SETTINGS_ENV must be specified" >&2
+	exit 7
+fi
+
+mkdir -p "$ANALYSIS_DIR"
+
+ANALYSIS="$ANALYSIS_DIR/$ANALYSIS_NAME"
+DETAILED_ANALYSIS="$ANALYSIS_DIR/$ANALYSIS_NAME.detail"
+
+SHOW_HEADER=""
+
+if [ ! -e "$ANALYSIS" ]; then
+    SHOW_HEADER="TRUE"
+    touch "$ANALYSIS"
+fi
+
+if [ ! -e "$DETAILED_ANALYSIS" ]; then
+    sed -e '/^$/d; /#.*/d; s/^/# /g' "$SETTINGS_ENV" > "$DETAILED_ANALYSIS"
+    logDetailed "# --------------------"
+fi
+
+echo -e "${GREEN}analyzing `"$UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"` into $ANALYSIS${NC}"
+
+
+for OUT_DIR in  "$RESULT_DIR"/*; do
+    if [ ! -d "$OUT_DIR" ]; then
+		continue
+	fi
+	OUTPUT="$OUT_DIR/output"
+	OUTPUT_RUN="$OUT_DIR/output-run"
+	LIBVIRT_XML="$OUT_DIR/libvirt.xml"
+
+	if [ -f "$OUTPUT" ]; then
+		RETURN_CODE="`grep -e "failed with exit code" "$OUTPUT"`"
+        if [ -n "$RETURN_CODE" ]; then
+            logBoth "FAIL: $RETURN_CODE"
+            continue
+        fi
+	fi
+
+    if [ -f "$OUTPUT_RUN" ] && ! grep -q -e "benchmark.*success" "$OUTPUT_RUN"; then
+        logBoth "FAIL: benchmark run not succesfull"
+        continue
+	fi
+
+	if [ ! -f "$OUTPUT" -o ! -f "$OUTPUT_RUN" -o ! -f "$OUTPUT_RUN" ]; then
+		logBoth "FAIL: not all expected files created"
+		continue
+	fi
+
+    "$BENCHMARK_DIR"/analysis.sh "$OUTPUT" "$ANALYSIS" "$DETAILED_ANALYSIS" "$SHOW_HEADER"
+    logDetailed "# --------------------"
+
+    if [ -n "$SHOW_HEADER" ]; then
+        SHOW_HEADER=""
+    fi
+done
+
+# show distinctions between each analysis in case the out dir is not cleaned
+logDetailed  "# End of Analysis"
+logDetailed  "#"
+log "#"

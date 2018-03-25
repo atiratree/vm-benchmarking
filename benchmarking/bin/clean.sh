@@ -7,55 +7,65 @@ remove(){
     fi
 }
 
+safeRemove(){
+    echo -e -n "Are you sure you want to delete $1? (y/n): "
+    read -n 1 -r
+    if [[ ! "$REPLY" =~ ^[Yy]$ ]]; then
+        echo ". skipping..."
+        return 1
+    fi
+    echo
+}
+
 removeBenchmark(){
     BENCHMARK_DIR="$1"
     NAME="`basename "$BENCHMARK_DIR"`"
-    for INSTALL_DIR in `ls -d "$BENCHMARK_DIR"install-v*/`; do
+    for INSTALL_DIR in "$BENCHMARK_DIR/"install-v*; do
+        if [ ! -d "$INSTALL_DIR" ]; then
+            continue
+        fi
+        INSTALL_VERSION="`basename "$INSTALL_DIR" | cut -c 10-`"
         if [  "$SELECT" == "--all" -o "$SELECT" == "--install" ]; then
-           remove "$INSTALL_DIR""out"
+           remove "$INSTALL_DIR/out"
         fi
 
         if [  "$SELECT" == "--all" -o "$SELECT" == "--vms" ]; then
-           INSTALL_VERSION="`basename "$INSTALL_DIR" | cut -c 10-`"
-           VM="`"$UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION"`"
-           "$IMAGE_MANAGEMENT_DIR"/delete-vm.sh "$VM" > /dev/null 2>&1 && echo "removed $VM"
+            VM="`"$UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION"`"
+            if "$UTIL_DIR/"assert-vm.sh "$VM" 2> /dev/null; then
+                safeRemove "${GREEN}Vm ${RED}$VM${NC}" && "$IMAGE_MANAGEMENT_DIR"/delete-vm.sh "$VM" > /dev/null 2>&1 && echo "removed $VM"
+            fi
         fi
 
-        for RUN_DIR in `ls -d "$INSTALL_DIR"run-v*/`; do
+        for RUN_DIR in "$INSTALL_DIR/"run-v*; do
+             if [ ! -d "$RUN_DIR" ]; then
+                continue
+            fi
+            RUN_VERSION="`basename "$RUN_DIR" | cut -c 6-`"
             if [  "$SELECT" == "--all" -o "$SELECT" == "--run" ]; then
-                remove "$RUN_DIR""out"
+                remove "$RUN_DIR/out"
             fi
             if [  "$SELECT" == "--all" -o "$SELECT" == "--analysis" ]; then
-                remove "$RUN_DIR""analysis"
+                ANALYSIS_NAME="`"$UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"`"
+                ANALYSIS_DIR="$RUN_DIR/analysis"
+                 if [ -d "$ANALYSIS_DIR" ]; then
+                    safeRemove "${GREEN}Analysis ${RED}$ANALYSIS_NAME${NC}" &&  remove "$ANALYSIS_DIR"
+                fi
             fi
         done
     done
-}
-
-safeRemove(){
-    read -p "Are you sure you want to delete $1? (y/n): " -n 1 -r
-    echo
-    if [[ ! "$REPLY" =~ ^[Yy]$ ]]; then
-        echo "aborted"
-        exit 0
-    fi
 }
 
 SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BENCHMARKS_DIR="`realpath $SCRIPTS_DIR/../benchmarks/`"
 IMAGE_MANAGEMENT_DIR="$SCRIPTS_DIR/image-management"
 UTIL_DIR="$IMAGE_MANAGEMENT_DIR/util"
+source "$SCRIPTS_DIR/config.env"
 
 SELECT="$1"
 NAME="$2"
 
-if [  "$SELECT" == "--all" ]; then
-   safeRemove "Analysis and Installed Benchmark Images"
-elif [ "$SELECT" == "--vms" ]; then
-   safeRemove "Installed Benchmark Images"
-elif [ "$SELECT" == "--analysis" ]; then
-   safeRemove "Analysis"
-elif [  "$SELECT" != "--install" -a "$SELECT" != "--run" ]; then
+if [  "$SELECT" != "--all" -a "$SELECT" != "--analysis" \
+    -a "$SELECT" != "--install" -a "$SELECT" != "--run"  -a "$SELECT" != "--vms" ]; then
     echo "clean.sh OPTION [NAME] "
     echo "  --all"
     echo "  --vms"
@@ -68,8 +78,10 @@ fi
 
 
 if [ -z "$NAME" ]; then
-    for BENCHMARK_DIR in `ls -d "$BENCHMARKS_DIR"/*/`; do
-        removeBenchmark "$BENCHMARK_DIR"
+    for BENCHMARK_DIR in "$BENCHMARKS_DIR/"*; do
+        if [ -d "$BENCHMARK_DIR" ]; then
+            removeBenchmark "$BENCHMARK_DIR"
+        fi
     done
 else
     removeBenchmark "$BENCHMARKS_DIR/$NAME/"

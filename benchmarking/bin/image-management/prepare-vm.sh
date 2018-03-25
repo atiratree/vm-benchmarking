@@ -24,6 +24,17 @@ runScript(){
 	rm -f "$SCRIPT_WITH_ENV_FILE"
 }
 
+safeRemove(){
+    echo -e -n "Are you sure you want to delete $1? (y/n): "
+    read -n 1 -r
+    if [[ ! "$REPLY" =~ ^[Yy]$ ]]; then
+        echo ". preparations skipped..."
+        exit 0
+    fi
+    echo
+}
+
+
 SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 UTIL_DIR="$SCRIPTS_DIR/util"
 source "$SCRIPTS_DIR/../config.env"
@@ -78,7 +89,8 @@ exitIfFailed $?
 NAME="`"$UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION"`"
 
 if virsh list --all | awk  '{print $2}' | grep -q --line-regexp --fixed-strings "$NAME"; then
-	echo "$LIBVIRT_DEFAULT_URI: prepared vm is present. Removing..."
+	echo "$LIBVIRT_DEFAULT_URI: vm is present. Removing..."
+	safeRemove "${GREEN}Vm ${RED}$NAME${NC}"
 	"$SCRIPTS_DIR/delete-vm.sh" "$NAME"	
 fi
 
@@ -113,6 +125,7 @@ if [ -e "$VERSIONED_INSTALL_SCRIPT" ]; then
 	runScript "$IP" "$ID_RSA" "$VERSIONED_INSTALL_SCRIPT" "$SETTINGS_ENV"
 fi
 
+# "$SCRIPTS_DIR/vm-up.sh" "$NAME"
 virsh shutdown "$NAME"
 
 echo -e "${GREEN}Install output can be found in `realpath $RESULTS_DIR`${NC}"

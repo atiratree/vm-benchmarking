@@ -18,7 +18,7 @@ exitIfFailed(){
 		if [ -n "$BENCHMARK_VM" ]; then
 		    CLONED_DISK="`"$UTIL_DIR/get-clone-disk-filename.sh" "$BENCHMARK_BASE_VM" "$BENCHMARK_VM"`"
 			sync # wait in case script is in the middle of creating image
-			"$SCRIPTS_DIR/delete-vm.sh" "$BENCHMARK_VM" "$CLONED_DISK"
+			"$IMAGE_MANAGEMENT_DIR/delete-vm.sh" "$BENCHMARK_VM" "$CLONED_DISK"
 		fi
         exit $1
     fi
@@ -37,7 +37,8 @@ runScript(){
 }
 
 SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-UTIL_DIR="$SCRIPTS_DIR/util"
+IMAGE_MANAGEMENT_DIR="`realpath $SCRIPTS_DIR/../image-management`"
+UTIL_DIR="$IMAGE_MANAGEMENT_DIR/util"
 source "$SCRIPTS_DIR/../config.env"
 
 
@@ -46,7 +47,7 @@ INSTALL_VERSION="$2"
 RUN_VERSION="$3"
 
 
-BENCHMARKS_DIR="`realpath $SCRIPTS_DIR/../../benchmarks/`"
+BENCHMARKS_DIR="`realpath $IMAGE_MANAGEMENT_DIR/../../benchmarks/`"
 BENCHMARK_DIR="$BENCHMARKS_DIR/$NAME"
 
 INSTALL_BENCHMARK_DIR="$BENCHMARK_DIR/install-v$INSTALL_VERSION"
@@ -58,7 +59,7 @@ RUN_SCRIPT="$VERSIONED_RUN_DIR/run.sh"
 RUN_LIBVIRT_XML="$VERSIONED_RUN_DIR/libvirt.xml"
 
 SETTINGS_ENV="$BENCHMARK_DIR/settings.env"
-ID_RSA="`realpath $SCRIPTS_DIR/../generated/id_rsa`"
+ID_RSA="`realpath $IMAGE_MANAGEMENT_DIR/../generated/id_rsa`"
 
 if [ -z "$NAME" ]; then
 	echo "name must be specified" >&2
@@ -105,7 +106,7 @@ mkdir -p "$RUN_RESULTS_DIR"
 > "$RUN_RESULT"
 
 echo -e "${GREEN}initializing $BENCHMARK_VM benchmark${NC}"
-"$SCRIPTS_DIR/clone-vm.sh" "$BENCHMARK_BASE_VM" "$BENCHMARK_VM"
+"$IMAGE_MANAGEMENT_DIR/clone-vm.sh" "$BENCHMARK_BASE_VM" "$BENCHMARK_VM"
 exitIfFailed $?
 
 echo "synchronizing cached writes"
@@ -138,7 +139,7 @@ echo -e "${GREEN}running $BENCHMARK_VM benchmark${NC}"
 
 runScript "$IP" "$ID_RSA" "$RUN_SCRIPT" "$SETTINGS_ENV"
 
-"$SCRIPTS_DIR/delete-vm.sh" "$BENCHMARK_VM"
+"$IMAGE_MANAGEMENT_DIR/delete-vm.sh" "$BENCHMARK_VM"
 exitIfFailed $?
 
 echo -e "${GREEN}benchmark successfully finished${NC}"
