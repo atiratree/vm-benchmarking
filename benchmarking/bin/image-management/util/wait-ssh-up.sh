@@ -43,5 +43,5 @@ while [ -z "$IP" ]; do
 		exitIfFailed 3
 	fi
 	sleep 1
-	counter=$(("$counter" + 1))
+	counter=$(($counter + 1))
 done
