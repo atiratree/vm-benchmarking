@@ -13,7 +13,7 @@ exitIfFailed(){
 		if [ -e "$RUN_RESULT" ]; then
 			echo "failed with return code $1" >> "$RUN_RESULT"
 		fi
-		rm -f "$SCRIPT_WITH_ENV_FILE"
+		rm -f " /tmp/get-settings.*"
 
 		if [ -n "$BENCHMARK_VM" ]; then
 		    CLONED_DISK="`"$UTIL_DIR/get-clone-disk-filename.sh" "$BENCHMARK_BASE_VM" "$BENCHMARK_VM"`"
@@ -22,18 +22,6 @@ exitIfFailed(){
 		fi
         exit $1
     fi
-}
-
-getScriptWithEnv(){
-	SCRIPT_WITH_ENV_FILE=$(mktemp /tmp/benchmark-suite.XXXXXX)
-	sed -e "/#!\/bin\/bash/r$2" "$1" > "$SCRIPT_WITH_ENV_FILE"
-}
-
-runScript(){
-	getScriptWithEnv "$3" "$4"
-	ssh -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null" -i "$2" "root@$1" "bash -s" -- < "$SCRIPT_WITH_ENV_FILE" 2>&1 | tee "$VERBOSE_FILE" >> "$RUN_RESULT"
-	exitIfFailed $?
-	rm -f "$SCRIPT_WITH_ENV_FILE"
 }
 
 SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -53,12 +41,10 @@ BENCHMARK_DIR="$BENCHMARKS_DIR/$NAME"
 INSTALL_BENCHMARK_DIR="$BENCHMARK_DIR/install-v$INSTALL_VERSION"
 VERSIONED_RUN_DIR="$INSTALL_BENCHMARK_DIR/run-v$RUN_VERSION"
 
-
 RESULTS_DIR="$VERSIONED_RUN_DIR/out"
 RUN_SCRIPT="$VERSIONED_RUN_DIR/run.sh"
 RUN_LIBVIRT_XML="$VERSIONED_RUN_DIR/libvirt.xml"
 
-SETTINGS_ENV="$BENCHMARK_DIR/settings.env"
 ID_RSA="`realpath $IMAGE_MANAGEMENT_DIR/../generated/id_rsa`"
 
 if [ -z "$NAME" ]; then
@@ -79,11 +65,6 @@ fi
 if [ ! -e "$RUN_SCRIPT" ]; then
 	echo "run script $RUN_SCRIPT must be specified" >&2
 	exit 4
-fi
-
-if [ ! -e "$SETTINGS_ENV" ]; then
-	echo "$SETTINGS_ENV must be specified" >&2
-	exit 5
 fi
 
 
@@ -137,7 +118,9 @@ IP="`"$UTIL_DIR/get-ip.sh" "$BENCHMARK_VM" "$ID_RSA"`"
 # run benchmarks
 echo -e "${GREEN}running $BENCHMARK_VM benchmark${NC}"
 
-runScript "$IP" "$ID_RSA" "$RUN_SCRIPT" "$SETTINGS_ENV"
+FINAL_SCRIPT="`SCRIPT_FILE="$RUN_SCRIPT" "$UTIL_DIR/get-settings.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"`"
+ssh -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null" -i "$ID_RSA" \
+    "root@$IP" "bash -s" -- <<< "$FINAL_SCRIPT" 2>&1 | tee "$VERBOSE_FILE" >> "$RUN_RESULT"
 
 "$IMAGE_MANAGEMENT_DIR/delete-vm.sh" "$BENCHMARK_VM"
 exitIfFailed $?

@@ -6,22 +6,9 @@ exitIfFailed(){
 		if [ -e "$RESULT" ]; then
 			echo "failed with return code $1" >> "$RESULT"
 		fi
-		rm -f "$SCRIPT_WITH_ENV_FILE"
-		"$SCRIPTS_DIR/delete-vm.sh" "$NAME"
+		"$SCRIPTS_DIR/delete-vm.sh" "$FULL_NAME"
         exit $?
     fi
-}
-
-getScriptWithEnv(){
-	SCRIPT_WITH_ENV_FILE=$(mktemp /tmp/benchmark-suite.XXXXXX)
-	sed -e "/#!\/bin\/bash/r$2" "$1" > "$SCRIPT_WITH_ENV_FILE"
-}
-
-runScript(){
-	getScriptWithEnv "$3" "$4"
-	ssh -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null" -i "$2" "root@$1" "bash -s" -- < "$SCRIPT_WITH_ENV_FILE" 2>&1 | tee "$VERBOSE_FILE" >> "$RESULT"
-	exitIfFailed $?
-	rm -f "$SCRIPT_WITH_ENV_FILE"
 }
 
 safeRemove(){
@@ -66,7 +53,6 @@ VERSIONED_INSTALL_DIR="$BENCHMARKS_DIR/$INSTALL_DIR_PART"
 
 INSTALL_SCRIPT="$BENCHMARK_DIR/install.sh"
 VERSIONED_INSTALL_SCRIPT="$VERSIONED_INSTALL_DIR/install.sh"
-SETTINGS_ENV="$BENCHMARK_DIR/settings.env"
 
 RESULTS_DIR="$VERSIONED_INSTALL_DIR/out"
 RESULT="$RESULTS_DIR/output"
@@ -78,20 +64,15 @@ if [ ! -e "$INSTALL_SCRIPT" ]; then
 	exit 4
 fi
 
-if [ ! -e "$SETTINGS_ENV" ]; then
-	echo "settings.env $SETTINGS_ENV must be specified" >&2
-	exit 5
-fi
-
 "$UTIL_DIR/assert-vm.sh" "$BASE_VM"
 exitIfFailed $?
 
-NAME="`"$UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION"`"
+FULL_NAME="`"$UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION"`"
 
-if virsh list --all | awk  '{print $2}' | grep -q --line-regexp --fixed-strings "$NAME"; then
+if virsh list --all | awk  '{print $2}' | grep -q --line-regexp --fixed-strings "$FULL_NAME"; then
 	echo "$LIBVIRT_DEFAULT_URI: vm is present. Removing..."
-	safeRemove "${GREEN}Vm ${RED}$NAME${NC}"
-	"$SCRIPTS_DIR/delete-vm.sh" "$NAME"	
+	safeRemove "${GREEN}Vm ${RED}$FULL_NAME${NC}"
+	"$SCRIPTS_DIR/delete-vm.sh" "$FULL_NAME"
 fi
 
 if [ -d "$RESULTS_DIR" ]; then
@@ -102,31 +83,31 @@ fi
 mkdir -p "$RESULTS_DIR"
 > "$RESULT"
 
-echo -e "${GREEN}preparing $NAME${NC}"
-"$SCRIPTS_DIR/clone-vm.sh" "$BASE_VM" "$NAME"
+echo -e "${GREEN}preparing $FULL_NAME${NC}"
+"$SCRIPTS_DIR/clone-vm.sh" "$BASE_VM" "$FULL_NAME"
 exitIfFailed $?
 
-virsh start "$NAME"
+virsh start "$FULL_NAME"
 exitIfFailed $?
 
 
-"$UTIL_DIR/wait-ssh-up.sh" "$NAME" "$ID_RSA"
-IP="`"$UTIL_DIR/get-ip.sh" "$NAME" "$ID_RSA"`"
+"$UTIL_DIR/wait-ssh-up.sh" "$FULL_NAME" "$ID_RSA"
+IP="`"$UTIL_DIR/get-ip.sh" "$FULL_NAME" "$ID_RSA"`"
 
 # install
-echo -e "${GREEN}Installing${NC}"
-
-
-runScript "$IP" "$ID_RSA" "$INSTALL_SCRIPT" "$SETTINGS_ENV"
-
 if [ -e "$VERSIONED_INSTALL_SCRIPT" ]; then
-	# install versioned
-	echo -e "${GREEN}Installing addon: `realpath $VERSIONED_INSTALL_SCRIPT`${NC}"
-	runScript "$IP" "$ID_RSA" "$VERSIONED_INSTALL_SCRIPT" "$SETTINGS_ENV"
+    echo -e "${GREEN}Installing with addon: $VERSIONED_INSTALL_SCRIPT${NC}"
+else
+    echo -e "${GREEN}Installing${NC}"
 fi
 
+FINAL_SCRIPT="`SCRIPT_FILE="$INSTALL_SCRIPT" POST_SCRIPT_FILE="$VERSIONED_INSTALL_SCRIPT" "$UTIL_DIR/get-settings.sh" "$NAME" "$INSTALL_VERSION"`"
+ssh -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null" -i "$ID_RSA" \
+    "root@$IP" "bash -s" -- <<< "$FINAL_SCRIPT" 2>&1 | tee "$VERBOSE_FILE" >> "$RESULT"
+exitIfFailed $?
+
 # "$SCRIPTS_DIR/vm-up.sh" "$NAME"
-virsh shutdown "$NAME"
+virsh shutdown "$FULL_NAME"
 
 echo -e "${GREEN}Install output can be found in `realpath $RESULTS_DIR`${NC}"
 

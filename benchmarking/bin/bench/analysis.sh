@@ -30,7 +30,6 @@ BENCHMARK_DIR="$BENCHMARKS_DIR/$NAME"
 RUN_DIR="$BENCHMARKS_DIR/$RUN_DIR_PART"
 
 ANALYSIS_SCRIPT="$BENCHMARK_DIR/analysis.sh"
-SETTINGS_ENV="$BENCHMARK_DIR/settings.env"
 ANALYSIS_DIR="$RUN_DIR/analysis"
 RESULT_DIR="$RUN_DIR/out"
 
@@ -64,11 +63,6 @@ if [ ! -e "$ANALYSIS_SCRIPT" ]; then
 	exit 6
 fi
 
-if [ ! -e "$SETTINGS_ENV" ]; then
-	echo "$SETTINGS_ENV must be specified" >&2
-	exit 7
-fi
-
 mkdir -p "$ANALYSIS_DIR"
 
 ANALYSIS="$ANALYSIS_DIR/$ANALYSIS_NAME"
@@ -82,7 +76,7 @@ if [ ! -e "$ANALYSIS" ]; then
 fi
 
 if [ ! -e "$DETAILED_ANALYSIS" ]; then
-    sed -e '/^$/d; /#.*/d; s/^/# /g' "$SETTINGS_ENV" > "$DETAILED_ANALYSIS"
+    "$UTIL_DIR/get-settings.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION" | sed -e '1{/.*/d}; s/^/# /g' > "$DETAILED_ANALYSIS"
     logDetailed "# --------------------"
 fi
 
