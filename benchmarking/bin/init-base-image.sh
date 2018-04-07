@@ -6,18 +6,36 @@ exitIfFailed(){
 	fi
 }
 
+checkDeps(){
+    while read dep; do
+        if [ -n "$dep" ] && ! type "$dep" &> /dev/null; then
+            echo "$dep dependency is missing" >&2
+            FAILED=TRUE
+        fi
+    done < $1
+    if [ -n "$FAILED" ]; then
+        exit 1
+    fi
+}
+
+downloadDeps(){
+    if [ ! -e "$GENERATED_DIR/$SYSTAT_FILENAME" ]; then
+        echo "Downloading benchmark scripts dependencies..."
+        wget -O "$GENERATED_DIR/$SYSTAT_FILENAME" "https://github.com/sysstat/sysstat/archive/v11.7.2.tar.gz" &> /dev/null
+    fi
+}
+
 SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 IMAGE_MANAGEMENT_DIR="$SCRIPTS_DIR/image-management"
 GENERATED_DIR="$SCRIPTS_DIR/generated"
+DEPS="$SCRIPTS_DIR/dependencies"
 BENCHMARKS_DIR="`realpath $SCRIPTS_DIR/../benchmarks`"
 source "$SCRIPTS_DIR/config.env"
 
 NAME="$1"
 
-if [ ! -e "$GENERATED_DIR/$SYSTAT_FILENAME" ]; then
-    echo "Downloading benchmark scripts dependencies..."
-    wget -O "$GENERATED_DIR/$SYSTAT_FILENAME" "https://github.com/sysstat/sysstat/archive/v11.7.2.tar.gz" &> /dev/null
-fi
+checkDeps "$DEPS"
+downloadDeps
 
 BASE_IMAGE_INSTALL="$BENCHMARKS_DIR/base-image-install.sh"
 

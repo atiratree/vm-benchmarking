@@ -75,8 +75,6 @@ if [  "$SELECT" != "--all" -a "$SELECT" != "--analysis" \
     exit 1
 fi
 
-
-
 if [ -z "$NAME" ]; then
     for BENCHMARK_DIR in "$BENCHMARKS_DIR/"*; do
         if [ -d "$BENCHMARK_DIR" ]; then

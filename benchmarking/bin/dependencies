@@ -1,0 +1,10 @@
+bash
+ssh
+ssh-keygen
+ssh-copy-id
+virsh
+virt-clone
+ip
+nmap
+wget
+bc
