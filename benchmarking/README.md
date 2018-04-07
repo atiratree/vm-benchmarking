@@ -38,5 +38,7 @@
 3. for each benchmark run
    - `cp benchmarks/$BENCHMARK_NAME/install-$INSTALL_VERSION/run-$RUN_VERSION/settings.env{.example,}`
    - customize each settings.env if it exists
+   - merge `benchmarks/$BENCHMARK_NAME/install-$INSTALL_VERSION/run-$RUN_VERSION/libvirt.xml.example` with `virsh dumpxml "$PREPARED_VM_NAME" > /libvirt.xml` and
+      save to `benchmarks/$BENCHMARK_NAME/install-$INSTALL_VERSION/run-$RUN_VERSION/libvirt.xml`
 4. run `./bin/prepare-benchmark-images.sh`
 5. see `benchmarks/$BENCHMARK_NAME/install-$INSTALL_VERSION/run-$RUN_VERSION/analysis` and `out` for results

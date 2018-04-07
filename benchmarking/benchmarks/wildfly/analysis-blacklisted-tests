@@ -1,0 +1,3 @@
+# these tests are blacklisted because they require RANDOM device which is not present by default
+org.jboss.as.test.integration.ws.wsse.signencrypt.EJBSignEncryptMultipleClientsTestCase
+org.jboss.as.test.integration.ws.wsse.signencrypt.EJBSignEncryptTestCase
