@@ -107,6 +107,10 @@ source "$SCRIPTS_DIR/config.env"
 
 SUITE="$BENCHMARKS_DIR/benchmark-suite.cfg"
 
+if [  "$1" == "-v" ]; then
+	export VERBOSE_FILE=/dev/tty
+fi
+
 if [ ! -e "$SUITE" ]; then
 	echo "$SUITE must be specified" >&2
 	exit 1

@@ -77,7 +77,7 @@ SHOW_HEADER="TRUE"
 "$UTIL_DIR/get-settings.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION" | sed -e '1{/.*/d}; s/^/# /g' > "$DETAILED_ANALYSIS"
 logDetailed "# --------------------"
 
-echo -e "${GREEN}analyzing `"$UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"` into $ANALYSIS${NC}"
+echo -e "${BLUE}analyzing `"$UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"` into $ANALYSIS${NC}"
 
 for OUT_DIR in  "$RESULT_DIR"/*; do
     if [ ! -d "$OUT_DIR" ]; then

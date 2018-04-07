@@ -91,7 +91,7 @@ RUN_RESULT_LIBVIRT_XML="$RUN_RESULTS_DIR/libvirt.xml"
 mkdir -p "$RUN_RESULTS_DIR"
 > "$RUN_RESULT"
 
-echo -e "${GREEN}initializing $BENCHMARK_VM benchmark${NC}"
+echo -e "${BLUE}initializing $BENCHMARK_VM benchmark${NC}"
 "$IMAGE_MANAGEMENT_DIR/clone-vm.sh" "$BENCHMARK_BASE_VM" "$BENCHMARK_VM"
 exitIfFailed $?
 
@@ -130,14 +130,14 @@ if [ "$MEASURE_RESOURCE_USAGE" == "yes" ]; then
 
     $SSH "root@$IP" "bash -s" -- < "$RESOURCE_USAGE_DIR/init-measurement.sh" &> /dev/null
     if [ $? -eq 0 ]; then
-        echo -e "${GREEN}measuring resource usage!${NC}"
+        echo -e "${BLUE}measuring resource usage!${NC}"
         $SSH "root@$IP" "bash -s" -- < "$RESOURCE_USAGE_DIR/measure.sh" &> /dev/null &
         MEASURE_PROCESS=$!
         sleep 3 # baseline
     fi
     START=`date +%s`
 fi
-
+echo "started: `date`"
 $SSH "root@$IP" "bash -s" -- <<< "$FINAL_SCRIPT" 2>&1 | tee "$VERBOSE_FILE" >> "$RUN_RESULT"
 
 

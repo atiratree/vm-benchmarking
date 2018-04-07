@@ -27,6 +27,9 @@ IMAGE_MANAGEMENT_DIR="$SCRIPTS_DIR/image-management"
 source "$SCRIPTS_DIR/config.env"
 SUITE="$BENCHMARKS_DIR/benchmark-images.cfg"
 
+if [  "$1" == "-v" ]; then
+	export VERBOSE_FILE=/dev/tty
+fi
 
 if [ ! -e "$SUITE" ]; then
 	echo "$SUITE must be specified" >&2
@@ -39,4 +42,3 @@ for i in `seq 1 $lines`
     variable="'$i""q;d' $SUITE"
     prepare-vm `eval sed "$variable"`
 done
-

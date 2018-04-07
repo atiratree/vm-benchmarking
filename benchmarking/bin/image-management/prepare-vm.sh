@@ -81,7 +81,7 @@ fi
 mkdir -p "$RESULTS_DIR"
 > "$RESULT"
 
-echo -e "${GREEN}preparing $FULL_NAME${NC}"
+echo -e "${BLUE}preparing $FULL_NAME${NC}"
 "$SCRIPTS_DIR/clone-vm.sh" "$BASE_VM" "$FULL_NAME"
 exitIfFailed $?
 
@@ -106,5 +106,5 @@ exitIfFailed $?
 # "$SCRIPTS_DIR/vm-up.sh" "$NAME"
 virsh shutdown "$FULL_NAME"
 
-echo -e "${GREEN}Install output can be found in `realpath $RESULTS_DIR`${NC}"
+echo -e "${BLUE}Install output can be found in `realpath $RESULTS_DIR`${NC}"
 
