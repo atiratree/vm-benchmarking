@@ -22,8 +22,8 @@ baseurl=ftp://ftp.unicamp.br/pub/linuxpatch/toolchain/at/redhat/RHEL$CENTOS\n\
 failovermethod=priority\n\
 enabled=1\n\
 gpgcheck=1\n\
-gpgkey=ftp://ftp.unicamp.br/pub/linuxpatch/toolchain/at/redhat/RHEL$CENTOS/gpg-pubkey-6976a827-5164221b\n\
-# End of configuration file" > /etc/yum.repos.d/at10.0.repo
+gpgkey=ftp://ftp.unicamp.br/pub/linuxpatch/toolchain/at/redhat/RHEL$CENTOS/gpg-pubkey-6976a827-5164221b\
+\n# End of configuration file" > /etc/yum.repos.d/at10.0.repo
 
     YUM_PACKAGES="advance-toolchain-at10.0-runtime"
 }

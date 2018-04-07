@@ -57,8 +57,6 @@ VERSIONED_INSTALL_SCRIPT="$VERSIONED_INSTALL_DIR/install.sh"
 RESULTS_DIR="$VERSIONED_INSTALL_DIR/out"
 RESULT="$RESULTS_DIR/output"
 
-ID_RSA="`realpath $SCRIPTS_DIR/../generated/id_rsa`"
-
 if [ ! -e "$INSTALL_SCRIPT" ]; then
 	echo "install script $INSTALL_SCRIPT must be specified" >&2
 	exit 4
@@ -91,8 +89,8 @@ virsh start "$FULL_NAME"
 exitIfFailed $?
 
 
-"$UTIL_DIR/wait-ssh-up.sh" "$FULL_NAME" "$ID_RSA"
-IP="`"$UTIL_DIR/get-ip.sh" "$FULL_NAME" "$ID_RSA"`"
+"$UTIL_DIR/wait-ssh-up.sh" "$FULL_NAME"
+IP="`"$UTIL_DIR/get-ip.sh" "$FULL_NAME"`"
 
 # install
 if [ -e "$VERSIONED_INSTALL_SCRIPT" ]; then
@@ -102,8 +100,7 @@ else
 fi
 
 FINAL_SCRIPT="`SCRIPT_FILE="$INSTALL_SCRIPT" POST_SCRIPT_FILE="$VERSIONED_INSTALL_SCRIPT" "$UTIL_DIR/get-settings.sh" "$NAME" "$INSTALL_VERSION"`"
-ssh -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null" -i "$ID_RSA" \
-    "root@$IP" "bash -s" -- <<< "$FINAL_SCRIPT" 2>&1 | tee "$VERBOSE_FILE" >> "$RESULT"
+$SSH "root@$IP" "bash -s" -- <<< "$FINAL_SCRIPT" 2>&1 | tee "$VERBOSE_FILE" >> "$RESULT"
 exitIfFailed $?
 
 # "$SCRIPTS_DIR/vm-up.sh" "$NAME"

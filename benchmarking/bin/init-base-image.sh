@@ -10,10 +10,15 @@ SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 IMAGE_MANAGEMENT_DIR="$SCRIPTS_DIR/image-management"
 GENERATED_DIR="$SCRIPTS_DIR/generated"
 BENCHMARKS_DIR="`realpath $SCRIPTS_DIR/../benchmarks`"
+source "$SCRIPTS_DIR/config.env"
 
 NAME="$1"
 
-ID_RSA="$GENERATED_DIR/id_rsa"
+if [ ! -e "$GENERATED_DIR/$SYSTAT_FILENAME" ]; then
+    echo "Downloading benchmark scripts dependencies..."
+    wget -O "$GENERATED_DIR/$SYSTAT_FILENAME" "https://github.com/sysstat/sysstat/archive/v11.7.2.tar.gz" &> /dev/null
+fi
+
 BASE_IMAGE_INSTALL="$BENCHMARKS_DIR/base-image-install.sh"
 
 "$IMAGE_MANAGEMENT_DIR/util/assert-vm.sh" "$NAME"
@@ -40,6 +45,6 @@ fi
 
 ssh-copy-id -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null" -i "$ID_RSA" "root@$IP"
 
-ssh -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null" -i "$ID_RSA" "root@$IP" "bash -s" -- < "$BASE_IMAGE_INSTALL"
+$SSH "root@$IP" "bash -s" -- < "$BASE_IMAGE_INSTALL"
 
 virsh shutdown "$NAME"

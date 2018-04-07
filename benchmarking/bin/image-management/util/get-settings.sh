@@ -53,7 +53,7 @@ if [ -e "$POST_SCRIPT_FILE" ]; then
 fi
 
 if [ -z "$LEAVE_COMMENTS" ]; then
-    sed -e '2,${/^#.*/d}; /^\s*$/d; 2,${s/#.*$//g};' "$SCRIPT_WITH_ENV_FILE"
+    sed -e '2,${/^#.*/d}; /^\s*$/d; 2,${s/^\s*#.*$//g};' "$SCRIPT_WITH_ENV_FILE"
 else
     cat "$SCRIPT_WITH_ENV_FILE"
 fi

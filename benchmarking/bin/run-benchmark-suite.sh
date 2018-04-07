@@ -25,6 +25,8 @@ kill_current_benchmark(){
     BASE_VM="`"$UTIL_DIR"/get-name.sh "$NAME" "$INSTALL_VERSION"`"
     VM="`"$UTIL_DIR"/get-name.sh "$NAME" "$INSTALL_VERSION" "$RUN_VERSION" "$ID"`"
 
+    rm -f "/tmp/get-settings.*" "/tmp/benchmark-run.*"
+
     CLONED_DISK="`"$UTIL_DIR/get-clone-disk-filename.sh" "$BASE_VM" "$VM"`"
     sync # wait in case script is in the middle of creating image
     "$IMAGE_MANAGEMENT_DIR/delete-vm.sh" "$VM" "$CLONED_DISK"
@@ -135,7 +137,8 @@ run_benchmark(){
 
         echo "running $ID"
         set_option "$OPTIONS" "NO_OUTPUT_CHECK_MIN"
-        "$BENCH_DIR"/run-benchmark.sh "$NAME" "$INSTALL_VERSION" "$RUN_VERSION" > >(tee "$VERBOSE_FILE"> "$TMP_FILE" 2>&1) &
+        set_option "$OPTIONS" "MEASURE_RESOURCE_USAGE"
+        "$BENCH_DIR"/run-benchmark.sh "$NAME" "$INSTALL_VERSION" "$RUN_VERSION" "$MEASURE_RESOURCE_USAGE" > >(tee "$VERBOSE_FILE"> "$TMP_FILE" 2>&1) &
         BENCH_CHILD_PROCESS=$!
         wait_for_benchmark "$BENCH_CHILD_PROCESS" "$OUTPUT_DIR/output" "$NO_OUTPUT_CHECK_MIN"
         BENCH_CHILD_PROCESS=""

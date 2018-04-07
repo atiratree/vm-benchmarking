@@ -11,7 +11,10 @@ source "$UTIL_DIR/../../config.env"
 MAX_WAIT_TIME_FOR_CONNECTION="${MAX_WAIT_TIME_FOR_CONNECTION:120}"
 
 NAME="$1"
-ID_RSA="$2"
+
+if [ -n "$2" ]; then
+    ID_RSA="$2"
+fi
 
 if [ -z "$NAME" ]; then
 	echo "name of vm must be specified" >&2

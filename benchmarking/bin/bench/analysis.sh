@@ -70,18 +70,12 @@ DETAILED_ANALYSIS="$ANALYSIS_DIR/$ANALYSIS_NAME.detail"
 
 SHOW_HEADER=""
 
-if [ ! -e "$ANALYSIS" ]; then
-    SHOW_HEADER="TRUE"
-    touch "$ANALYSIS"
-fi
+> "$ANALYSIS"
 
-if [ ! -e "$DETAILED_ANALYSIS" ]; then
-    "$UTIL_DIR/get-settings.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION" | sed -e '1{/.*/d}; s/^/# /g' > "$DETAILED_ANALYSIS"
-    logDetailed "# --------------------"
-fi
+"$UTIL_DIR/get-settings.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION" | sed -e '1{/.*/d}; s/^/# /g' > "$DETAILED_ANALYSIS"
+logDetailed "# --------------------"
 
 echo -e "${GREEN}analyzing `"$UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"` into $ANALYSIS${NC}"
-
 
 for OUT_DIR in  "$RESULT_DIR"/*; do
     if [ ! -d "$OUT_DIR" ]; then
@@ -109,15 +103,6 @@ for OUT_DIR in  "$RESULT_DIR"/*; do
 		continue
 	fi
 
-    "$BENCHMARK_DIR"/analysis.sh "$OUTPUT" "$ANALYSIS" "$DETAILED_ANALYSIS" "$SHOW_HEADER"
+    "$BENCHMARK_DIR"/analysis.sh "$OUTPUT" "$ANALYSIS" "$DETAILED_ANALYSIS"
     logDetailed "# --------------------"
-
-    if [ -n "$SHOW_HEADER" ]; then
-        SHOW_HEADER=""
-    fi
 done
-
-# show distinctions between each analysis in case the out dir is not cleaned
-logDetailed  "# End of Analysis"
-logDetailed  "#"
-log "#"

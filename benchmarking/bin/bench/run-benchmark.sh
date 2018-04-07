@@ -13,7 +13,7 @@ exitIfFailed(){
 		if [ -e "$RUN_RESULT" ]; then
 			echo "failed with return code $1" >> "$RUN_RESULT"
 		fi
-		rm -f " /tmp/get-settings.*"
+		rm -f "$TMP_FILE" "/tmp/get-settings.*"
 
 		if [ -n "$BENCHMARK_VM" ]; then
 		    CLONED_DISK="`"$UTIL_DIR/get-clone-disk-filename.sh" "$BENCHMARK_BASE_VM" "$BENCHMARK_VM"`"
@@ -26,6 +26,7 @@ exitIfFailed(){
 
 SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 IMAGE_MANAGEMENT_DIR="`realpath $SCRIPTS_DIR/../image-management`"
+RESOURCE_USAGE_DIR="$SCRIPTS_DIR/resource-usage"
 UTIL_DIR="$IMAGE_MANAGEMENT_DIR/util"
 source "$SCRIPTS_DIR/../config.env"
 
@@ -33,6 +34,7 @@ source "$SCRIPTS_DIR/../config.env"
 NAME="$1"
 INSTALL_VERSION="$2"
 RUN_VERSION="$3"
+MEASURE_RESOURCE_USAGE="$4"
 
 
 BENCHMARKS_DIR="`realpath $IMAGE_MANAGEMENT_DIR/../../benchmarks/`"
@@ -44,8 +46,6 @@ VERSIONED_RUN_DIR="$INSTALL_BENCHMARK_DIR/run-v$RUN_VERSION"
 RESULTS_DIR="$VERSIONED_RUN_DIR/out"
 RUN_SCRIPT="$VERSIONED_RUN_DIR/run.sh"
 RUN_LIBVIRT_XML="$VERSIONED_RUN_DIR/libvirt.xml"
-
-ID_RSA="`realpath $IMAGE_MANAGEMENT_DIR/../generated/id_rsa`"
 
 if [ -z "$NAME" ]; then
 	echo "name must be specified" >&2
@@ -65,6 +65,11 @@ fi
 if [ ! -e "$RUN_SCRIPT" ]; then
 	echo "run script $RUN_SCRIPT must be specified" >&2
 	exit 4
+fi
+
+if [ "$MEASURE_RESOURCE_USAGE" == "yes" ] && [ ! -e "$GENERATED_DIR/$SYSTAT_FILENAME" ]; then
+   echo "run init-base-image to download dependencies first" >&2
+   exit 5
 fi
 
 
@@ -112,17 +117,45 @@ exitIfFailed $?
 virsh --connect="$CONNECTION" start "$BENCHMARK_VM"
 exitIfFailed $?
 
-"$UTIL_DIR/wait-ssh-up.sh" "$BENCHMARK_VM" "$ID_RSA"
-IP="`"$UTIL_DIR/get-ip.sh" "$BENCHMARK_VM" "$ID_RSA"`"
+"$UTIL_DIR/wait-ssh-up.sh" "$BENCHMARK_VM"
+IP="`"$UTIL_DIR/get-ip.sh" "$BENCHMARK_VM"`"
 
 # run benchmarks
 echo -e "${GREEN}running $BENCHMARK_VM benchmark${NC}"
 
 FINAL_SCRIPT="`SCRIPT_FILE="$RUN_SCRIPT" "$UTIL_DIR/get-settings.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"`"
-ssh -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null" -i "$ID_RSA" \
-    "root@$IP" "bash -s" -- <<< "$FINAL_SCRIPT" 2>&1 | tee "$VERBOSE_FILE" >> "$RUN_RESULT"
+
+if [ "$MEASURE_RESOURCE_USAGE" == "yes" ]; then
+    $SCP "$GENERATED_DIR/$SYSTAT_FILENAME" "root@$IP:/tmp/" &> /dev/null
+
+    $SSH "root@$IP" "bash -s" -- < "$RESOURCE_USAGE_DIR/init-measurement.sh" &> /dev/null
+    if [ $? -eq 0 ]; then
+        echo -e "${GREEN}measuring resource usage!${NC}"
+        $SSH "root@$IP" "bash -s" -- < "$RESOURCE_USAGE_DIR/measure.sh" &> /dev/null &
+        MEASURE_PROCESS=$!
+        sleep 3 # baseline
+    fi
+    START=`date +%s`
+fi
+
+$SSH "root@$IP" "bash -s" -- <<< "$FINAL_SCRIPT" 2>&1 | tee "$VERBOSE_FILE" >> "$RUN_RESULT"
+
+
+if [ "$MEASURE_RESOURCE_USAGE" == "yes" ]; then
+    END=`date +%s`
+    kill "$MEASURE_PROCESS"
+    $SSH "root@$IP" "bash -s" -- < "$RESOURCE_USAGE_DIR/finish-measurement.sh" &> /dev/null
+    $SCP "root@$IP:/tmp/sar-report.svg" "$RUN_RESULTS_DIR/resource-usage.svg" &> /dev/null
+    SPACE_USAGE="`$SSH "root@$IP" "df -h"`"
+fi
 
 "$IMAGE_MANAGEMENT_DIR/delete-vm.sh" "$BENCHMARK_VM"
 exitIfFailed $?
 
 echo -e "${GREEN}benchmark successfully finished${NC}"
+
+
+if [ "$MEASURE_RESOURCE_USAGE" == "yes" ]; then
+    echo -e "\nBenchmark Runtime: $((END-START)) s"
+    echo -e "\nBenchmark Space Usage:\n $SPACE_USAGE"
+fi
