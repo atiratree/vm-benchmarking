@@ -9,9 +9,10 @@ function logDetailed(){
 }
 
 
-function logBoth(){
+function finish(){
 	log "$1"
 	logDetailed "$1"
+	logDetailed "# --------------------"
 }
 
 NAME="$1"
@@ -25,7 +26,7 @@ UTIL_DIR="$IMAGE_MANAGEMENT_DIR/util"
 source "$SCRIPTS_DIR/../config.env"
 
 BENCHMARKS_DIR="`realpath $SCRIPTS_DIR/../../benchmarks`"
-RUN_DIR_PART="`DIR=TRUE "$UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"`"
+RUN_DIR_PART="`DIR=TRUE "$UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"`" || exit 1
 BENCHMARK_DIR="$BENCHMARKS_DIR/$NAME"
 RUN_DIR="$BENCHMARKS_DIR/$RUN_DIR_PART"
 
@@ -70,6 +71,7 @@ DETAILED_ANALYSIS="$ANALYSIS_DIR/$ANALYSIS_NAME.detail"
 
 SHOW_HEADER=""
 
+SHOW_HEADER="TRUE"
 > "$ANALYSIS"
 
 "$UTIL_DIR/get-settings.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION" | sed -e '1{/.*/d}; s/^/# /g' > "$DETAILED_ANALYSIS"
@@ -88,21 +90,26 @@ for OUT_DIR in  "$RESULT_DIR"/*; do
 	if [ -f "$OUTPUT" ]; then
 		RETURN_CODE="`grep -e "failed with exit code" "$OUTPUT"`"
         if [ -n "$RETURN_CODE" ]; then
-            logBoth "FAIL: $RETURN_CODE"
+            finish "FAIL: $RETURN_CODE"
             continue
         fi
 	fi
 
     if [ -f "$OUTPUT_RUN" ] && ! grep -q -e "benchmark.*success" "$OUTPUT_RUN"; then
-        logBoth "FAIL: benchmark run not succesfull"
+        finish "FAIL: benchmark run not succesfull"
         continue
 	fi
 
 	if [ ! -f "$OUTPUT" -o ! -f "$OUTPUT_RUN" -o ! -f "$OUTPUT_RUN" ]; then
-		logBoth "FAIL: not all expected files created"
+		finish "FAIL: not all expected files created"
 		continue
 	fi
 
-    "$BENCHMARK_DIR"/analysis.sh "$OUTPUT" "$ANALYSIS" "$DETAILED_ANALYSIS"
+    "$BENCHMARK_DIR"/analysis.sh "$OUTPUT" "$ANALYSIS" "$DETAILED_ANALYSIS" "$SHOW_HEADER"
     logDetailed "# --------------------"
+
+    if [ -n "$SHOW_HEADER" ]; then
+        SHOW_HEADER=""
+    fi
 done
+

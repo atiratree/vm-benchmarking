@@ -9,6 +9,7 @@ VERBOSE_FILE="${VERBOSE_FILE:-/dev/null}"
 OUTPUT="$1"
 ANALYSIS="$2"
 DETAILED_ANALYSIS="$3"
+SHOW_HEADER="$4"
 
 if [ ! -f "$OUTPUT" ]; then
 	echo "file for analysis must be specified" >&2
@@ -20,7 +21,10 @@ if [ ! -f "$ANALYSIS" ]; then
 	exit 2
 fi
 
-log "# transactions per second"
+if [ -n "$SHOW_HEADER" ]; then
+    log "# transactions per second"
+fi
+
 
 TRANSACTION_PER_SECOND=`grep -oe "tps = [0-9.]* (including connections establishing)" "$OUTPUT" | grep -o "[0-9.]*"`
 
