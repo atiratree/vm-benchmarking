@@ -37,7 +37,7 @@ fi
 FAILED=""
 FAILED_PARSE=""
 
-REGEX="Time elapsed: ([0-9.]*) sec"
+REGEX="Time elapsed: ([0-9.]+) sec"
 
 TIME=0
 
@@ -50,11 +50,9 @@ while read -r line; do
 
     if [[ "$line" =~ $REGEX ]]; then
         SEC="${BASH_REMATCH[1]}"
-        if [ -z "$SECONDS" ]; then
-            FAILED_PARSE="$line"
-        else
-            TIME="`echo "$TIME + $SEC" | bc`"
-        fi
+        TIME="`echo "$TIME + $SEC" | bc`"
+    else
+        FAILED_PARSE="$line"
     fi
 done <<< "`grep -e 'Time elapsed:' "$OUTPUT" | grep -v -f "$BLACLISTED_TESTS" `"
 

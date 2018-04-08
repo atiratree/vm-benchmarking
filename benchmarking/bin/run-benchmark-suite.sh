@@ -161,9 +161,9 @@ run_benchmark(){
     fi
 }
 
-lines=`cat "$SUITE" | wc -l`
-for i in `seq 1 $lines`
+LINES=`cat "$SUITE" | wc -l`
+for i in `seq 1 $LINES`
     do
-    variable="'$i""q;d' $SUITE"
-    run_benchmark `eval sed "$variable"`
+    VAR="'$i""q;d' $SUITE"
+    run_benchmark `eval sed "$VAR"`
 done

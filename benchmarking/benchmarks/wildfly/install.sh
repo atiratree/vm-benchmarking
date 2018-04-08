@@ -13,7 +13,7 @@ set_env(){
 }
 
 # install java
-yum -y install wget java-1.8.0-openjdk.x86_64 java-1.8.0-openjdk-devel.x86_64
+yum -y install java-1.8.0-openjdk.x86_64 java-1.8.0-openjdk-devel.x86_64
 
 yum clean all
 rm -rf /var/cache/yum

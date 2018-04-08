@@ -6,3 +6,5 @@ postgres     3-disk             1-baseline       1       analysis-result      CL
 
 wildfly      1-main             1-baseline       1       analysis-result      CLEAN_FLAG=clean,NO_OUTPUT_CHECK_MIN=30
 wildfly      1-main             2-rand           1       analysis-result      CLEAN_FLAG=clean,NO_OUTPUT_CHECK_MIN=30
+
+compression  1-main             1-baseline       1       analysis-result      CLEAN_FLAG=clean

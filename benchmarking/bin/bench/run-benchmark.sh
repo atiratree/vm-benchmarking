@@ -146,7 +146,7 @@ if [ "$MEASURE_RESOURCE_USAGE" == "yes" ]; then
     kill "$MEASURE_PROCESS"
     $SSH "root@$IP" "bash -s" -- < "$RESOURCE_USAGE_DIR/finish-measurement.sh" &> /dev/null
     $SCP "root@$IP:/tmp/sar-report.svg" "$RUN_RESULTS_DIR/resource-usage.svg" &> /dev/null
-    SPACE_USAGE="`$SSH "root@$IP" "df -h"`"
+    SPACE_USAGE="`$SSH "root@$IP" "df -h" 2> /dev/null`"
 fi
 
 "$IMAGE_MANAGEMENT_DIR/delete-vm.sh" "$BENCHMARK_VM"

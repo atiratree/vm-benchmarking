@@ -33,7 +33,7 @@ if [ "$ARCHITECTURE" != "x86_64" -a "$ARCHITECTURE" != "ppc64le" ]; then
     exit 1
 fi
 
-yum -y install wget bc
+yum -y install bc
 
 if [ "$ARCHITECTURE" == "ppc64le" ]; then
     ppc64le
