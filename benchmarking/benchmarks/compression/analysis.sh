@@ -10,24 +10,30 @@ function logDetailed(){
 
 SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 VERBOSE_FILE="${VERBOSE_FILE:-/dev/null}"
+PRINT_HEADER="${PRINT_HEADER:-}"
 
-OUTPUT="$1"
-ANALYSIS="$2"
-DETAILED_ANALYSIS="$3"
-SHOW_HEADER="$4"
-
-if [ ! -f "$OUTPUT" ]; then
-	echo "file for analysis must be specified" >&2
-	exit 1
-fi
+ANALYSIS="$1"
+DETAILED_ANALYSIS="$2"
+OUTPUT="$3"
 
 if [ ! -f "$ANALYSIS" ]; then
 	echo "file for analysis result must be specified" >&2
+	exit 1
+fi
+
+if [ -n "$PRINT_HEADER" ]; then
+    log "# time elapsed (in seconds)"
+    exit 0
+fi
+
+if [ ! -f "$DETAILED_ANALYSIS" ]; then
+	echo "file for detailed analysis result must be specified" >&2
 	exit 2
 fi
 
-if [ -n "$SHOW_HEADER" ]; then
-    log "# time elapsed (in seconds)"
+if [ ! -f "$OUTPUT" ]; then
+	echo "file for analysis must be specified" >&2
+	exit 3
 fi
 
 REGEX="real\s+([0-9.]+)"
@@ -52,7 +58,7 @@ done <<< "$CONTENT"
 
 if [ -z "$FINISHED" ]; then
     log "FAIL: tests were not successful"
-    exit 3
+    exit 4
 fi
 
 log "$TIME"

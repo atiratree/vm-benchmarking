@@ -140,7 +140,7 @@ run_benchmark(){
         return 3
     fi
 
-    echo -e "${GREEN}running $RUN_BENCH_NAME $TIMES times, OPTIONS=$OPTIONS${NC}"
+    echo -e "${GREEN}running $RUN_BENCH_NAME $TIMES times, OPTIONS: $OPTIONS${NC}"
 
     for i in `seq 1 "$TIMES"`; do
 

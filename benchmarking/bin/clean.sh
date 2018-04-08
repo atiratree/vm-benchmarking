@@ -25,7 +25,7 @@ removeBenchmark(){
             continue
         fi
         INSTALL_VERSION="`basename "$INSTALL_DIR" | cut -c 10-`"
-        if [  "$SELECT" == "--all" -o "$SELECT" == "--install" ]; then
+        if [  "$SELECT" == "--all" -o "$SELECT" == "--all-files" -o "$SELECT" == "--install" ]; then
            remove "$INSTALL_DIR/out"
         fi
 
@@ -41,10 +41,10 @@ removeBenchmark(){
                 continue
             fi
             RUN_VERSION="`basename "$RUN_DIR" | cut -c 6-`"
-            if [  "$SELECT" == "--all" -o "$SELECT" == "--run" ]; then
+            if [  "$SELECT" == "--all" -o "$SELECT" == "--all-files" -o "$SELECT" == "--run" ]; then
                 remove "$RUN_DIR/out"
             fi
-            if [  "$SELECT" == "--all" -o "$SELECT" == "--analysis" ]; then
+            if [  "$SELECT" == "--all" -o "$SELECT" == "--all-files" -o "$SELECT" == "--analysis" ]; then
                 ANALYSIS_NAME="`"$UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"`"
                 ANALYSIS_DIR="$RUN_DIR/analysis"
                  if [ -d "$ANALYSIS_DIR" ]; then
@@ -64,11 +64,12 @@ source "$SCRIPTS_DIR/config.env"
 SELECT="$1"
 NAME="$2"
 
-if [  "$SELECT" != "--all" -a "$SELECT" != "--analysis" \
+if [  "$SELECT" != "--all" -a "$SELECT" != "--analysis" -a "$SELECT" != "--all-files" \
     -a "$SELECT" != "--install" -a "$SELECT" != "--run"  -a "$SELECT" != "--vms" ]; then
     echo "clean.sh OPTION [NAME] "
     echo "  --all"
     echo "  --vms"
+    echo "  --all-files"
     echo "  --analysis"
     echo "  --install"
     echo "  --run"

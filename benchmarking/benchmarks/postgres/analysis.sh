@@ -5,24 +5,30 @@ function log(){
 }
 
 VERBOSE_FILE="${VERBOSE_FILE:-/dev/null}"
+PRINT_HEADER="${PRINT_HEADER:-}"
 
-OUTPUT="$1"
-ANALYSIS="$2"
-DETAILED_ANALYSIS="$3"
-SHOW_HEADER="$4"
-
-if [ ! -f "$OUTPUT" ]; then
-	echo "file for analysis must be specified" >&2
-	exit 1
-fi
+ANALYSIS="$1"
+DETAILED_ANALYSIS="$2"
+OUTPUT="$3"
 
 if [ ! -f "$ANALYSIS" ]; then
 	echo "file for analysis result must be specified" >&2
+	exit 1
+fi
+
+if [ -n "$PRINT_HEADER" ]; then
+    log "# transactions per second"
+    exit 0
+fi
+
+if [ ! -f "$DETAILED_ANALYSIS" ]; then
+	echo "file for detailed analysis result must be specified" >&2
 	exit 2
 fi
 
-if [ -n "$SHOW_HEADER" ]; then
-    log "# transactions per second"
+if [ ! -f "$OUTPUT" ]; then
+	echo "file for analysis must be specified" >&2
+	exit 3
 fi
 
 

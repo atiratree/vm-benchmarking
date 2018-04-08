@@ -54,11 +54,6 @@ if [ -z "$ANALYSIS_NAME" ]; then
 	exit 4
 fi
 
-if [ ! -d "$RESULT_DIR" ]; then
-    echo "out directory does not exist" >&2
-    exit 5
-fi
-
 if [ ! -e "$ANALYSIS_SCRIPT" ]; then
 	echo "$ANALYSIS_SCRIPT must be specified" >&2
 	exit 6
@@ -68,16 +63,23 @@ mkdir -p "$ANALYSIS_DIR"
 
 ANALYSIS="$ANALYSIS_DIR/$ANALYSIS_NAME"
 DETAILED_ANALYSIS="$ANALYSIS_DIR/$ANALYSIS_NAME.detail"
+ANALYSIS_USAGES_DIR="$ANALYSIS_DIR/$ANALYSIS_NAME""-USAGE"
 
-SHOW_HEADER=""
+rm -f "$ANALYSIS_USAGES_DIR"
 
-SHOW_HEADER="TRUE"
 > "$ANALYSIS"
+PRINT_HEADER=TRUE "$BENCHMARK_DIR"/analysis.sh "$ANALYSIS" "$DETAILED_ANALYSIS"
 
 "$UTIL_DIR/get-settings.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION" | sed -e '1{/.*/d}; s/^/# /g' > "$DETAILED_ANALYSIS"
 logDetailed "# --------------------"
 
-echo -e "${BLUE}analyzing `"$UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"` into $ANALYSIS${NC}"
+echo -e "${BLUE}analyzing `"$UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"` into $ANALYSIS_DIR as $ANALYSIS_NAME${NC}"
+
+
+if [ ! -d "$RESULT_DIR" ]; then
+    echo -e "${RED}out directory not found${NC}" >&2
+    exit 0
+fi
 
 for OUT_DIR in  "$RESULT_DIR"/*; do
     if [ ! -d "$OUT_DIR" ]; then
@@ -86,6 +88,13 @@ for OUT_DIR in  "$RESULT_DIR"/*; do
 	OUTPUT="$OUT_DIR/output"
 	OUTPUT_RUN="$OUT_DIR/output-run"
 	LIBVIRT_XML="$OUT_DIR/libvirt.xml"
+	RESOURCE_USAGE="$OUT_DIR/resource-usage.svg"
+
+	if [ -f "$RESOURCE_USAGE" ]; then
+        mkdir -p "$ANALYSIS_USAGES_DIR"
+        NUMBERED="` basename "$OUT_DIR"`"
+        cp "$RESOURCE_USAGE" "$ANALYSIS_USAGES_DIR/resource-usage.$NUMBERED.svg"
+	fi
 
 	if [ -f "$OUTPUT" ]; then
 		RETURN_CODE="`grep -e "failed with exit code" "$OUTPUT"`"
@@ -105,11 +114,6 @@ for OUT_DIR in  "$RESULT_DIR"/*; do
 		continue
 	fi
 
-    "$BENCHMARK_DIR"/analysis.sh "$OUTPUT" "$ANALYSIS" "$DETAILED_ANALYSIS" "$SHOW_HEADER"
+    "$BENCHMARK_DIR"/analysis.sh "$ANALYSIS" "$DETAILED_ANALYSIS" "$OUTPUT"
     logDetailed "# --------------------"
-
-    if [ -n "$SHOW_HEADER" ]; then
-        SHOW_HEADER=""
-    fi
 done
-
