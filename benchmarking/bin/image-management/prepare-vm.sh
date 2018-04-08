@@ -99,6 +99,7 @@ else
     echo -e "${GREEN}Installing${NC}"
 fi
 
+$SSH "root@$IP" "echo $FULL_NAME > /etc/hostname"
 FINAL_SCRIPT="`SCRIPT_FILE="$INSTALL_SCRIPT" POST_SCRIPT_FILE="$VERSIONED_INSTALL_SCRIPT" "$UTIL_DIR/get-settings.sh" "$NAME" "$INSTALL_VERSION"`"
 $SSH "root@$IP" "bash -s" -- <<< "$FINAL_SCRIPT" 2>&1 | tee "$VERBOSE_FILE" >> "$RESULT"
 exitIfFailed $?

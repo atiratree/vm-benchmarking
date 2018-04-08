@@ -137,6 +137,7 @@ if [ "$MEASURE_RESOURCE_USAGE" == "yes" ]; then
     fi
     START=`date +%s`
 fi
+
 echo "started: `date`"
 $SSH "root@$IP" "bash -s" -- <<< "$FINAL_SCRIPT" 2>&1 | tee "$VERBOSE_FILE" >> "$RUN_RESULT"
 
