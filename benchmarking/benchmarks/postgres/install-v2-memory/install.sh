@@ -1,9 +1,6 @@
 #!/bin/bash
 
-# Memory Cached  Test 
-#
-# scale / 75 = 1GB database
-# 0.9 X RAM
+# Memory Cached  Test
 
 set -e
 
@@ -12,9 +9,7 @@ if [ -z "$RAM" ]; then
 	exit 1
 fi
 
-TEST_CONSTANT="0.9"
-
-SCALE="`echo "$RAM * 75 * $TEST_CONSTANT" | bc | xargs printf "%.0f"`"
+SCALE="`echo "$RAM * 75 * $SCALE_MULTIPLIER_CONSTANT" | bc | xargs printf "%.0f"`"
 echo "Buffer Install: using scale $SCALE for ram $RAM GiB"
 
 # prepare db

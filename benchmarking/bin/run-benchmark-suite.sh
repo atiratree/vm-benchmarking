@@ -94,6 +94,8 @@ set_option(){
     if [[ "$OPTIONS" =~ $REGEX ]]; then
         OPT="${BASH_REMATCH[0]}"
         export "$OPT"
+    else
+        unset "$OPTION"
     fi
 }
 
@@ -130,7 +132,15 @@ run_benchmark(){
         return 2
     fi
 
-    echo -e "${GREEN}running `"$UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"` $TIMES times${NC}"
+    RUN_BENCH_NAME="`"$UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"`"
+    RUN_BENCH_DIR="$BENCHMARKS_DIR/`DIR=TRUE "$UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"`"
+
+    if [ ! -d "$RUN_BENCH_DIR" ]; then
+        echo "skipping $RUN_BENCH_DIR: directory does not exist" >&2
+        return 3
+    fi
+
+    echo -e "${GREEN}running $RUN_BENCH_NAME $TIMES times, OPTIONS=$OPTIONS${NC}"
 
     for i in `seq 1 "$TIMES"`; do
 
