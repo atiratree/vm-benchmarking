@@ -162,7 +162,7 @@ run_benchmark(){
         mv "$TMP_FILE" "$RESULT_FILE"
     done
 
-    "$BENCH_DIR"/analysis.sh  "$NAME" "$INSTALL_VERSION" "$RUN_VERSION" "$ANALYSIS_NAME"
+    "$BENCH_DIR"/analysis.sh  "$NAME" "$INSTALL_VERSION" "$RUN_VERSION" "$ANALYSIS_NAME" || echo -e "${RED}skipping analysis${NC}"
 
     set_option "$OPTIONS" "CLEAN_FLAG"
     if [ "$CLEAN_FLAG" == "clean" ]; then

@@ -7,3 +7,5 @@ centos-base         postgres          3-disk
 centos-base         wildfly           1-main
 
 centos-base         compression       1-main
+
+centos-base         npb               1-main
