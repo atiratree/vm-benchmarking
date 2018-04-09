@@ -1,18 +1,8 @@
 #!/bin/bash
 
-# Disk Test 
-#
-# scale / 75 = 1GB database
-# 4 X RAM
+# Disk Test
 
-set -e
-
-if [ -z "$RAM" ]; then
-	echo "Failed" 2>&1
-	exit 1
-fi
-
-SCALE_MULTIPLIER_CONSTANT="4"
+set -eu
 
 SCALE="`echo "$RAM * 75 * $SCALE_MULTIPLIER_CONSTANT" | bc | xargs printf "%.0f"`"
 echo "Buffer Install: using scale $SCALE for ram $RAM GiB"

@@ -1,11 +1,6 @@
 #!/bin/bash
 
-set -e
-
-if [ -z "$PROCESSORS" ] || [ -z "$RUN_TIME" ]; then
-	echo "Failed" 2>&1
-	exit 1
-fi
+set -eu
 
 CLIENTS="`echo "$PROCESSORS * 2" | bc`" # clients running simultaneously
 

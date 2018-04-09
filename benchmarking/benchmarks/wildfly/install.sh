@@ -1,7 +1,7 @@
 #!/bin/bash
 # common install file for all versions
 
-set -e
+set -eu
 
 extract(){
     tar xzf "$1" && rm -rf "$1"
@@ -32,6 +32,7 @@ cd
 wget https://github.com/wildfly/wildfly/archive/12.0.0.Final.tar.gz
 extract 12.0.0.Final.tar.gz
 cd wildfly-12.0.0.Final
+ulimit -n 8192
 mvn install -DskipTests
 
 # download test dependencies

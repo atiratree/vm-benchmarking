@@ -7,7 +7,9 @@
 # https://people.planetpostgresql.org/devrim/index.php?/#archives/80-Installing-and-configuring-PostgreSQL-9.3-and-9.4-on-RHEL-7.html
 # https://developer.ibm.com/linuxonpower/advance-toolchain/advtool-installation/
 
-set -e
+set -eu
+
+YUM_PACKAGES=""
 
 ppc64le(){
     # add advance toolchain
