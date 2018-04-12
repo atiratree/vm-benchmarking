@@ -83,5 +83,5 @@ if [ -z "$NAME" ]; then
         fi
     done
 else
-    removeBenchmark "$BENCHMARKS_DIR/$NAME/"
+    removeBenchmark "$BENCHMARKS_DIR/$NAME"
 fi

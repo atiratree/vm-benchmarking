@@ -90,6 +90,12 @@ exitIfFailed $?
 
 
 "$UTIL_DIR/wait-ssh-up.sh" "$FULL_NAME"
+
+if [ $? -ne 0 ]; then
+    echo -e "${RED}Could not connect to the vm!${NC}"
+    exit 5
+fi
+
 IP="`"$UTIL_DIR/get-ip.sh" "$FULL_NAME"`"
 
 # install

@@ -14,7 +14,7 @@ SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 VERBOSE_FILE="${VERBOSE_FILE:-/dev/null}"
 PRINT_HEADER="${PRINT_HEADER:-}"
 
-BLACLISTED_TESTS="$SCRIPTS_DIR/analysis-blacklisted-tests"
+BLACLISTED_ENTRIES="$SCRIPTS_DIR/analysis-blacklisted-entries"
 
 ANALYSIS="$1"
 DETAILED_ANALYSIS="$2"
@@ -47,6 +47,17 @@ REGEX="Time elapsed: ([0-9.]+) sec"
 
 TIME=0
 
+ELAPSED_TIMES="`grep -e 'Time elapsed:' "$OUTPUT"`"
+
+if [ -f "$BLACLISTED_ENTRIES" ]; then
+    TMP_FILE=$(mktemp)
+    sed -e '/^#.*/d; /^\s*$/d; s/^\s*#.*$//g;' "$BLACLISTED_ENTRIES" > "$TMP_FILE"
+    if [ -s  "$TMP_FILE" ]; then
+        ELAPSED_TIMES="`echo  "$ELAPSED_TIMES" | grep -v -f "$TMP_FILE"`"
+    fi
+    rm -f "$TMP_FILE"
+fi
+
 while read -r line; do
 	logDetailed  "$line"
 
@@ -60,7 +71,7 @@ while read -r line; do
     else
         FAILED_PARSE="$line"
     fi
-done <<< "`grep -e 'Time elapsed:' "$OUTPUT" | grep -v -f "$BLACLISTED_TESTS" `"
+done <<< "$ELAPSED_TIMES"
 
 
 if [ -n "$FAILED" ]; then

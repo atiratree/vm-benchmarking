@@ -68,9 +68,17 @@ ANALYSIS_USAGES_DIR="$ANALYSIS_DIR/$ANALYSIS_NAME""-USAGE"
 rm -rf "$ANALYSIS_USAGES_DIR"
 
 > "$ANALYSIS"
-PRINT_HEADER=TRUE "$BENCHMARK_DIR"/analysis.sh "$ANALYSIS" "$DETAILED_ANALYSIS"
+PRINT_HEADER=TRUE "$ANALYSIS_SCRIPT" "$ANALYSIS" "$DETAILED_ANALYSIS"
 
-"$UTIL_DIR/get-settings.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION" | sed -e '1{/.*/d}; s/^/# /g' > "$DETAILED_ANALYSIS"
+ALL_SETTINGS=""
+for RUN_DIR in "$RESULT_DIR"/*; do
+    if [ ! -f "$RUN_DIR/settings.env" ]; then
+        continue
+    fi
+    ALL_SETTINGS="$ALL_SETTINGS`echo && cat "$RUN_DIR/settings.env"`"
+done
+
+echo "$ALL_SETTINGS" | sort | uniq | sed -e '/^\s*$/d; s/^/# /g' > "$DETAILED_ANALYSIS"
 logDetailed "# --------------------"
 
 echo -e "${BLUE}analyzing `"$UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"` into $ANALYSIS_DIR as $ANALYSIS_NAME${NC}"
@@ -104,9 +112,17 @@ for OUT_DIR in  "$RESULT_DIR"/*; do
         fi
 	fi
 
-    if [ -f "$OUTPUT_RUN" ] && ! grep -q -e "benchmark.*success" "$OUTPUT_RUN"; then
-        finish "FAIL: benchmark run not succesfull"
-        continue
+    if [ -f "$OUTPUT_RUN" ]; then
+        NO_CONNECT="`grep -e "Could not connect to" "$OUTPUT_RUN"`"
+        if [ -n "$NO_CONNECT" ]; then
+            finish "FAIL: $NO_CONNECT"
+            continue
+        fi
+        NO_SUCCESS="`grep -e "benchmark.*success" "$OUTPUT_RUN"`"
+        if [ -z "$NO_SUCCESS" ]; then
+            finish "FAIL: benchmark run not successful"
+            continue
+        fi
 	fi
 
 	if [ ! -f "$OUTPUT" -o ! -f "$OUTPUT_RUN" -o ! -f "$OUTPUT_RUN" ]; then
@@ -114,6 +130,6 @@ for OUT_DIR in  "$RESULT_DIR"/*; do
 		continue
 	fi
 
-    "$BENCHMARK_DIR"/analysis.sh "$ANALYSIS" "$DETAILED_ANALYSIS" "$OUTPUT"
+    "$ANALYSIS_SCRIPT" "$ANALYSIS" "$DETAILED_ANALYSIS" "$OUTPUT"
     logDetailed "# --------------------"
 done

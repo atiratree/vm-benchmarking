@@ -8,7 +8,7 @@ exitIfFailed(){
 
 UTIL_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 source "$UTIL_DIR/../../config.env"
-MAX_WAIT_TIME_FOR_CONNECTION="${MAX_WAIT_TIME_FOR_CONNECTION:120}"
+MAX_WAIT_TIME_FOR_CONNECTION="${MAX_WAIT_TIME_FOR_CONNECTION:-120}"
 
 NAME="$1"
 
@@ -27,7 +27,7 @@ if [ ! -e "$ID_RSA" ]; then
 fi
 
 # wait for IP
-counter=1
+COUNTER=1
 while [ -z "$IP" ]; do
 	IP="`"$UTIL_DIR/get-ip.sh" "$NAME"`"
 	exitIfFailed $?
@@ -41,10 +41,12 @@ while [ -z "$IP" ]; do
 		if grep -q "$IP" <<< "$OUTPUT"; then # something wrong happened  (e.g. Connection refused)
 			IP=""
 		fi
-	elif [ "$counter" == "$MAX_WAIT_TIME_FOR_CONNECTION" ]; then
+	fi
+
+	if [ "$COUNTER" == "$MAX_WAIT_TIME_FOR_CONNECTION" ]; then
 		echo "Could not connect to $NAME" >&2
-		exitIfFailed 3
+		exit 3
 	fi
 	sleep 1
-	counter=$(($counter + 1))
+	COUNTER=$(($COUNTER + 1))
 done

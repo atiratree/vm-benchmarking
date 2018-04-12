@@ -87,9 +87,12 @@ BENCHMARK_VM="`"$UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"
 RUN_RESULTS_DIR="$RESULTS_DIR/$ID"
 RUN_RESULT="$RUN_RESULTS_DIR/output"
 RUN_RESULT_LIBVIRT_XML="$RUN_RESULTS_DIR/libvirt.xml"
+RUN_RESULT_SETTINGS="$RUN_RESULTS_DIR/settings.env"
 
 mkdir -p "$RUN_RESULTS_DIR"
+
 > "$RUN_RESULT"
+"$UTIL_DIR/get-settings.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION" | sed -e '1{/.*/d}'> "$RUN_RESULT_SETTINGS"
 
 echo -e "${BLUE}initializing $BENCHMARK_VM benchmark${NC}"
 "$IMAGE_MANAGEMENT_DIR/clone-vm.sh" "$BENCHMARK_BASE_VM" "$BENCHMARK_VM"
@@ -118,6 +121,13 @@ virsh --connect="$CONNECTION" start "$BENCHMARK_VM"
 exitIfFailed $?
 
 "$UTIL_DIR/wait-ssh-up.sh" "$BENCHMARK_VM"
+
+if [ $? -ne 0 ]; then
+    echo -e "${RED}Could not connect to the vm!${NC}"
+    "$IMAGE_MANAGEMENT_DIR/delete-vm.sh" "$BENCHMARK_VM"
+    exit 6
+fi
+
 IP="`"$UTIL_DIR/get-ip.sh" "$BENCHMARK_VM"`"
 
 # run benchmarks

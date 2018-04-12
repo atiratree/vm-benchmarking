@@ -5,5 +5,7 @@
 */install-v*/run-v*/libvirt.xml
 */install-v*/run-v*/settings.env
 */settings.env
+*/analysis-blacklisted-entries
 benchmark-images.cfg
 benchmark-suite.cfg
+stop-suite.flag

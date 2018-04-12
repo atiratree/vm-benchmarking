@@ -108,6 +108,7 @@ UTIL_DIR="$IMAGE_MANAGEMENT_DIR/util"
 source "$SCRIPTS_DIR/config.env"
 
 SUITE="$BENCHMARKS_DIR/benchmark-suite.cfg"
+STOP_SUITE_FLAG="$BENCHMARKS_DIR/stop-suite.flag"
 
 if [  "$1" == "-v" ]; then
 	export VERBOSE_FILE=/dev/tty
@@ -164,8 +165,8 @@ run_benchmark(){
 
     "$BENCH_DIR"/analysis.sh  "$NAME" "$INSTALL_VERSION" "$RUN_VERSION" "$ANALYSIS_NAME" || echo -e "${RED}skipping analysis${NC}"
 
-    set_option "$OPTIONS" "CLEAN_FLAG"
-    if [ "$CLEAN_FLAG" == "clean" ]; then
+    set_option "$OPTIONS" "CLEAN"
+    if [ "$CLEAN" == "yes" ]; then
          echo "cleaning up run directory"
         "$SCRIPTS_DIR"/clean.sh --run "$NAME" > "$VERBOSE_FILE"
     fi
@@ -174,6 +175,10 @@ run_benchmark(){
 LINES=`cat "$SUITE" | wc -l`
 for i in `seq 1 $LINES`
     do
+    if [ -e "$STOP_SUITE_FLAG" ]; then
+        echo -e "${RED}stopping suite ${NC}because $STOP_SUITE_FLAG exists"
+        exit 0
+    fi
     VAR="'$i""q;d' $SUITE"
     run_benchmark `eval sed "$VAR"`
 done
