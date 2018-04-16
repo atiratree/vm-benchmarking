@@ -34,6 +34,4 @@ extract 12.0.0.Final.tar.gz
 cd wildfly-12.0.0.Final
 ulimit -n 8192
 mvn install -DskipTests
-
-# download test dependencies
-./integration-tests.sh install -DallTests -DskipTests
+cd

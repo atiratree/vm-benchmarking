@@ -1,1 +1,1 @@
-../../standard-run.sh
+../standard-run.sh
