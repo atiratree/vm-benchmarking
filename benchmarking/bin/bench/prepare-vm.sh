@@ -6,7 +6,7 @@ exitIfFailed(){
 		if [ -e "$RESULT" ]; then
 			echo "failed with return code $1" >> "$RESULT"
 		fi
-		"$SCRIPTS_DIR/delete-vm.sh" "$FULL_NAME"
+		"$IMAGE_MANAGEMENT_DIR/delete-vm.sh" "$FULL_NAME"
         exit $?
     fi
 }
@@ -21,9 +21,19 @@ safeRemove(){
     echo
 }
 
+copyToRemote(){
+    IP="$1"
+    DIR_TO_COPY="$2"
+
+    if [ -d "$DIR_TO_COPY" ]; then
+        $SCP -r "$DIR_TO_COPY"  "root@$IP:/tmp/" &> /dev/null
+    fi
+}
+
 
 SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-UTIL_DIR="$SCRIPTS_DIR/util"
+IMAGE_MANAGEMENT_DIR="`realpath $SCRIPTS_DIR/../image-management`"
+UTIL_DIR="$IMAGE_MANAGEMENT_DIR/util"
 source "$SCRIPTS_DIR/../config.env"
 
 BASE_VM="$1"
@@ -70,7 +80,7 @@ FULL_NAME="`"$UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION"`"
 if virsh list --all | awk  '{print $2}' | grep -q --line-regexp --fixed-strings "$FULL_NAME"; then
 	echo "$LIBVIRT_DEFAULT_URI: vm is present. Removing..."
 	safeRemove "${GREEN}Vm ${RED}$FULL_NAME${NC}"
-	"$SCRIPTS_DIR/delete-vm.sh" "$FULL_NAME"
+	"$IMAGE_MANAGEMENT_DIR/delete-vm.sh" "$FULL_NAME"
 fi
 
 if [ -d "$RESULTS_DIR" ]; then
@@ -82,7 +92,7 @@ mkdir -p "$RESULTS_DIR"
 > "$RESULT"
 
 echo -e "${BLUE}preparing $FULL_NAME${NC}"
-"$SCRIPTS_DIR/clone-vm.sh" "$BASE_VM" "$FULL_NAME"
+"$IMAGE_MANAGEMENT_DIR/clone-vm.sh" "$BASE_VM" "$FULL_NAME"
 exitIfFailed $?
 
 virsh start "$FULL_NAME"
@@ -105,12 +115,18 @@ else
     echo -e "${GREEN}Installing${NC}"
 fi
 
-$SSH "root@$IP" "echo $FULL_NAME > /etc/hostname"
+$SSH "root@$IP" "echo $FULL_NAME > /etc/hostname" &> /dev/null
+
+copyToRemote "$IP" "$BENCHMARK_DIR/dependencies"
+copyToRemote "$IP" "$VERSIONED_INSTALL_DIR/dependencies"
+
 FINAL_SCRIPT="`SCRIPT_FILE="$INSTALL_SCRIPT" POST_SCRIPT_FILE="$VERSIONED_INSTALL_SCRIPT" "$UTIL_DIR/get-settings.sh" "$NAME" "$INSTALL_VERSION"`"
 $SSH "root@$IP" "bash -s" -- <<< "$FINAL_SCRIPT" 2>&1 | tee "$VERBOSE_FILE" >> "$RESULT"
 exitIfFailed $?
 
-# "$SCRIPTS_DIR/vm-up.sh" "$NAME"
+$SSH "root@$IP" "rm -rf /tmp/dependencies" 2>&1 | tee "$VERBOSE_FILE" >> "$RESULT"
+
+# "$IMAGE_MANAGEMENT_DIR/vm-up.sh" "$NAME"
 virsh shutdown "$FULL_NAME"
 
 echo -e "${BLUE}Install output can be found in `realpath $RESULTS_DIR`${NC}"
