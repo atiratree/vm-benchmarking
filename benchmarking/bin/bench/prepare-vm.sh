@@ -13,10 +13,14 @@ exitIfFailed(){
 
 safeRemove(){
     echo -e -n "Are you sure you want to delete $1? (y/n): "
-    read -n 1 -r
-    if [[ ! "$REPLY" =~ ^[Yy]$ ]]; then
-        echo ". preparations skipped..."
-        exit 0
+    if [ -z "$FORCE" ]; then
+        read -n 1 -r
+        if [[ ! "$REPLY" =~ ^[Yy]$ ]]; then
+            echo ". preparations skipped..."
+            exit 0
+        fi
+    else
+         echo -e -n "y (forced)"
     fi
     echo
 }
@@ -35,6 +39,8 @@ SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 IMAGE_MANAGEMENT_DIR="`realpath $SCRIPTS_DIR/../image-management`"
 IMAGE_UTIL_DIR="$IMAGE_MANAGEMENT_DIR/util"
 source "$SCRIPTS_DIR/../config.env"
+
+FORCE="${FORCE:-}"
 
 BASE_VM="$1"
 NAME="$2"
