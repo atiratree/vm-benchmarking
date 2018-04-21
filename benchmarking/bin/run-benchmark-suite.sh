@@ -1,7 +1,6 @@
 #!/bin/bash
 
-trap cleanup SIGINT
-trap cleanup SIGTERM
+trap cleanup SIGTERM SIGINT
 
 cleanup(){
     kill_current_benchmark 3 "cleaning up"
@@ -22,14 +21,7 @@ kill_current_benchmark(){
 
     mkdir -p "$OUTPUT_DIR"
     echo "failed with exit code $EXIT_CODE ($REASON)" >> "$OUTPUT_DIR/output"
-    BASE_VM="`"$UTIL_DIR"/get-name.sh "$NAME" "$INSTALL_VERSION"`"
-    VM="`"$UTIL_DIR"/get-name.sh "$NAME" "$INSTALL_VERSION" "$RUN_VERSION" "$ID"`"
-
     rm -f "/tmp/get-settings.*" "/tmp/benchmark-run.*"
-
-    CLONED_DISK="`"$UTIL_DIR/get-clone-disk-filename.sh" "$BASE_VM" "$VM"`"
-    sync # wait in case script is in the middle of creating image
-    "$IMAGE_MANAGEMENT_DIR/delete-vm.sh" "$VM" "$CLONED_DISK"
 }
 
 line_count(){
@@ -83,19 +75,8 @@ wait_for_benchmark(){
             fi
         done
     else
-         wait "$PROCESS_PID" 2> /dev/null # reattach to benchmark and wait to finish
-    fi
-}
-
-set_option(){
-    OPTIONS="$1"
-    OPTION="$2"
-    REGEX="$OPTION=[^,]*"
-    if [[ "$OPTIONS" =~ $REGEX ]]; then
-        OPT="${BASH_REMATCH[0]}"
-        export "$OPT"
-    else
-        unset "$OPTION"
+         # reattach to benchmark and wait to finish
+         wait "$PROCESS_PID" 2> /dev/null
     fi
 }
 
@@ -103,9 +84,11 @@ SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BENCHMARKS_DIR="`realpath $SCRIPTS_DIR/../benchmarks/`"
 IMAGE_MANAGEMENT_DIR="$SCRIPTS_DIR/image-management"
 BENCH_DIR="$SCRIPTS_DIR/bench"
-UTIL_DIR="$IMAGE_MANAGEMENT_DIR/util"
+IMAGE_UTIL_DIR="$IMAGE_MANAGEMENT_DIR/util"
+UTIL_DIR="$SCRIPTS_DIR/util"
 
 source "$SCRIPTS_DIR/config.env"
+source "$UTIL_DIR/common.sh"
 
 SUITE="$BENCHMARKS_DIR/benchmark-suite.cfg"
 STOP_SUITE_FLAG="$BENCHMARKS_DIR/stop-suite.flag"
@@ -126,6 +109,7 @@ run_benchmark(){
     TIMES="$4"
     ANALYSIS_NAME="$5"
     OPTIONS="$6"
+    set_option "$OPTIONS" "MANAGED_BY_VM"
 
     BENCHMARK_DIR="$BENCHMARKS_DIR/$NAME"
 
@@ -133,8 +117,8 @@ run_benchmark(){
         return 2
     fi
 
-    RUN_BENCH_NAME="`"$UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"`"
-    RUN_BENCH_DIR="$BENCHMARKS_DIR/`DIR=TRUE "$UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"`"
+    RUN_BENCH_NAME="`"$IMAGE_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"`"
+    RUN_BENCH_DIR="$BENCHMARKS_DIR/`DIR=TRUE "$IMAGE_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"`"
 
     if [ ! -d "$RUN_BENCH_DIR" ]; then
         echo "skipping $RUN_BENCH_DIR: directory does not exist" >&2
@@ -145,30 +129,45 @@ run_benchmark(){
 
     for i in `seq 1 "$TIMES"`; do
 
-        ID="`"$UTIL_DIR/get-new-run-id.sh" "$NAME" "$INSTALL_VERSION"  "$RUN_VERSION"`"
-        RUN_PART="`DIR=TRUE "$UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION" "$ID"`"
+        ID="`"$IMAGE_UTIL_DIR/get-new-run-id.sh" "$NAME" "$INSTALL_VERSION"  "$RUN_VERSION"`"
+        RUN_PART="`DIR=TRUE "$IMAGE_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION" "$ID"`"
         OUTPUT_DIR="$BENCHMARKS_DIR/$RUN_PART"
+
+        if [ -n "$MANAGED_BY_VM" ]; then
+           MANAGED_ID="`"$IMAGE_UTIL_DIR/get-new-run-id.sh" "$MANAGED_BY_VM" "$INSTALL_VERSION"  "$RUN_VERSION"`"
+           MANAGED_RUN_PART="`DIR=TRUE "$IMAGE_UTIL_DIR/get-name.sh" "$MANAGED_BY_VM" "$INSTALL_VERSION" "$RUN_VERSION" "$MANAGED_ID"`"
+           MANAGED_OUTPUT_DIR="$BENCHMARKS_DIR/$MANAGED_RUN_PART"
+        fi
+
         TMP_FILE=$(mktemp /tmp/benchmark-suite.XXXXXX)
 
         echo "running $ID"
         set_option "$OPTIONS" "NO_OUTPUT_CHECK_MIN"
-        set_option "$OPTIONS" "MEASURE_RESOURCE_USAGE"
-        "$BENCH_DIR"/run-benchmark.sh "$NAME" "$INSTALL_VERSION" "$RUN_VERSION" "$MEASURE_RESOURCE_USAGE" > >(tee "$VERBOSE_FILE"> "$TMP_FILE" 2>&1) &
+        "$BENCH_DIR"/run-benchmark.sh "$NAME" "$INSTALL_VERSION" "$RUN_VERSION" "$OPTIONS" > >(tee "$VERBOSE_FILE"> "$TMP_FILE" 2>&1) &
         BENCH_CHILD_PROCESS=$!
         wait_for_benchmark "$BENCH_CHILD_PROCESS" "$OUTPUT_DIR/output" "$NO_OUTPUT_CHECK_MIN"
         BENCH_CHILD_PROCESS=""
 
         mkdir -p "$OUTPUT_DIR"
         RESULT_FILE="$OUTPUT_DIR/output-run"
+
+        if [ -n "$MANAGED_BY_VM" ]; then
+            mkdir -p "$MANAGED_OUTPUT_DIR"
+            MANAGED_RESULT_FILE="$MANAGED_OUTPUT_DIR/output-run"
+            cp "$TMP_FILE" "$MANAGED_RESULT_FILE"
+        fi
         mv "$TMP_FILE" "$RESULT_FILE"
     done
 
     "$BENCH_DIR"/analysis.sh  "$NAME" "$INSTALL_VERSION" "$RUN_VERSION" "$ANALYSIS_NAME" || echo -e "${RED}skipping analysis${NC}"
+    if [ -n "$MANAGED_BY_VM" ]; then
+        "$BENCH_DIR"/analysis.sh  "$MANAGED_BY_VM" "$INSTALL_VERSION" "$RUN_VERSION" "$ANALYSIS_NAME" || echo -e "${RED}skipping MANAGED_BY_VM analysis${NC}"
+    fi
 
     set_option "$OPTIONS" "CLEAN"
     if [ "$CLEAN" == "yes" ]; then
          echo "cleaning up run directory"
-        "$SCRIPTS_DIR"/clean.sh --run "$NAME" > "$VERBOSE_FILE"
+        "$SCRIPTS_DIR"/clean.sh --run "$NAME" "$INSTALL_VERSION" > "$VERBOSE_FILE"
     fi
 }
 

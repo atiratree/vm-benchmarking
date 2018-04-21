@@ -22,15 +22,25 @@ ANALYSIS_NAME="$4"
 
 SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 IMAGE_MANAGEMENT_DIR="`realpath $SCRIPTS_DIR/../image-management`"
-UTIL_DIR="$IMAGE_MANAGEMENT_DIR/util"
+IMAGE_UTIL_DIR="$IMAGE_MANAGEMENT_DIR/util"
 source "$SCRIPTS_DIR/../config.env"
 
 BENCHMARKS_DIR="`realpath $SCRIPTS_DIR/../../benchmarks`"
-RUN_DIR_PART="`DIR=TRUE "$UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"`" || exit 1
+RUN_DIR_PART="`DIR=TRUE "$IMAGE_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"`" || exit 1
 BENCHMARK_DIR="$BENCHMARKS_DIR/$NAME"
+
+INSTALL_DIR_PART="`DIR=TRUE "$IMAGE_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION"`"
+VERSIONED_INSTALL_DIR="$BENCHMARKS_DIR/$INSTALL_DIR_PART"
+
 RUN_DIR="$BENCHMARKS_DIR/$RUN_DIR_PART"
 
 ANALYSIS_SCRIPT="$BENCHMARK_DIR/analysis.sh"
+VERSIONED_ANALYSIS_SCRIPT="$VERSIONED_INSTALL_DIR/analysis.sh"
+
+if [ -f "$VERSIONED_ANALYSIS_SCRIPT" ]; then
+    ANALYSIS_SCRIPT="$VERSIONED_ANALYSIS_SCRIPT"
+fi
+
 ANALYSIS_DIR="$RUN_DIR/analysis"
 RESULT_DIR="$RUN_DIR/out"
 
@@ -54,7 +64,7 @@ if [ -z "$ANALYSIS_NAME" ]; then
 	exit 4
 fi
 
-if [ ! -e "$ANALYSIS_SCRIPT" ]; then
+if [ ! -f "$ANALYSIS_SCRIPT" ]; then
 	echo "$ANALYSIS_SCRIPT must be specified" >&2
 	exit 6
 fi
@@ -81,7 +91,7 @@ done
 echo "$ALL_SETTINGS" | sort | uniq | sed -e '/^\s*$/d; s/^/# /g' > "$DETAILED_ANALYSIS"
 logDetailed "# --------------------"
 
-echo -e "${BLUE}analyzing `"$UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"` into $ANALYSIS_DIR as $ANALYSIS_NAME${NC}"
+echo -e "${BLUE}analyzing `"$IMAGE_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"` into $ANALYSIS_DIR as $ANALYSIS_NAME${NC}"
 
 
 if [ ! -d "$RESULT_DIR" ]; then
@@ -107,7 +117,7 @@ for OUT_DIR in  "$RESULT_DIR"/*; do
 	if [ -f "$OUTPUT" ]; then
 		RETURN_CODE="`grep -e "failed with exit code" "$OUTPUT"`"
         if [ -n "$RETURN_CODE" ]; then
-            finish "FAIL: $RETURN_CODE"
+            finish "FAIL: `echo "$RETURN_CODE" | tail -1`"
             continue
         fi
 	fi

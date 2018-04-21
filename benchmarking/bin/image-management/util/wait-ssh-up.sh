@@ -6,8 +6,8 @@ exitIfFailed(){
 	fi
 }
 
-UTIL_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-source "$UTIL_DIR/../../config.env"
+IMAGE_UTIL_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source "$IMAGE_UTIL_DIR/../../config.env"
 MAX_WAIT_TIME_FOR_CONNECTION="${MAX_WAIT_TIME_FOR_CONNECTION:-120}"
 
 NAME="$1"
@@ -29,7 +29,7 @@ fi
 # wait for IP
 COUNTER=1
 while [ -z "$IP" ]; do
-	IP="`"$UTIL_DIR/get-ip.sh" "$NAME"`"
+	IP="`"$IMAGE_UTIL_DIR/get-ip.sh" "$NAME"`"
 	exitIfFailed $?
 
 	if [ -n "$IP" ]; then

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-UTIL_DIR="$SCRIPTS_DIR/util"
+IMAGE_UTIL_DIR="$SCRIPTS_DIR/util"
 source "$SCRIPTS_DIR/../config.env"
 
 NAME="$1"
@@ -16,7 +16,7 @@ fi
 echo -e "${GREEN}$LIBVIRT_DEFAULT_URI: deleting $NAME${NC}"
 
 if [ -z "$DISK_FILENAME" ]; then
-    DISK_FILENAME="`"$UTIL_DIR"/get-disk-filename.sh "$NAME"`"
+    DISK_FILENAME="`"$IMAGE_UTIL_DIR"/get-disk-filename.sh "$NAME"`"
 fi
 
 virsh destroy "$NAME" 2> /dev/null
