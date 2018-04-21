@@ -1,12 +1,14 @@
-# $NAME    $INSTALL_VERSION    $RUN_VERSION    $TIMES    $ANALYSIS_NAME    $OPTIONS (CLEAN={yes, no}, MEASURE_RESOURCE_USAGE={yes,no}, NO_OUTPUT_CHECK_MIN=X)
+# $NAME           $INSTALL_VERSION     $RUN_VERSION     $TIMES     $ANALYSIS_NAME     $OPTIONS (CLEAN={yes, no}, MEASURE_RESOURCE_USAGE={yes,no}, NO_OUTPUT_CHECK_MIN=X, MANAGED_BY_VM=XX)
 
-postgres     1-buffer           1-baseline       1       analysis-result      CLEAN=yes
-postgres     2-memory           1-baseline       1       analysis-result      CLEAN=yes
-postgres     3-disk             1-baseline       1       analysis-result      CLEAN=yes
+postgres            1-buffer             1-baseline       1          result             CLEAN=yes
+postgres            2-memory             1-baseline       1          result             CLEAN=yes
+postgres            3-disk               1-baseline       1          result             CLEAN=yes
 
-wildfly      1-main             1-baseline       1       analysis-result      CLEAN=yes,NO_OUTPUT_CHECK_MIN=30
-wildfly      1-main             2-rand           1       analysis-result      CLEAN=yes,NO_OUTPUT_CHECK_MIN=30
+wildfly             1-main               1-baseline       1          result             CLEAN=yes,NO_OUTPUT_CHECK_MIN=30
+wildfly             1-main               2-rand           1          result             CLEAN=yes,NO_OUTPUT_CHECK_MIN=30
 
-compression  1-main             1-baseline       1       analysis-result      CLEAN=yes
+wildfly             2-daytrader          1-baseline       1          result             CLEAN=yes,MANAGED_BY_VM=wildfly-jmeter
 
-npb          1-main             1-baseline       1       analysis-result      CLEAN=yes
+compression         1-main               1-baseline       1          result             CLEAN=yes
+
+npb                 1-main               1-baseline       1          result             CLEAN=yes
