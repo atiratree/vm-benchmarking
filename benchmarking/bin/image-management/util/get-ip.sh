@@ -1,9 +1,7 @@
 #!/bin/bash
 
-exit_if_failed(){
-	if [ "$1" != 0 ]; then
-		exit "$1"
-	fi
+fail_handler(){
+    exit "$1"
 }
 
 validate_ip(){
@@ -14,13 +12,14 @@ validate_ip(){
     fi
 }
 
-UTIL_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-source "$UTIL_DIR/../../config.env"
+IMAGE_UTIL_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+UTIL_DIR="`realpath $IMAGE_UTIL_DIR/../../util`"
+source "$UTIL_DIR/common.sh"
+source "$IMAGE_UTIL_DIR/../../config.env"
 
 NAME="$1"
 
-"$UTIL_DIR/assert-vm.sh" "$NAME"
-exit_if_failed $?
+"$IMAGE_UTIL_DIR/assert-vm.sh" "$NAME" || fail_handler $?
 
 validate_ip "$STATIC_IP"
 
@@ -39,5 +38,3 @@ if [ -z "$NETWORK" ]; then
 else
     validate_ip "`virsh net-dhcp-leases "$NETWORK" --mac "$MAC_ADDRESS" | awk '{ print $5; }'`"
 fi
-
-exit 0

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -eu
+
 if type sadf &> /dev/null; then
     sadf -g /tmp/sar-report -- -r -P ALL -u ALL -b > /tmp/sar-report.svg
 else

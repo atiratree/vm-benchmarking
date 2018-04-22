@@ -4,15 +4,15 @@ function log(){
 	echo "$1" | tee "$VERBOSE_FILE" >> "$ANALYSIS"
 }
 
-function logDetailed(){
+function log_detailed(){
 	echo "$1" | tee "$VERBOSE_FILE" >> "$DETAILED_ANALYSIS"
 }
 
 
 function finish(){
 	log "$1"
-	logDetailed "$1"
-	logDetailed "# --------------------"
+	log_detailed "$1"
+	log_detailed "# --------------------"
 }
 
 NAME="$1"
@@ -22,8 +22,10 @@ ANALYSIS_NAME="$4"
 
 SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 IMAGE_MANAGEMENT_DIR="`realpath $SCRIPTS_DIR/../image-management`"
+UTIL_DIR="`realpath $SCRIPTS_DIR/../util`"
 IMAGE_UTIL_DIR="$IMAGE_MANAGEMENT_DIR/util"
 source "$SCRIPTS_DIR/../config.env"
+source "$UTIL_DIR/common.sh"
 
 BENCHMARKS_DIR="`realpath $SCRIPTS_DIR/../../benchmarks`"
 RUN_DIR_PART="`DIR=TRUE "$IMAGE_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"`" || exit 1
@@ -44,20 +46,7 @@ fi
 ANALYSIS_DIR="$RUN_DIR/analysis"
 RESULT_DIR="$RUN_DIR/out"
 
-if [ -z "$NAME" ]; then
-	echo "name must be specified" >&2
-	exit 1
-fi
-
-if [ -z "$INSTALL_VERSION" ]; then
-	echo "install version must be specified" >&2
-	exit 2
-fi
-
-if [ -z "$RUN_VERSION" ]; then
-	echo "run version must be specified" >&2
-	exit 3
-fi
+assert_run "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"
 
 if [ -z "$ANALYSIS_NAME" ]; then
 	echo "analysis name must be specified" >&2
@@ -89,7 +78,7 @@ for RUN_DIR in "$RESULT_DIR"/*; do
 done
 
 echo "$ALL_SETTINGS" | sort | uniq | sed -e '/^\s*$/d; s/^/# /g' > "$DETAILED_ANALYSIS"
-logDetailed "# --------------------"
+log_detailed "# --------------------"
 
 echo -e "${BLUE}analyzing `"$IMAGE_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"` into $ANALYSIS_DIR as $ANALYSIS_NAME${NC}"
 
@@ -141,5 +130,5 @@ for OUT_DIR in  "$RESULT_DIR"/*; do
 	fi
 
     "$ANALYSIS_SCRIPT" "$ANALYSIS" "$DETAILED_ANALYSIS" "$OUTPUT"
-    logDetailed "# --------------------"
+    log_detailed "# --------------------"
 done

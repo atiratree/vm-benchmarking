@@ -1,12 +1,12 @@
 #!/bin/bash
 
-exitIfFailed(){
-	if [ "$1" != 0 ]; then
-		exit "$1"
-	fi
+fail_handler(){
+    exit "$1"
 }
 
 IMAGE_UTIL_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+UTIL_DIR="`realpath $IMAGE_UTIL_DIR/../../util`"
+source "$UTIL_DIR/common.sh"
 source "$IMAGE_UTIL_DIR/../../config.env"
 MAX_WAIT_TIME_FOR_CONNECTION="${MAX_WAIT_TIME_FOR_CONNECTION:-120}"
 
@@ -16,10 +16,7 @@ if [ -n "$2" ]; then
     ID_RSA="$2"
 fi
 
-if [ -z "$NAME" ]; then
-	echo "name of vm must be specified" >&2
-	exit 1
-fi
+assert_name "$NAME"
 
 if [ ! -e "$ID_RSA" ]; then
 	echo "id rsa file must be specified" >&2
@@ -29,8 +26,7 @@ fi
 # wait for IP
 COUNTER=1
 while [ -z "$IP" ]; do
-	IP="`"$IMAGE_UTIL_DIR/get-ip.sh" "$NAME"`"
-	exitIfFailed $?
+	IP="`"$IMAGE_UTIL_DIR/get-ip.sh" "$NAME"`" || fail_handler $?
 
 	if [ -n "$IP" ]; then
 		# test ssh works

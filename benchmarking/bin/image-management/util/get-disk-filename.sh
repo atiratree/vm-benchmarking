@@ -1,11 +1,11 @@
 #!/bin/bash
 
 set -e
-UTIL_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-source "$UTIL_DIR/../../config.env"
+IMAGE_UTIL_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+source "$IMAGE_UTIL_DIR/../../config.env"
 
 VM="$1"
 
-"$UTIL_DIR/assert-vm.sh" "$VM"
+"$IMAGE_UTIL_DIR/assert-vm.sh" "$VM"
 
 virsh dumpxml "$VM" | grep "/.*/*$VM.qcow2" -o | head -1

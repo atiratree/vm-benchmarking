@@ -1,9 +1,7 @@
 #!/bin/bash
 
-exitIfFailed(){
-	if [ "$1" != 0 ]; then
-		exit "$1"
-	fi
+fail_handler(){
+    exit "$1"
 }
 
 SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -14,8 +12,7 @@ FORWARD_FROM="${FORWARD_FROM:-}"
 FORWARD_TO="${FORWARD_TO:-8080}"
 NAME="`"$IMAGE_UTIL_DIR/get-name.sh" "$@"`"
 
-"$IMAGE_UTIL_DIR/assert-vm.sh" "$NAME"
-exitIfFailed $?
+"$IMAGE_UTIL_DIR/assert-vm.sh" "$NAME" || fail_handler $?
 
 # allow failing
 virsh start "$NAME" 2>/dev/null
@@ -28,8 +25,6 @@ if [ $? -ne 0 ]; then
 fi
 
 IP="`"$IMAGE_UTIL_DIR/get-ip.sh" "$NAME"`"
-
-
 
 if [ -z "$FORWARD_FROM" ] || [ -z "$FORWARD_TO" ]; then
     $SSH "root@$IP"

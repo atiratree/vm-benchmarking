@@ -4,10 +4,10 @@ trap cleanup SIGINT SIGTERM
 
 cleanup(){
 	echo "killing benchmark $BENCHMARK_VM"
-    finishAll 3
+    finish_all 3
 }
 
-finishAll(){
+finish_all(){
     echo "exiting unexpectedly"
     rm -f "/tmp/get-settings.*"
 
@@ -49,7 +49,7 @@ finish(){
     fi
 }
 
-initializeRun(){
+initialize_run(){
     I_NAME="$1"
     I_INSTALL_VERSION="$2"
     I_RUN_VERSION="$3"
@@ -70,7 +70,7 @@ initializeRun(){
 
     BENCHMARK_BASE_VM="`"$IMAGE_UTIL_DIR/get-name.sh" "$I_NAME" "$I_INSTALL_VERSION"`"
 
-    "$IMAGE_UTIL_DIR/assert-vm.sh" "$BENCHMARK_BASE_VM" || finishAll $?
+    "$IMAGE_UTIL_DIR/assert-vm.sh" "$BENCHMARK_BASE_VM" || finish_all $?
 
     ID="`"$IMAGE_UTIL_DIR/get-new-run-id.sh" "$I_NAME" "$I_INSTALL_VERSION"  "$I_RUN_VERSION"`"
 
@@ -88,10 +88,10 @@ initializeRun(){
 
     RUN_SCRIPT="`SCRIPT_FILE="$SCRIPT" "$IMAGE_UTIL_DIR/get-settings.sh" "$I_NAME" "$I_INSTALL_VERSION" "$I_RUN_VERSION"`"
 
-    "$IMAGE_MANAGEMENT_DIR/clone-vm.sh" "$BENCHMARK_BASE_VM" "$BENCHMARK_VM" || finishAll $?
+    "$IMAGE_MANAGEMENT_DIR/clone-vm.sh" "$BENCHMARK_BASE_VM" "$BENCHMARK_VM" || finish_all $?
 }
 
-resolveLibvirtXML(){
+resolve_libvirt_xml(){
     R_BENCHMARK_VM="$1"
     R_RUN_RESULTS_DIR="$2"
 
@@ -107,16 +107,16 @@ resolveLibvirtXML(){
         MAC_ADDR="`echo "$CURRENT_LIBVIRT_XML" | grep -Eo "<mac address='.*'" | head -1`"
         FILE="`echo "$CURRENT_LIBVIRT_XML" | grep -Eo "/.*.qcow2" | sed 's;/;\\\/;g' | head -1`"
         sed -e "s/<name>.*<\/name>/<name>$R_BENCHMARK_VM<\/name>/; s/<uuid>.*</$UUID_ELEM/g; s/\/.*.qcow2/$FILE/; s/<mac address='.*'/$MAC_ADDR/" \
-        "$RUN_LIBVIRT_XML" | virsh define /dev/stdin > /dev/null 2>&1 || finishAll $?
+        "$RUN_LIBVIRT_XML" | virsh define /dev/stdin > /dev/null 2>&1 || finish_all $?
     fi
 
-    virsh dumpxml "$R_BENCHMARK_VM" > "$RUN_RESULT_LIBVIRT_XML" || finishAll $?
+    virsh dumpxml "$R_BENCHMARK_VM" > "$RUN_RESULT_LIBVIRT_XML" || finish_all $?
 
 }
 
-startVm(){
+start_vm(){
     S_BENCHMARK_VM="$1"
-    virsh --connect="$CONNECTION" start "$S_BENCHMARK_VM" || finishAll $?
+    virsh --connect="$CONNECTION" start "$S_BENCHMARK_VM" || finish_all $?
 
     "$IMAGE_UTIL_DIR/wait-ssh-up.sh" "$S_BENCHMARK_VM"
 
@@ -131,7 +131,7 @@ startVm(){
     echo "running $S_BENCHMARK_VM "
 }
 
-measureResources(){
+measure_resources(){
     S_IP="$1"
     S_RUN_RESULTS_DIR="$2"
     if [ "$MEASURE_RESOURCE_USAGE" == "yes" ]; then
@@ -150,7 +150,7 @@ measureResources(){
 }
 
 
-finishMeasuringResources(){
+finish_measuring_resources(){
     C_IP="$1"
     C_RUN_RESULTS_DIR="$2"
     C_MEASURE_PROCESS="$3"
@@ -189,14 +189,14 @@ if [ "$MEASURE_RESOURCE_USAGE" == "yes" ] && [ ! -e "$GENERATED_DIR/$SYSTAT_FILE
    exit 5
 fi
 
-initializeRun "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"
+initialize_run "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"
 V_BENCHMARK_VM="$BENCHMARK_VM"
 V_RUN_RESULTS_DIR="$RUN_RESULTS_DIR"
 V_RUN_RESULT="$RUN_RESULT"
 V_RUN_SCRIPT="$RUN_SCRIPT"
 
 if [ -n "$MANAGED_BY_VM" ]; then
-    initializeRun "$MANAGED_BY_VM" "$INSTALL_VERSION" "$RUN_VERSION"
+    initialize_run "$MANAGED_BY_VM" "$INSTALL_VERSION" "$RUN_VERSION"
     M_RUN_RESULTS_DIR="$RUN_RESULTS_DIR"
     M_BENCHMARK_VM="$BENCHMARK_VM"
     M_RUN_RESULT="$RUN_RESULT"
@@ -206,23 +206,23 @@ fi
 echo "synchronizing cached writes"
 sync
 
-resolveLibvirtXML "$V_BENCHMARK_VM" "$V_RUN_RESULTS_DIR"
+resolve_libvirt_xml "$V_BENCHMARK_VM" "$V_RUN_RESULTS_DIR"
 if [ -n "$MANAGED_BY_VM" ]; then
-    resolveLibvirtXML "$M_BENCHMARK_VM" "$M_RUN_RESULTS_DIR"
+    resolve_libvirt_xml "$M_BENCHMARK_VM" "$M_RUN_RESULTS_DIR"
 fi
 
-startVm "$V_BENCHMARK_VM"
+start_vm "$V_BENCHMARK_VM"
 V_IP="$IP"
 
 if [ -n "$MANAGED_BY_VM" ]; then
-    startVm "$M_BENCHMARK_VM"
+    start_vm "$M_BENCHMARK_VM"
     M_IP="$IP"
 fi
 
-measureResources "$V_IP" "$V_RUN_RESULTS_DIR"
+measure_resources "$V_IP" "$V_RUN_RESULTS_DIR"
 V_MEASURE_PROCESS="$MEASURE_PROCESS"
 if [ -n "$MANAGED_BY_VM" ]; then
-    measureResources "$M_IP" "$M_RUN_RESULTS_DIR"
+    measure_resources "$M_IP" "$M_RUN_RESULTS_DIR"
     M_MEASURE_PROCESS="$MEASURE_PROCESS"
 fi
 
@@ -244,16 +244,16 @@ $SSH "root@$V_IP" "[ -f $FINAL_OUTPUT ] && cat  $FINAL_OUTPUT"  2>&1 | tee "$VER
 
 END=`date +%s`
 
-finishMeasuringResources "$V_IP" "$V_RUN_RESULTS_DIR" "$V_MEASURE_PROCESS"
+finish_measuring_resources "$V_IP" "$V_RUN_RESULTS_DIR" "$V_MEASURE_PROCESS"
 
 if [ -n "$MANAGED_BY_VM" ]; then
-    finishMeasuringResources "$M_IP" "$M_RUN_RESULTS_DIR" "$M_MEASURE_PROCESS"
+    finish_measuring_resources "$M_IP" "$M_RUN_RESULTS_DIR" "$M_MEASURE_PROCESS"
 fi
 
 if [ -n "$MANAGED_BY_VM" ]; then
     "$IMAGE_MANAGEMENT_DIR/delete-vm.sh" "$M_BENCHMARK_VM"
 fi
-"$IMAGE_MANAGEMENT_DIR/delete-vm.sh" "$V_BENCHMARK_VM"|| finishAll $?
+"$IMAGE_MANAGEMENT_DIR/delete-vm.sh" "$V_BENCHMARK_VM"|| finish_all $?
 
 
 echo -e "\nBenchmark Runtime: $((END-START)) s"

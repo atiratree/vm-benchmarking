@@ -7,7 +7,7 @@ remove(){
     fi
 }
 
-safeRemove(){
+safe_remove(){
     echo -e -n "Are you sure you want to delete $1? (y/n): "
     read -n 1 -r
     if [[ ! "$REPLY" =~ ^[Yy]$ ]]; then
@@ -17,7 +17,7 @@ safeRemove(){
     echo
 }
 
-removeBenchmark(){
+remove_benchmark(){
     NAME="$1"
     BENCHMARK_DIR="$BENCHMARKS_DIR/$NAME"
 
@@ -27,11 +27,11 @@ removeBenchmark(){
 
     for INSTALL_DIR in "$BENCHMARK_DIR/"install-v*; do
         INSTALL_VERSION="`basename "$INSTALL_DIR" | cut -c 10-`"
-        removeInstall "$NAME" "$INSTALL_VERSION"
+        remove_install "$NAME" "$INSTALL_VERSION"
     done
 }
 
-removeInstall(){
+remove_install(){
     NAME="$1"
     INSTALL_VERSION="$2"
 
@@ -48,7 +48,7 @@ removeInstall(){
     if [  "$SELECT" == "--all" -o "$SELECT" == "--vms" ]; then
         VM="`"$IMAGE_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION"`"
         if "$IMAGE_UTIL_DIR/"assert-vm.sh "$VM" 2> /dev/null; then
-            safeRemove "${GREEN}Vm ${RED}$VM${NC}" && "$IMAGE_MANAGEMENT_DIR"/delete-vm.sh "$VM" > /dev/null 2>&1 && echo "removed $VM"
+            safe_remove "${GREEN}Vm ${RED}$VM${NC}" && "$IMAGE_MANAGEMENT_DIR"/delete-vm.sh "$VM" > /dev/null 2>&1 && echo "removed $VM"
         fi
     fi
 
@@ -64,7 +64,7 @@ removeInstall(){
             ANALYSIS_NAME="`"$IMAGE_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"`"
             ANALYSIS_DIR="$RUN_DIR/analysis"
              if [ -d "$ANALYSIS_DIR" ]; then
-                safeRemove "${GREEN}Analysis ${RED}$ANALYSIS_NAME${NC}" &&  remove "$ANALYSIS_DIR"
+                safe_remove "${GREEN}Analysis ${RED}$ANALYSIS_NAME${NC}" &&  remove "$ANALYSIS_DIR"
             fi
         fi
     done
@@ -94,12 +94,12 @@ if [  "$SELECT" != "--all" -a "$SELECT" != "--analysis" -a "$SELECT" != "--all-f
 fi
 
 if [ -n "$INSTALL_VERSION" ]; then
-    removeInstall "$NAME" "$INSTALL_VERSION"
+    remove_install "$NAME" "$INSTALL_VERSION"
 elif [ -n "$NAME" ]; then
-    removeBenchmark "$NAME"
+    remove_benchmark "$NAME"
 else
     for BENCHMARK_DIR in "$BENCHMARKS_DIR/"*; do
         NAME="`basename "$BENCHMARK_DIR"`"
-        removeBenchmark "$NAME"
+        remove_benchmark "$NAME"
     done
 fi

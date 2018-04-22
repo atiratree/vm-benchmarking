@@ -1,7 +1,9 @@
 #!/bin/bash
 
-UTIL_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-source "$UTIL_DIR/../../config.env"
+IMAGE_UTIL_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+UTIL_DIR="`realpath $IMAGE_UTIL_DIR/../../util`"
+source "$UTIL_DIR/common.sh"
+source "$IMAGE_UTIL_DIR/../../config.env"
 
 DIR="${DIR:-}"
 NAME="$1"
@@ -9,10 +11,7 @@ INSTALL_VERSION="$2"
 RUN_VERSION="$3"
 ID="$4"
 
-if [ -z "$NAME" ]; then
-	echo "name must be specified" >&2
-	exit 1
-fi
+assert_name "$NAME"
 
 if [ -z "$DIR" ]; then
 	DISTRO_LEN=${#DISTRO}

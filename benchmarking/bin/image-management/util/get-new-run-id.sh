@@ -1,38 +1,19 @@
 #!/bin/bash
 
-exitIfFailed(){
-	if [ "$1" != 0 ]; then
-		exit "$1"
-	fi
-}
-
-UTIL_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-source "$UTIL_DIR/../../config.env"
-BENCHMARKS_DIR="`realpath $UTIL_DIR/../../../benchmarks`"
-
+IMAGE_UTIL_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+UTIL_DIR="`realpath $IMAGE_UTIL_DIR/../../util`"
+source "$UTIL_DIR/common.sh"
+source "$IMAGE_UTIL_DIR/../../config.env"
+BENCHMARKS_DIR="`realpath $IMAGE_UTIL_DIR/../../../benchmarks`"
 
 NAME="$1"
 INSTALL_VERSION="$2"
 RUN_VERSION="$3"
 
-if [ -z "$NAME" ]; then
-	echo "name must be specified" >&2
-	exit 1
-fi
+assert_run "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"
 
-if [ -z "$INSTALL_VERSION" ]; then
-	echo "install version must be specified" >&2
-	exit 2
-fi
-
-if [ -z "$RUN_VERSION" ]; then
-	echo "run version must be specified" >&2
-	exit 3
-fi
-
-PART_NAME="`DIR=TRUE "$UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"`"
+PART_NAME="`DIR=TRUE "$IMAGE_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"`"
 RUN_DIR="$BENCHMARKS_DIR/$PART_NAME"
-exitIfFailed $?
 
 OUT_DIR="$RUN_DIR/out"
 

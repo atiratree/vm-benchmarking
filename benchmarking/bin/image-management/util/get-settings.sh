@@ -1,6 +1,6 @@
 #!/bin/bash
 
-prependToScript(){
+prepend_to_script(){
     SCRIPT="$1"
     SETTINGS="$2/settings.env"
     if [ -e "$SETTINGS" ]; then
@@ -8,9 +8,11 @@ prependToScript(){
 	fi
 }
 
-UTIL_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-source "$UTIL_DIR/../../config.env"
-BENCHMARKS_DIR="`realpath $UTIL_DIR/../../../benchmarks`"
+IMAGE_UTIL_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+UTIL_DIR="`realpath $IMAGE_UTIL_DIR/../../util`"
+source "$UTIL_DIR/common.sh"
+source "$IMAGE_UTIL_DIR/../../config.env"
+BENCHMARKS_DIR="`realpath $IMAGE_UTIL_DIR/../../../benchmarks`"
 
 
 SCRIPT_FILE="${SCRIPT_FILE:-}"
@@ -21,11 +23,7 @@ NAME="$1"
 INSTALL_VERSION="$2"
 RUN_VERSION="$3"
 
-
-if [ -z "$NAME" ]; then
-	echo "name must be specified" >&2
-	exit 1
-fi
+assert_name "$NAME"
 
 SCRIPT_WITH_ENV_FILE=$(mktemp /tmp/get-settings.XXXXXX)
 
@@ -36,17 +34,17 @@ else
 fi
 
 if [ -n "$RUN_VERSION" ]; then
-    PATH_PART="`DIR=TRUE "$UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"`"
-    prependToScript "$SCRIPT_WITH_ENV_FILE" "$BENCHMARKS_DIR/$PATH_PART"
+    PATH_PART="`DIR=TRUE "$IMAGE_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"`"
+    prepend_to_script "$SCRIPT_WITH_ENV_FILE" "$BENCHMARKS_DIR/$PATH_PART"
 fi
 
 if [ -n "$INSTALL_VERSION" ]; then
-    PATH_PART="`DIR=TRUE "$UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION"`"
-    prependToScript "$SCRIPT_WITH_ENV_FILE" "$BENCHMARKS_DIR/$PATH_PART"
+    PATH_PART="`DIR=TRUE "$IMAGE_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION"`"
+    prepend_to_script "$SCRIPT_WITH_ENV_FILE" "$BENCHMARKS_DIR/$PATH_PART"
 fi
 
-PATH_PART="`DIR=TRUE "$UTIL_DIR/get-name.sh" "$NAME"`"
-prependToScript "$SCRIPT_WITH_ENV_FILE" "$BENCHMARKS_DIR/$PATH_PART"
+PATH_PART="`DIR=TRUE "$IMAGE_UTIL_DIR/get-name.sh" "$NAME"`"
+prepend_to_script "$SCRIPT_WITH_ENV_FILE" "$BENCHMARKS_DIR/$PATH_PART"
 
 if [ -e "$POST_SCRIPT_FILE" ]; then
     cat "$POST_SCRIPT_FILE" >> "$SCRIPT_WITH_ENV_FILE"

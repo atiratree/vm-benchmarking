@@ -1,6 +1,6 @@
 #!/bin/bash
 
-showSettings(){
+show_settings(){
     if [ -n "$SHOW_SETTINGS" ]; then
         SETTINGS="$1/settings.env"
         if [ -f "$SETTINGS" ]; then
@@ -10,10 +10,10 @@ showSettings(){
     fi
 }
 
-listBenchmark(){
+list_benchmark(){
     BENCHMARK_DIR="$1"
     NAME="`basename "$BENCHMARK_DIR"`"
-    showSettings "$BENCHMARK_DIR"
+    show_settings "$BENCHMARK_DIR"
     for INSTALL_DIR in "$BENCHMARK_DIR/"install-v*; do
         if [ ! -d "$INSTALL_DIR" ]; then
             continue
@@ -25,7 +25,7 @@ listBenchmark(){
             echo -e "${GREEN}$VM${NC}"
         fi
 
-        showSettings "$INSTALL_DIR"
+        show_settings "$INSTALL_DIR"
         if [ -d "$INSTALL_DIR/out" ]; then
             ls -d "$INSTALL_DIR/out"/*
         fi
@@ -34,7 +34,7 @@ listBenchmark(){
             if [ ! -d "$RUN_DIR" ]; then
                 continue
             fi
-            showSettings "$RUN_DIR"
+            show_settings "$RUN_DIR"
 
             RUN_VERSION="`basename "$RUN_DIR" | cut -c 6-`"
             VM="`"$IMAGE_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"`"
@@ -68,9 +68,9 @@ NAME="$1"
 if [ -z "$NAME" ]; then
     for BENCHMARK_DIR in "$BENCHMARKS_DIR/"*; do
         if [ -d "$BENCHMARK_DIR" ]; then
-            listBenchmark "$BENCHMARK_DIR"
+            list_benchmark "$BENCHMARK_DIR"
         fi
     done
 else
-    listBenchmark "$BENCHMARKS_DIR/$NAME"
+    list_benchmark "$BENCHMARKS_DIR/$NAME"
 fi

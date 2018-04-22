@@ -1,12 +1,10 @@
 #!/bin/bash
 
-exitIfFailed(){
-	if [ "$1" != 0 ]; then
-		exit "$1"
-	fi
+fail_handler(){
+    exit "$1"
 }
 
-checkDeps(){
+check_dependencies(){
     while read dep; do
         if [ -n "$dep" ] && ! type "$dep" &> /dev/null; then
             echo "$dep dependency is missing" >&2
@@ -18,7 +16,7 @@ checkDeps(){
     fi
 }
 
-downloadDeps(){
+download_dependencies(){
     if [ ! -e "$GENERATED_DIR/$SYSTAT_FILENAME" ]; then
         echo "Downloading benchmark scripts dependencies..."
         wget -O "$GENERATED_DIR/$SYSTAT_FILENAME" "https://github.com/sysstat/sysstat/archive/v11.7.2.tar.gz" &> /dev/null
@@ -34,21 +32,19 @@ source "$SCRIPTS_DIR/config.env"
 
 NAME="$1"
 
-checkDeps "$DEPS"
-downloadDeps
+check_dependencies "$DEPS"
+download_dependencies
 
 BASE_IMAGE_INSTALL="$BENCHMARKS_DIR/base-image-install.sh"
 
-"$IMAGE_MANAGEMENT_DIR/util/assert-vm.sh" "$NAME"
-exitIfFailed $?
+"$IMAGE_MANAGEMENT_DIR/util/assert-vm.sh" "$NAME" || fail_handler $?
 
 if [ ! -e "$BASE_IMAGE_INSTALL" ]; then
 	echo "install script must be located at $BASE_IMAGE_INSTALL" >&2
 	exit 2
 fi
 
-IP="`"$SCRIPTS_DIR/image-management/util/get-ip.sh" "$NAME"`"
-exitIfFailed $?
+IP="`"$SCRIPTS_DIR/image-management/util/get-ip.sh" "$NAME"`" || fail_handler $?
 
 if [ -z "$IP" ]; then
 	echo "could not find ip of $1. Is vm running?" >&2

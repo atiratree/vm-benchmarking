@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -eu
+
 cd /tmp
 tar xzf sysstat-v11.7.2.tar.gz
 cd sysstat-11.7.2/
