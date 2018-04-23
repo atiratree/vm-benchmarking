@@ -14,6 +14,21 @@ set_option(){
     fi
 }
 
+set_option_by_position(){
+    CM_OPTIONS="$1"
+    CM_OPTION="$2"
+    CM_OPTION_NUMBER="$3"
+
+    CM_ARRAY=(${CM_OPTIONS//,/ })
+    CM_OPT="${CM_ARRAY[$CM_OPTION_NUMBER]}"
+
+    if [ -n "$CM_OPT" ]; then
+        export "$CM_OPTION"="$CM_OPT"
+    else
+        unset "$CM_OPTION"
+    fi
+}
+
 assert_name(){
     if [ -z "$1" ]; then
         echo "name must be specified" >&2

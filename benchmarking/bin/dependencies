@@ -8,3 +8,5 @@ ip
 nmap
 wget
 bc
+awk
+

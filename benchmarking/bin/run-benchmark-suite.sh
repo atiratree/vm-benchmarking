@@ -11,6 +11,7 @@ cleanup(){
 kill_current_benchmark(){
     EXIT_CODE="$1"
     REASON="$2"
+    echo
     echo -e "${RED}stopping child benchmark $ID with pid=$BENCH_CHILD_PROCESS: $REASON${NC}"
 
     if [ -n "$BENCH_CHILD_PROCESS" ]; then
@@ -19,8 +20,10 @@ kill_current_benchmark(){
         wait "$BENCH_CHILD_PROCESS"
     fi
 
-    mkdir -p "$OUTPUT_DIR"
-    echo "failed with exit code $EXIT_CODE ($REASON)" >> "$OUTPUT_DIR/output"
+    if [ -n "$OUTPUT_DIR" ]; then
+        mkdir -p "$OUTPUT_DIR"
+        echo "failed with exit code $EXIT_CODE ($REASON)" >> "$OUTPUT_DIR/output"
+    fi
     rm -f "/tmp/get-settings.*" "/tmp/benchmark-run.*"
 }
 
@@ -80,6 +83,133 @@ wait_for_benchmark(){
     fi
 }
 
+get_line(){
+    G_VAR="`sed "s/^\s*//; $1""q; d" "$SUITE" 2> /dev/null`"
+
+    if [ -z "$G_VAR" -o "${G_VAR:0:1}" == "#" ]; then
+        return 1
+    fi
+    echo "$G_VAR"
+}
+
+finish_suite_run(){
+    U_LINE="$1"
+    sed -i -e "$U_LINE"'s/^/# /' "$SUITE"
+}
+
+update_suite_run(){
+    U_LINE="$1"
+    U_TIMES="$2"
+    U_ACCEPTED="$3"
+
+    F_OUT="$U_TIMES"",ACCEPTED=$U_ACCEPTED"
+    AWK_TMP_FILE=$(mktemp /tmp/benchmark-suite.out.XXXXXX)
+    awk 'BEGIN { OFS="    "}; '"FNR==$U_LINE{"'$4="'"$F_OUT"'"};{print $0}' "$SUITE" > "$AWK_TMP_FILE"
+    mv "$AWK_TMP_FILE" "$SUITE"
+}
+
+run_benchmark(){
+    NAME="$1"
+    INSTALL_VERSION="$2"
+    RUN_VERSION="$3"
+    ANALYSIS_NAME="$4"
+    OPTIONS="$5"
+
+    set_option "$OPTIONS" "MANAGED_BY_VM"
+
+    ID="`"$IMAGE_UTIL_DIR/get-new-run-id.sh" "$NAME" "$INSTALL_VERSION"  "$RUN_VERSION"`"
+    RUN_PART="`DIR=TRUE "$IMAGE_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION" "$ID"`"
+    OUTPUT_DIR="$BENCHMARKS_DIR/$RUN_PART"
+
+    if [ -n "$MANAGED_BY_VM" ]; then
+       MANAGED_ID="`"$IMAGE_UTIL_DIR/get-new-run-id.sh" "$MANAGED_BY_VM" "$INSTALL_VERSION"  "$RUN_VERSION"`"
+       MANAGED_RUN_PART="`DIR=TRUE "$IMAGE_UTIL_DIR/get-name.sh" "$MANAGED_BY_VM" "$INSTALL_VERSION" "$RUN_VERSION" "$MANAGED_ID"`"
+       MANAGED_OUTPUT_DIR="$BENCHMARKS_DIR/$MANAGED_RUN_PART"
+    fi
+
+    TMP_FILE=$(mktemp /tmp/benchmark-suite.out.XXXXXX)
+
+    echo -n "running $ID ..."
+    START=`date +%s`
+    set_option "$OPTIONS" "NO_OUTPUT_CHECK_MIN"
+    "$BENCH_DIR"/run-benchmark.sh "$NAME" "$INSTALL_VERSION" "$RUN_VERSION" "$OPTIONS" > >(tee "$VERBOSE_FILE"> "$TMP_FILE" 2>&1) &
+    BENCH_CHILD_PROCESS=$!
+    wait_for_benchmark "$BENCH_CHILD_PROCESS" "$OUTPUT_DIR/output" "$NO_OUTPUT_CHECK_MIN"
+    END=`date +%s`
+    echo -e "${BLUE} finished in $((END-START))s${NC}"
+    BENCH_CHILD_PROCESS=""
+
+    mkdir -p "$OUTPUT_DIR"
+    RESULT_FILE="$OUTPUT_DIR/output-run"
+
+    if [ -n "$MANAGED_BY_VM" ]; then
+        mkdir -p "$MANAGED_OUTPUT_DIR"
+        MANAGED_RESULT_FILE="$MANAGED_OUTPUT_DIR/output-run"
+        cp "$TMP_FILE" "$MANAGED_RESULT_FILE"
+    fi
+    mv "$TMP_FILE" "$RESULT_FILE"
+
+    "$BENCH_DIR"/analysis.sh  "$NAME" "$INSTALL_VERSION" "$RUN_VERSION" "$ANALYSIS_NAME" &> /dev/null || echo -e "${RED}skipping analysis${NC}"
+    if [ -n "$MANAGED_BY_VM" ]; then
+        "$BENCH_DIR"/analysis.sh  "$MANAGED_BY_VM" "$INSTALL_VERSION" "$RUN_VERSION" "$ANALYSIS_NAME" &> /dev/null || echo -e "${RED}skipping MANAGED_BY_VM analysis${NC}"
+    fi
+}
+
+run_benchmark_times(){
+    LINE="$1"
+    NAME="$2"
+    INSTALL_VERSION="$3"
+    RUN_VERSION="$4"
+    TIMES_FIELDS="$5"
+    ANALYSIS_NAME="$6"
+    OPTIONS="$7"
+
+    BENCHMARK_DIR="$BENCHMARKS_DIR/$NAME"
+
+    if [ -z "$ANALYSIS_NAME"  ]; then
+        return 3
+    fi
+
+    RUN_BENCH_NAME="`"$IMAGE_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"`"
+    RUN_BENCH_DIR="$BENCHMARKS_DIR/`DIR=TRUE "$IMAGE_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"`"
+
+    mkdir -p "$RUN_BENCH_DIR"
+    if [ ! -d "$RUN_BENCH_DIR" ]; then
+        echo "skipping $RUN_BENCH_DIR: directory does not exist" >&2
+        return 3
+    fi
+
+    echo -e "${GREEN}running $RUN_BENCH_NAME  OPTIONS: $OPTIONS${NC}"
+
+    while true; do
+        # update TIMES and ACCEPTED FROM FILE
+        R_LINE="`get_line "$LINE"`" || break
+        TIMES_FIELDS="`echo "$R_LINE" | awk '{print $4}'`"
+
+        set_option_by_position  "$TIMES_FIELDS" "TIMES" 0
+        set_option  "$TIMES_FIELDS" "ACCEPTED"
+
+        if [ -z "$ACCEPTED" ]; then
+            ACCEPTED=0
+        fi
+
+        REGEX="[0-9]+"
+        if [[ ! "$TIMES" =~ $REGEX ]] || [ "$TIMES" -le 0 ]; then
+           break
+        fi
+        update_suite_run "$LINE" "$((TIMES - 1))" "$((ACCEPTED + 1))"
+
+        run_benchmark $NAME $INSTALL_VERSION $RUN_VERSION $ANALYSIS_NAME $OPTIONS
+    done
+
+
+    set_option "$OPTIONS" "CLEAN"
+    if [ "$CLEAN" == "yes" ]; then
+         echo -e "${RED}cleaning up run directory${NC}"
+        "$SCRIPTS_DIR"/clean.sh --run "$NAME" "$INSTALL_VERSION" > "$VERBOSE_FILE"
+    fi
+}
+
 SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BENCHMARKS_DIR="`realpath $SCRIPTS_DIR/../benchmarks/`"
 IMAGE_MANAGEMENT_DIR="$SCRIPTS_DIR/image-management"
@@ -90,97 +220,43 @@ UTIL_DIR="$SCRIPTS_DIR/util"
 source "$SCRIPTS_DIR/config.env"
 source "$UTIL_DIR/common.sh"
 
-SUITE="$BENCHMARKS_DIR/benchmark-suite.cfg"
-STOP_SUITE_FLAG="$BENCHMARKS_DIR/stop-suite.flag"
+SUITE_ORIGIN="$BENCHMARKS_DIR/benchmark-suite.cfg"
 
 if [  "$1" == "-v" ]; then
 	export VERBOSE_FILE=/dev/tty
 fi
 
-if [ ! -e "$SUITE" ]; then
-	echo "$SUITE must be specified" >&2
+if [ ! -e "$SUITE_ORIGIN" ]; then
+	echo "$SUITE_ORIGIN must be specified" >&2
 	exit 1
 fi
 
-run_benchmark(){
-    NAME="$1"
-    INSTALL_VERSION="$2"
-    RUN_VERSION="$3"
-    TIMES="$4"
-    ANALYSIS_NAME="$5"
-    OPTIONS="$6"
-    set_option "$OPTIONS" "MANAGED_BY_VM"
+if [ "`cat "$SUITE_ORIGIN" | wc -l`" -eq 0 ]; then
+	echo "$SUITE_ORIGIN empty" >&2
+	exit 2
+fi
 
-    BENCHMARK_DIR="$BENCHMARKS_DIR/$NAME"
+SUITE=$(mktemp /tmp/benchmark-suite.editable-cfg.XXXXXX)
+echo "# This is editable config:" >> "$SUITE"
+echo "# You can append new benchmark runs to this file and edit TIMES column in active benchmark " >> "$SUITE"
+echo >> "$SUITE"
+cat "$SUITE_ORIGIN" >> "$SUITE"
 
-    if [ -z "$NAME" ] || [ -z "$ANALYSIS_NAME" ] || [ ${NAME:0:1} == "#" ]; then
-        return 2
+LINE=1
+
+while [ "$LINE" -le "`cat "$SUITE" | wc -l`" ]; do
+    VAR="`get_line "$LINE"`"
+
+    if [ $? -ne 0 ]; then
+        LINE=$((LINE + 1))
+        continue
     fi
 
-    RUN_BENCH_NAME="`"$IMAGE_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"`"
-    RUN_BENCH_DIR="$BENCHMARKS_DIR/`DIR=TRUE "$IMAGE_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"`"
+    run_benchmark_times "$LINE" $VAR
 
-    if [ ! -d "$RUN_BENCH_DIR" ]; then
-        echo "skipping $RUN_BENCH_DIR: directory does not exist" >&2
-        return 3
-    fi
+    finish_suite_run "$LINE"
 
-    echo -e "${GREEN}running $RUN_BENCH_NAME $TIMES times, OPTIONS: $OPTIONS${NC}"
-
-    for i in `seq 1 "$TIMES"`; do
-
-        ID="`"$IMAGE_UTIL_DIR/get-new-run-id.sh" "$NAME" "$INSTALL_VERSION"  "$RUN_VERSION"`"
-        RUN_PART="`DIR=TRUE "$IMAGE_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION" "$ID"`"
-        OUTPUT_DIR="$BENCHMARKS_DIR/$RUN_PART"
-
-        if [ -n "$MANAGED_BY_VM" ]; then
-           MANAGED_ID="`"$IMAGE_UTIL_DIR/get-new-run-id.sh" "$MANAGED_BY_VM" "$INSTALL_VERSION"  "$RUN_VERSION"`"
-           MANAGED_RUN_PART="`DIR=TRUE "$IMAGE_UTIL_DIR/get-name.sh" "$MANAGED_BY_VM" "$INSTALL_VERSION" "$RUN_VERSION" "$MANAGED_ID"`"
-           MANAGED_OUTPUT_DIR="$BENCHMARKS_DIR/$MANAGED_RUN_PART"
-        fi
-
-        TMP_FILE=$(mktemp /tmp/benchmark-suite.XXXXXX)
-
-        echo "running $ID"
-        START=`date +%s`
-        set_option "$OPTIONS" "NO_OUTPUT_CHECK_MIN"
-        "$BENCH_DIR"/run-benchmark.sh "$NAME" "$INSTALL_VERSION" "$RUN_VERSION" "$OPTIONS" > >(tee "$VERBOSE_FILE"> "$TMP_FILE" 2>&1) &
-        BENCH_CHILD_PROCESS=$!
-        wait_for_benchmark "$BENCH_CHILD_PROCESS" "$OUTPUT_DIR/output" "$NO_OUTPUT_CHECK_MIN"
-        END=`date +%s`
-        echo "        $ID finished in $((END-START))s"
-        BENCH_CHILD_PROCESS=""
-
-        mkdir -p "$OUTPUT_DIR"
-        RESULT_FILE="$OUTPUT_DIR/output-run"
-
-        if [ -n "$MANAGED_BY_VM" ]; then
-            mkdir -p "$MANAGED_OUTPUT_DIR"
-            MANAGED_RESULT_FILE="$MANAGED_OUTPUT_DIR/output-run"
-            cp "$TMP_FILE" "$MANAGED_RESULT_FILE"
-        fi
-        mv "$TMP_FILE" "$RESULT_FILE"
-    done
-
-    "$BENCH_DIR"/analysis.sh  "$NAME" "$INSTALL_VERSION" "$RUN_VERSION" "$ANALYSIS_NAME" || echo -e "${RED}skipping analysis${NC}"
-    if [ -n "$MANAGED_BY_VM" ]; then
-        "$BENCH_DIR"/analysis.sh  "$MANAGED_BY_VM" "$INSTALL_VERSION" "$RUN_VERSION" "$ANALYSIS_NAME" || echo -e "${RED}skipping MANAGED_BY_VM analysis${NC}"
-    fi
-
-    set_option "$OPTIONS" "CLEAN"
-    if [ "$CLEAN" == "yes" ]; then
-         echo "cleaning up run directory"
-        "$SCRIPTS_DIR"/clean.sh --run "$NAME" "$INSTALL_VERSION" > "$VERBOSE_FILE"
-    fi
-}
-
-LINES=`cat "$SUITE" | wc -l`
-for i in `seq 1 $LINES`
-    do
-    if [ -e "$STOP_SUITE_FLAG" ]; then
-        echo -e "${RED}stopping suite ${NC}because $STOP_SUITE_FLAG exists"
-        exit 0
-    fi
-    VAR="'$i""q;d' $SUITE"
-    run_benchmark `eval sed "$VAR"`
+    LINE=$((LINE + 1))
 done
+
+rm -f "$SUITE"
