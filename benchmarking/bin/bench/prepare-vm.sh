@@ -64,6 +64,7 @@ VERSIONED_INSTALL_SCRIPT="$VERSIONED_INSTALL_DIR/install.sh"
 RESULTS_DIR="$VERSIONED_INSTALL_DIR/out"
 RESULT="$RESULTS_DIR/output"
 RESULT_SETTINGS="$RESULTS_DIR/settings.env"
+RESULT_RELEASE="$RESULTS_DIR/release"
 
 if [ ! -e "$INSTALL_SCRIPT" ]; then
 	echo "install script $INSTALL_SCRIPT must be specified" >&2
@@ -112,6 +113,7 @@ else
 fi
 
 $SSH "root@$IP" "echo $FULL_NAME > /etc/hostname" &> /dev/null
+$SSH "root@$IP" "cat /etc/*release" > "$RESULT_RELEASE"
 
 copy_to_remote "$IP" "$BENCHMARK_DIR/dependencies"
 copy_to_remote "$IP" "$VERSIONED_INSTALL_DIR/dependencies"

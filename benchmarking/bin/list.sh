@@ -39,7 +39,7 @@ list_benchmark(){
             RUN_VERSION="`basename "$RUN_DIR" | cut -c 6-`"
             VM="`"$IMAGE_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"`"
 
-            for RUN_VM in `virsh list --all | grep "$VM""-[0-9+]" |  awk '{print $2}'`; do
+            for RUN_VM in `virsh list --all 2> /dev/null | grep "$VM""-[0-9+]" |  awk '{print $2}'`; do
                 echo -e "${GREEN}$RUN_VM${NC}"
             done
 

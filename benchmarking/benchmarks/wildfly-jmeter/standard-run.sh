@@ -2,6 +2,11 @@
 
 set -eu
 
+OUTPUT="/tmp/jmeter-output"
+
+echo 1 > /proc/sys/net/ipv4/tcp_tw_reuse
+echo "$IPV4_TCP_FIN_TIMEOUT" > /proc/sys/net/ipv4/tcp_fin_timeout
+
 ./apache-jmeter-4.0/bin/jmeter -nongui \
   --testfile "daytrader.jmx" \
   -JHOST="$IP" \
@@ -9,4 +14,8 @@ set -eu
   -JDURATION="$JDURATION" \
   -JTOPUID="$JTOPUID" \
   -JSTOCKS="$JSTOCKS" \
-  -JTHREADS="$JTHREADS"
+  -JTHREADS="$JTHREADS" \
+  -l "$OUTPUT"
+
+cat "$OUTPUT"
+rm -f "$OUTPUT"

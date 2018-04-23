@@ -9,10 +9,14 @@ remove(){
 
 safe_remove(){
     echo -e -n "Are you sure you want to delete $1? (y/n): "
-    read -n 1 -r
-    if [[ ! "$REPLY" =~ ^[Yy]$ ]]; then
+    if [ -z "$FORCE" ]; then
+        read -n 1 -r
+        if [[ ! "$REPLY" =~ ^[Yy]$ ]]; then
         echo ". skipping..."
-        return 1
+            return 1
+        fi
+    else
+         echo -e -n "y (forced)"
     fi
     echo
 }

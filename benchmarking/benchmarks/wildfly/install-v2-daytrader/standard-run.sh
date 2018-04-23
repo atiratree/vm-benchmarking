@@ -12,6 +12,9 @@ wait_for_condition(){
     grep --color=never "WildFly Core.*$CONDITION" "$OUT_FILE"
 }
 
+echo 1 > /proc/sys/net/ipv4/tcp_tw_reuse
+echo "$IPV4_TCP_FIN_TIMEOUT" > /proc/sys/net/ipv4/tcp_fin_timeout
+
 WILDFLY_LOCATION="`realpath wildfly-12.0.0.Final/build/target/wildfly-12.0.0.Final`"
 WILDFLY_OUT="/tmp/benchmark-output"
 touch "$WILDFLY_OUT"

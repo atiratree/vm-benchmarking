@@ -142,10 +142,13 @@ run_benchmark(){
         TMP_FILE=$(mktemp /tmp/benchmark-suite.XXXXXX)
 
         echo "running $ID"
+        START=`date +%s`
         set_option "$OPTIONS" "NO_OUTPUT_CHECK_MIN"
         "$BENCH_DIR"/run-benchmark.sh "$NAME" "$INSTALL_VERSION" "$RUN_VERSION" "$OPTIONS" > >(tee "$VERBOSE_FILE"> "$TMP_FILE" 2>&1) &
         BENCH_CHILD_PROCESS=$!
         wait_for_benchmark "$BENCH_CHILD_PROCESS" "$OUTPUT_DIR/output" "$NO_OUTPUT_CHECK_MIN"
+        END=`date +%s`
+        echo "        $ID finished in $((END-START))s"
         BENCH_CHILD_PROCESS=""
 
         mkdir -p "$OUTPUT_DIR"
