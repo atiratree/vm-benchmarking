@@ -5,10 +5,20 @@ postgres            2-memory             1-baseline       1          result     
 postgres            3-disk               1-baseline       1          result             CLEAN=yes
 
 wildfly             1-main               1-baseline       1          result             CLEAN=yes,NO_OUTPUT_CHECK_MIN=30
-wildfly             1-main               2-rand           1          result             CLEAN=yes,NO_OUTPUT_CHECK_MIN=30
-
 wildfly             2-daytrader          1-baseline       1          result             CLEAN=yes,MANAGED_BY_VM=wildfly-jmeter
 
 compression         1-main               1-baseline       1          result             CLEAN=yes
 
 npb                 1-main               1-baseline       1          result             CLEAN=yes
+
+
+postgres            1-buffer             2-rand           1          result             CLEAN=yes
+postgres            2-memory             2-rand           1          result             CLEAN=yes
+postgres            3-disk               2-rand           1          result             CLEAN=yes
+
+wildfly             1-main               2-rand           1          result             CLEAN=yes,NO_OUTPUT_CHECK_MIN=30
+wildfly             2-daytrader          2-rand           1          result             CLEAN=yes,MANAGED_BY_VM=wildfly-jmeter
+
+compression         1-main               2-rand           1          result             CLEAN=yes
+
+npb                 1-main               2-rand           1          result             CLEAN=yes
