@@ -1,0 +1,4 @@
+<!-- merge this with your base vm xml and put it into ./libvirt.xml -->
+<domain>
+  <iothreads>1</iothreads>
+</domain>

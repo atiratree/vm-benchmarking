@@ -1,24 +1,33 @@
-# $NAME           $INSTALL_VERSION     $RUN_VERSION     $TIMES     $ANALYSIS_NAME     $OPTIONS (CLEAN={yes, no}, MEASURE_RESOURCE_USAGE={yes,no}, NO_OUTPUT_CHECK_MIN=X, MANAGED_BY_VM=XX)
+# $NAME           $INSTALL_VERSION     $RUN_VERSION     $TIMES     $ANALYSIS_NAME              $OPTIONS (CLEAN={yes, no}, MEASURE_RESOURCE_USAGE={yes,no}, NO_OUTPUT_CHECK_MIN=X, MANAGED_BY_VM=XX)
 
-postgres            1-buffer             1-baseline       1          result             CLEAN=yes
-postgres            2-memory             1-baseline       1          result             CLEAN=yes
-postgres            3-disk               1-baseline       1          result             CLEAN=yes
+# 1-baseline
+compression         1-main               1-baseline       1          analysis-result             CLEAN=yes
+npb                 1-main               1-baseline       1          analysis-result             CLEAN=yes
+npb                 2-thorough           1-baseline       1          analysis-result             CLEAN=yes
+postgres            1-buffer             1-baseline       1          analysis-result             CLEAN=yes
+postgres            2-memory             1-baseline       1          analysis-result             CLEAN=yes
+postgres            3-disk               1-baseline       1          analysis-result             CLEAN=yes
+wildfly             1-main               1-baseline       1          analysis-result             CLEAN=yes,NO_OUTPUT_CHECK_MIN=30
+wildfly             2-daytrader          1-baseline       1          analysis-result             CLEAN=yes,MANAGED_BY_VM=wildfly-jmeter
 
-wildfly             1-main               1-baseline       1          result             CLEAN=yes,NO_OUTPUT_CHECK_MIN=30
-wildfly             2-daytrader          1-baseline       1          result             CLEAN=yes,MANAGED_BY_VM=wildfly-jmeter
 
-compression         1-main               1-baseline       1          result             CLEAN=yes
+# 2-rand
+compression         1-main               2-rand           1          analysis-result             CLEAN=yes
+npb                 1-main               2-rand           1          analysis-result             CLEAN=yes
+npb                 2-thorough           2-rand           1          analysis-result             CLEAN=yes
+postgres            1-buffer             2-rand           1          analysis-result             CLEAN=yes
+postgres            2-memory             2-rand           1          analysis-result             CLEAN=yes
+postgres            3-disk               2-rand           1          analysis-result             CLEAN=yes
+wildfly             1-main               2-rand           1          analysis-result             CLEAN=yes,NO_OUTPUT_CHECK_MIN=30
+wildfly             2-daytrader          2-rand           1          analysis-result             CLEAN=yes,MANAGED_BY_VM=wildfly-jmeter
 
-npb                 1-main               1-baseline       1          result             CLEAN=yes
 
-
-postgres            1-buffer             2-rand           1          result             CLEAN=yes
-postgres            2-memory             2-rand           1          result             CLEAN=yes
-postgres            3-disk               2-rand           1          result             CLEAN=yes
-
-wildfly             1-main               2-rand           1          result             CLEAN=yes,NO_OUTPUT_CHECK_MIN=30
-wildfly             2-daytrader          2-rand           1          result             CLEAN=yes,MANAGED_BY_VM=wildfly-jmeter
-
-compression         1-main               2-rand           1          result             CLEAN=yes
-
-npb                 1-main               2-rand           1          result             CLEAN=yes
+# 3-one-iothread
+compression         1-main               3-one-iothread   1          analysis-result             CLEAN=yes
+npb                 1-main               3-one-iothread   1          analysis-result             CLEAN=yes
+npb                 2-thorough           3-one-iothread   1          analysis-result             CLEAN=yes
+postgres            1-buffer             3-one-iothread   1          analysis-result             CLEAN=yes
+postgres            2-memory             3-one-iothread   1          analysis-result             CLEAN=yes
+postgres            3-disk               3-one-iothread   1          analysis-result             CLEAN=yes
+wildfly             1-main               3-one-iothread   1          analysis-result             CLEAN=yes,NO_OUTPUT_CHECK_MIN=30
+wildfly             2-daytrader          3-one-iothread   1          analysis-result             CLEAN=yes,MANAGED_BY_VM=wildfly-jmeter

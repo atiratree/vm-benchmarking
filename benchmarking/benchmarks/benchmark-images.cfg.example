@@ -1,5 +1,10 @@
 # $BASE_IMAGE     $NAME             $INSTALL_VERSION
 
+centos-base         compression       1-main
+
+centos-base         npb               1-main
+centos-base         npb               2-thorough
+
 centos-base         postgres          1-buffer
 centos-base         postgres          2-memory
 centos-base         postgres          3-disk
@@ -7,7 +12,3 @@ centos-base         postgres          3-disk
 centos-base         wildfly           1-main
 centos-base         wildfly           2-daytrader
 centos-base         wildfly-jmeter    2-daytrader
-
-centos-base         compression       1-main
-
-centos-base         npb               1-main
