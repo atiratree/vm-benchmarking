@@ -111,7 +111,6 @@ resolve_libvirt_xml(){
     fi
 
     virsh dumpxml "$R_BENCHMARK_VM" > "$RUN_RESULT_LIBVIRT_XML" || finish_all $?
-
 }
 
 start_vm(){
