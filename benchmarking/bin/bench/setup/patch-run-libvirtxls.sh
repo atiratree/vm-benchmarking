@@ -2,10 +2,11 @@
 
 
 SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-BIN_DIR="`realpath $SCRIPTS_DIR/../..`"
-BENCHMARKS_DIR="`realpath $BIN_DIR/../benchmarks/`"
+BIN_DIR="`realpath "$SCRIPTS_DIR/../.."`"
+BENCHMARKS_DIR="`realpath "$BIN_DIR/../benchmarks/"`"
 IMAGE_MANAGEMENT_DIR="$BIN_DIR/image-management"
 IMAGE_UTIL_DIR="$IMAGE_MANAGEMENT_DIR/util"
+BENCH_UTIL_DIR="$BIN_DIR/bench/util"
 source "$BIN_DIR/config.env"
 
 
@@ -40,7 +41,7 @@ fetch_libvirtxmls(){
         fi
         INSTALL_VERSION="`basename "$INSTALL_DIR" | cut -c 10-`"
 
-        VM="`"$IMAGE_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION"`"
+        VM="`"$BENCH_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION"`"
 
         if ! "$IMAGE_UTIL_DIR/"assert-vm.sh "$VM" 2> /dev/null; then
             echo -e "${RED}skipping $VM ... does not exit${NC}"

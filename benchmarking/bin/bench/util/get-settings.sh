@@ -8,11 +8,11 @@ prepend_to_script(){
 	fi
 }
 
-IMAGE_UTIL_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-UTIL_DIR="`realpath $IMAGE_UTIL_DIR/../../util`"
+BENCH_UTIL_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+UTIL_DIR="`realpath "$BENCH_UTIL_DIR/../../util"`"
 source "$UTIL_DIR/common.sh"
-source "$IMAGE_UTIL_DIR/../../config.env"
-BENCHMARKS_DIR="`realpath $IMAGE_UTIL_DIR/../../../benchmarks`"
+source "$BENCH_UTIL_DIR/../../config.env"
+BENCHMARKS_DIR="`realpath "$BENCH_UTIL_DIR/../../../benchmarks"`"
 
 
 SCRIPT_FILE="${SCRIPT_FILE:-}"
@@ -34,16 +34,16 @@ else
 fi
 
 if [ -n "$RUN_VERSION" ]; then
-    PATH_PART="`DIR=TRUE "$IMAGE_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"`"
+    PATH_PART="`DIR=TRUE "$BENCH_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"`"
     prepend_to_script "$SCRIPT_WITH_ENV_FILE" "$BENCHMARKS_DIR/$PATH_PART"
 fi
 
 if [ -n "$INSTALL_VERSION" ]; then
-    PATH_PART="`DIR=TRUE "$IMAGE_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION"`"
+    PATH_PART="`DIR=TRUE "$BENCH_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION"`"
     prepend_to_script "$SCRIPT_WITH_ENV_FILE" "$BENCHMARKS_DIR/$PATH_PART"
 fi
 
-PATH_PART="`DIR=TRUE "$IMAGE_UTIL_DIR/get-name.sh" "$NAME"`"
+PATH_PART="`DIR=TRUE "$BENCH_UTIL_DIR/get-name.sh" "$NAME"`"
 prepend_to_script "$SCRIPT_WITH_ENV_FILE" "$BENCHMARKS_DIR/$PATH_PART"
 
 if [ -e "$POST_SCRIPT_FILE" ]; then

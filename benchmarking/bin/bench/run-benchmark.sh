@@ -42,7 +42,7 @@ finish(){
     fi
 
     if [ -n "$F_BENCHMARK_VM" ]; then
-        BENCHMARK_BASE_VM="`"$IMAGE_UTIL_DIR/get-name.sh" "$F_NAME" "$F_INSTALL_VERSION"`"
+        BENCHMARK_BASE_VM="`"$BENCH_UTIL_DIR/get-name.sh" "$F_NAME" "$F_INSTALL_VERSION"`"
         CLONED_DISK="`"$IMAGE_UTIL_DIR/get-clone-disk-filename.sh" "$BENCHMARK_BASE_VM" "$F_BENCHMARK_VM"`"
         sync # wait in case script is in the middle of creating image
         "$IMAGE_MANAGEMENT_DIR/delete-vm.sh" "$F_BENCHMARK_VM" "$CLONED_DISK"
@@ -68,13 +68,13 @@ initialize_run(){
 
     mkdir -p "$RESULTS_DIR"
 
-    BENCHMARK_BASE_VM="`"$IMAGE_UTIL_DIR/get-name.sh" "$I_NAME" "$I_INSTALL_VERSION"`"
+    BENCHMARK_BASE_VM="`"$BENCH_UTIL_DIR/get-name.sh" "$I_NAME" "$I_INSTALL_VERSION"`"
 
     "$IMAGE_UTIL_DIR/assert-vm.sh" "$BENCHMARK_BASE_VM" || finish_all $?
 
-    ID="`"$IMAGE_UTIL_DIR/get-new-run-id.sh" "$I_NAME" "$I_INSTALL_VERSION"  "$I_RUN_VERSION"`"
+    ID="`"$BENCH_UTIL_DIR/get-new-run-id.sh" "$I_NAME" "$I_INSTALL_VERSION"  "$I_RUN_VERSION"`"
 
-    BENCHMARK_VM="`"$IMAGE_UTIL_DIR/get-name.sh" "$I_NAME" "$I_INSTALL_VERSION" "$I_RUN_VERSION" "$ID"`"
+    BENCHMARK_VM="`"$BENCH_UTIL_DIR/get-name.sh" "$I_NAME" "$I_INSTALL_VERSION" "$I_RUN_VERSION" "$ID"`"
     echo -e "${BLUE}initializing $BENCHMARK_VM${NC}"
 
     RUN_RESULTS_DIR="$RESULTS_DIR/$ID"
@@ -84,9 +84,9 @@ initialize_run(){
     mkdir -p "$RUN_RESULTS_DIR"
 
     > "$RUN_RESULT"
-    "$IMAGE_UTIL_DIR/get-settings.sh" "$I_NAME" "$I_INSTALL_VERSION" "$I_RUN_VERSION" | sed -e '1{/.*/d}'> "$RUN_RESULT_SETTINGS"
+    "$BENCH_UTIL_DIR/get-settings.sh" "$I_NAME" "$I_INSTALL_VERSION" "$I_RUN_VERSION" | sed -e '1{/.*/d}'> "$RUN_RESULT_SETTINGS"
 
-    RUN_SCRIPT="`SCRIPT_FILE="$SCRIPT" "$IMAGE_UTIL_DIR/get-settings.sh" "$I_NAME" "$I_INSTALL_VERSION" "$I_RUN_VERSION"`"
+    RUN_SCRIPT="`SCRIPT_FILE="$SCRIPT" "$BENCH_UTIL_DIR/get-settings.sh" "$I_NAME" "$I_INSTALL_VERSION" "$I_RUN_VERSION"`"
 
     "$IMAGE_MANAGEMENT_DIR/clone-vm.sh" "$BENCHMARK_BASE_VM" "$BENCHMARK_VM" || finish_all $?
 }
@@ -162,12 +162,13 @@ finish_measuring_resources(){
 }
 
 SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-IMAGE_MANAGEMENT_DIR="`realpath $SCRIPTS_DIR/../image-management`"
-BENCHMARKS_DIR="`realpath $IMAGE_MANAGEMENT_DIR/../../benchmarks/`"
+IMAGE_MANAGEMENT_DIR="`realpath "$SCRIPTS_DIR/../image-management"`"
+BENCHMARKS_DIR="`realpath "$IMAGE_MANAGEMENT_DIR/../../benchmarks/"`"
 
 RESOURCE_USAGE_DIR="$SCRIPTS_DIR/resource-usage"
 IMAGE_UTIL_DIR="$IMAGE_MANAGEMENT_DIR/util"
-UTIL_DIR="`realpath $SCRIPTS_DIR/../util`"
+BENCH_UTIL_DIR="$SCRIPTS_DIR/util"
+UTIL_DIR="`realpath "$SCRIPTS_DIR/../util"`"
 
 source "$SCRIPTS_DIR/../config.env"
 source "$UTIL_DIR/common.sh"

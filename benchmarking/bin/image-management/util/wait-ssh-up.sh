@@ -5,7 +5,7 @@ fail_handler(){
 }
 
 IMAGE_UTIL_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-UTIL_DIR="`realpath $IMAGE_UTIL_DIR/../../util`"
+UTIL_DIR="`realpath "$IMAGE_UTIL_DIR/../../util"`"
 source "$UTIL_DIR/common.sh"
 source "$IMAGE_UTIL_DIR/../../config.env"
 MAX_WAIT_TIME_FOR_CONNECTION="${MAX_WAIT_TIME_FOR_CONNECTION:-120}"

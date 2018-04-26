@@ -15,19 +15,22 @@ prepare_vm(){
     NAME="$2"
     INSTALL_VERSION="$3"
 
-    if [ -z "$BASE_IMAGE" ] || [ -z "$INSTALL_VERSION" ] || [ ${BASE_IMAGE:0:1} == "#" ]; then
-        return 0
-    fi
+    [ -z "$INSTALL_VERSION" ] && return 1
+
     "$BENCH_DIR/prepare-vm.sh" "$BASE_IMAGE" "$NAME" "$INSTALL_VERSION"
     fail_handler $?
 }
 
 SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-BENCHMARKS_DIR="`realpath $SCRIPTS_DIR/../benchmarks/`"
+BENCHMARKS_DIR="`realpath "$SCRIPTS_DIR/../benchmarks/"`"
 BENCH_DIR="$SCRIPTS_DIR/bench"
-PARALLEL="${PARALLEL:-}"
+UTIL_DIR="$SCRIPTS_DIR/util"
 
 source "$SCRIPTS_DIR/config.env"
+source "$UTIL_DIR/common.sh"
+
+PARALLEL="${PARALLEL:-}"
+
 SUITE="$BENCHMARKS_DIR/benchmark-images.cfg"
 
 if [  "$1" == "-v" ]; then
@@ -40,13 +43,12 @@ if [ ! -e "$SUITE" ]; then
 fi
 
 LINES=`cat "$SUITE" | wc -l`
-for i in `seq 1 $LINES`
-    do
-    VAR="'$i""q;d' $SUITE"
+for LINE in `seq 1 $LINES`; do
+    VAR="`get_line "$LINE"`" || continue
     if [ -z "$PARALLEL" ]; then
-        prepare_vm `eval sed "$VAR"`
+        prepare_vm $VAR
     else
-        prepare_vm `eval sed "$VAR"` &
+        prepare_vm $VAR &
     fi
 done
 

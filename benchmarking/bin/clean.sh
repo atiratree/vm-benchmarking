@@ -1,26 +1,5 @@
 #!/bin/bash
 
-remove(){
-    if [ -d "$1" ]; then
-        echo "rm -rf $1"
-        rm -rf "$1"
-    fi
-}
-
-safe_remove(){
-    echo -e -n "Are you sure you want to delete $1? (y/n): "
-    if [ -z "$FORCE" ]; then
-        read -n 1 -r
-        if [[ ! "$REPLY" =~ ^[Yy]$ ]]; then
-        echo ". skipping..."
-            return 1
-        fi
-    else
-         echo -e -n "y (forced)"
-    fi
-    echo
-}
-
 remove_benchmark(){
     NAME="$1"
     BENCHMARK_DIR="$BENCHMARKS_DIR/$NAME"
@@ -46,13 +25,13 @@ remove_install(){
     fi
 
     if [  "$SELECT" == "--all" -o "$SELECT" == "--all-files" -o "$SELECT" == "--install" ]; then
-       remove "$INSTALL_DIR/out"
+       verbose_remove "$INSTALL_DIR/out"
     fi
 
     if [  "$SELECT" == "--all" -o "$SELECT" == "--vms" ]; then
-        VM="`"$IMAGE_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION"`"
+        VM="`"$BENCH_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION"`"
         if "$IMAGE_UTIL_DIR/"assert-vm.sh "$VM" 2> /dev/null; then
-            safe_remove "${GREEN}Vm ${RED}$VM${NC}" && "$IMAGE_MANAGEMENT_DIR"/delete-vm.sh "$VM" > /dev/null 2>&1 && echo "removed $VM"
+            safe_remove "${GREEN}Vm ${RED}$VM${NC}" "$FORCE" && "$IMAGE_MANAGEMENT_DIR"/delete-vm.sh "$VM" > /dev/null 2>&1 && echo "removed $VM"
         fi
     fi
 
@@ -62,13 +41,13 @@ remove_install(){
         fi
         RUN_VERSION="`basename "$RUN_DIR" | cut -c 6-`"
         if [  "$SELECT" == "--all" -o "$SELECT" == "--all-files" -o "$SELECT" == "--run" ]; then
-            remove "$RUN_DIR/out"
+            verbose_remove "$RUN_DIR/out"
         fi
         if [  "$SELECT" == "--all" -o "$SELECT" == "--all-files" -o "$SELECT" == "--analysis" ]; then
-            ANALYSIS_NAME="`"$IMAGE_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"`"
+            ANALYSIS_NAME="`"$BENCH_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"`"
             ANALYSIS_DIR="$RUN_DIR/analysis"
              if [ -d "$ANALYSIS_DIR" ]; then
-                safe_remove "${GREEN}Analysis ${RED}$ANALYSIS_NAME${NC}" &&  remove "$ANALYSIS_DIR"
+                safe_remove "${GREEN}Analysis ${RED}$ANALYSIS_NAME${NC}" "$FORCE" &&  verbose_remove "$ANALYSIS_DIR"
             fi
         fi
     done
@@ -76,10 +55,15 @@ remove_install(){
 
 
 SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-BENCHMARKS_DIR="`realpath $SCRIPTS_DIR/../benchmarks/`"
+BENCHMARKS_DIR="`realpath "$SCRIPTS_DIR/../benchmarks/"`"
 IMAGE_MANAGEMENT_DIR="$SCRIPTS_DIR/image-management"
 IMAGE_UTIL_DIR="$IMAGE_MANAGEMENT_DIR/util"
+BENCH_UTIL_DIR="$SCRIPTS_DIR/bench/util"
+UTIL_DIR="$SCRIPTS_DIR/util"
+source "$UTIL_DIR/common.sh"
 source "$SCRIPTS_DIR/config.env"
+
+FORCE="${FORCE:-}"
 
 SELECT="$1"
 NAME="$2"

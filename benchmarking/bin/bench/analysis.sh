@@ -21,17 +21,18 @@ RUN_VERSION="$3"
 ANALYSIS_NAME="$4"
 
 SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-IMAGE_MANAGEMENT_DIR="`realpath $SCRIPTS_DIR/../image-management`"
-UTIL_DIR="`realpath $SCRIPTS_DIR/../util`"
+IMAGE_MANAGEMENT_DIR="`realpath "$SCRIPTS_DIR/../image-management"`"
+UTIL_DIR="`realpath "$SCRIPTS_DIR/../util"`"
 IMAGE_UTIL_DIR="$IMAGE_MANAGEMENT_DIR/util"
+BENCH_UTIL_DIR="$SCRIPTS_DIR/util"
 source "$SCRIPTS_DIR/../config.env"
 source "$UTIL_DIR/common.sh"
 
-BENCHMARKS_DIR="`realpath $SCRIPTS_DIR/../../benchmarks`"
-RUN_DIR_PART="`DIR=TRUE "$IMAGE_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"`" || exit 1
+BENCHMARKS_DIR="`realpath "$SCRIPTS_DIR/../../benchmarks"`"
+RUN_DIR_PART="`DIR=TRUE "$BENCH_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"`" || exit 1
 BENCHMARK_DIR="$BENCHMARKS_DIR/$NAME"
 
-INSTALL_DIR_PART="`DIR=TRUE "$IMAGE_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION"`"
+INSTALL_DIR_PART="`DIR=TRUE "$BENCH_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION"`"
 VERSIONED_INSTALL_DIR="$BENCHMARKS_DIR/$INSTALL_DIR_PART"
 
 RUN_DIR="$BENCHMARKS_DIR/$RUN_DIR_PART"
@@ -80,7 +81,7 @@ done
 echo "$ALL_SETTINGS" | sort | uniq | sed -e '/^\s*$/d; s/^/# /g' > "$DETAILED_ANALYSIS"
 log_detailed "# --------------------"
 
-echo -e "${BLUE}analyzing `"$IMAGE_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"` into $ANALYSIS_DIR as $ANALYSIS_NAME${NC}"
+echo -e "${BLUE}analyzing `"$BENCH_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"` into $ANALYSIS_DIR as $ANALYSIS_NAME${NC}"
 
 
 if [ ! -d "$RESULT_DIR" ]; then

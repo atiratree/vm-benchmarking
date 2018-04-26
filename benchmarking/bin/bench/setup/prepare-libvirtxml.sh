@@ -1,10 +1,11 @@
 #!/bin/bash
 
 SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-BIN_DIR="`realpath $SCRIPTS_DIR/../..`"
-BENCHMARKS_DIR="`realpath $BIN_DIR/../benchmarks/`"
+BIN_DIR="`realpath "$SCRIPTS_DIR/../.."`"
+BENCHMARKS_DIR="`realpath "$BIN_DIR/../benchmarks/"`"
 IMAGE_MANAGEMENT_DIR="$BIN_DIR/image-management"
 IMAGE_UTIL_DIR="$IMAGE_MANAGEMENT_DIR/util"
+BENCH_UTIL_DIR="$BIN_DIR/bench/util"
 source "$BIN_DIR/config.env"
 
 RUN_NAME="$1"
@@ -41,7 +42,7 @@ fetch_libvirtxml(){
         fi
         INSTALL_VERSION="`basename "$INSTALL_DIR" | cut -c 10-`"
 
-        VM="`"$IMAGE_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION"`"
+        VM="`"$BENCH_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION"`"
 
         if ! "$IMAGE_UTIL_DIR/"assert-vm.sh "$VM" 2> /dev/null; then
             echo -e "${RED}skipping $VM ... does not exist${NC}"
@@ -80,10 +81,10 @@ if [ "$FINISH" != "--finish" ]; then
     echo
     echo "1. edit $LIBVIRT_XML_RESULT"
     echo "2. merge with current libvirt.xml.example bellow"
-    echo -e "3. run ${GREEN} prepare-libvirtxml.sh $RUN_NAME --finish${NC}"
-    echo "3. run patch-run-libvirtxls.sh $RUN_NAME"
-
+    echo -e "3. run ${GREEN} \"$SCRIPTS_DIR/prepare-libvirtxml.sh $RUN_NAME --finish\"${NC}"
+    echo "4. run \"$SCRIPTS_DIR/patch-run-libvirtxls.sh $RUN_NAME\""
     echo
+
     if [ -f "$LIBVIRT_XML_EXAMPLE" ]; then
         echo -e "${BLUE}current libvirt.xml.example: ${NC}"
         echo

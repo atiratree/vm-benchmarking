@@ -9,20 +9,6 @@ fail_handler(){
     exit $1
 }
 
-safe_remove(){
-    echo -e -n "Are you sure you want to delete $1? (y/n): "
-    if [ -z "$FORCE" ]; then
-        read -n 1 -r
-        if [[ ! "$REPLY" =~ ^[Yy]$ ]]; then
-            echo ". preparations skipped..."
-            exit 0
-        fi
-    else
-         echo -e -n "y (forced)"
-    fi
-    echo
-}
-
 copy_to_remote(){
     IP="$1"
     DIR_TO_COPY="$2"
@@ -33,9 +19,10 @@ copy_to_remote(){
 }
 
 SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-IMAGE_MANAGEMENT_DIR="`realpath $SCRIPTS_DIR/../image-management`"
-UTIL_DIR="`realpath $SCRIPTS_DIR/../util`"
+IMAGE_MANAGEMENT_DIR="`realpath "$SCRIPTS_DIR/../image-management"`"
+UTIL_DIR="`realpath "$SCRIPTS_DIR/../util"`"
 IMAGE_UTIL_DIR="$IMAGE_MANAGEMENT_DIR/util"
+BENCH_UTIL_DIR="$SCRIPTS_DIR/util"
 source "$SCRIPTS_DIR/../config.env"
 source "$UTIL_DIR/common.sh"
 
@@ -52,10 +39,10 @@ if [ -z "$BASE_VM" ]; then
 	exit 3
 fi
 
-BENCHMARKS_DIR="`realpath $SCRIPTS_DIR/../../benchmarks/`"
+BENCHMARKS_DIR="`realpath "$SCRIPTS_DIR/../../benchmarks/"`"
 BENCHMARK_DIR="$BENCHMARKS_DIR/$NAME"
 
-INSTALL_DIR_PART="`DIR=TRUE "$IMAGE_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION"`"
+INSTALL_DIR_PART="`DIR=TRUE "$BENCH_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION"`"
 VERSIONED_INSTALL_DIR="$BENCHMARKS_DIR/$INSTALL_DIR_PART"
 
 INSTALL_SCRIPT="$BENCHMARK_DIR/install.sh"
@@ -73,11 +60,11 @@ fi
 
 "$IMAGE_UTIL_DIR/assert-vm.sh" "$BASE_VM" || fail_handler $?
 
-FULL_NAME="`"$IMAGE_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION"`"
+FULL_NAME="`"$BENCH_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION"`"
 
 if virsh list --all | awk  '{print $2}' | grep -q --line-regexp --fixed-strings "$FULL_NAME"; then
 	echo "$LIBVIRT_DEFAULT_URI: vm is present. Removing..."
-	safe_remove "${GREEN}Vm ${RED}$FULL_NAME${NC}"
+	safe_remove "${GREEN}Vm ${RED}$FULL_NAME${NC}" "$FORCE"  ||  exit 0
 	"$IMAGE_MANAGEMENT_DIR/delete-vm.sh" "$FULL_NAME"
 fi
 
@@ -89,7 +76,7 @@ fi
 mkdir -p "$RESULTS_DIR"
 > "$RESULT"
 
-"$IMAGE_UTIL_DIR/get-settings.sh" "$NAME" "$INSTALL_VERSION" | sed -e '1{/.*/d}'> "$RESULT_SETTINGS"
+"$BENCH_UTIL_DIR/get-settings.sh" "$NAME" "$INSTALL_VERSION" | sed -e '1{/.*/d}'> "$RESULT_SETTINGS"
 
 echo -e "${BLUE}preparing $FULL_NAME${NC}"
 "$IMAGE_MANAGEMENT_DIR/clone-vm.sh" "$BASE_VM" "$FULL_NAME" || fail_handler $?
@@ -118,7 +105,7 @@ $SSH "root@$IP" "cat /etc/*release" > "$RESULT_RELEASE"
 copy_to_remote "$IP" "$BENCHMARK_DIR/dependencies"
 copy_to_remote "$IP" "$VERSIONED_INSTALL_DIR/dependencies"
 
-FINAL_SCRIPT="`SCRIPT_FILE="$INSTALL_SCRIPT" POST_SCRIPT_FILE="$VERSIONED_INSTALL_SCRIPT" "$IMAGE_UTIL_DIR/get-settings.sh" "$NAME" "$INSTALL_VERSION"`"
+FINAL_SCRIPT="`SCRIPT_FILE="$INSTALL_SCRIPT" POST_SCRIPT_FILE="$VERSIONED_INSTALL_SCRIPT" "$BENCH_UTIL_DIR/get-settings.sh" "$NAME" "$INSTALL_VERSION"`"
 $SSH "root@$IP" "bash -s" -- <<< "$FINAL_SCRIPT" 2>&1 | tee "$VERBOSE_FILE" >> "$RESULT" || fail_handler $?
 
 $SSH "root@$IP" "rm -rf /tmp/dependencies" 2>&1 | tee "$VERBOSE_FILE" >> "$RESULT"
@@ -126,5 +113,5 @@ $SSH "root@$IP" "rm -rf /tmp/dependencies" 2>&1 | tee "$VERBOSE_FILE" >> "$RESUL
 # "$IMAGE_MANAGEMENT_DIR/vm-up.sh" "$FULL_NAME"
 virsh shutdown "$FULL_NAME"
 
-echo -e "${BLUE}Install output can be found in `realpath $RESULTS_DIR`${NC}"
+echo -e "${BLUE}Install output can be found in `realpath "$RESULTS_DIR"`${NC}"
 

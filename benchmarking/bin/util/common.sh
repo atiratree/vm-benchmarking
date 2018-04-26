@@ -29,6 +29,40 @@ set_option_by_position(){
     fi
 }
 
+safe_remove(){
+    SR_WHAT="$1"
+    SR_FORCE="$2"
+
+    echo -e -n "Are you sure you want to delete $SR_WHAT? (y/n): "
+    if [ -z "$SR_FORCE" ]; then
+        read -n 1 -r
+        if [[ ! "$REPLY" =~ ^[Yy]$ ]]; then
+            echo -e ". skipping $SR_WHAT..."
+            return 1
+        fi
+    else
+         echo -e -n "y (forced)"
+    fi
+    echo
+}
+
+verbose_remove(){
+    if [ -d "$1" ]; then
+        echo "rm -rf $1"
+        rm -rf "$1"
+    fi
+}
+
+get_line(){
+    G_VAR="`sed "s/^\s*//; $1""q; d" "$SUITE" 2> /dev/null`"
+
+    if [ -z "$G_VAR" -o "${G_VAR:0:1}" == "#" ]; then
+        return 1
+    fi
+    echo "$G_VAR"
+}
+
+
 assert_name(){
     if [ -z "$1" ]; then
         echo "name must be specified" >&2

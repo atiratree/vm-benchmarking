@@ -20,7 +20,7 @@ list_benchmark(){
         fi
         INSTALL_VERSION="`basename "$INSTALL_DIR" | cut -c 10-`"
 
-        VM="`"$IMAGE_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION"`"
+        VM="`"$BENCH_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION"`"
         if "$IMAGE_UTIL_DIR/"assert-vm.sh "$VM" 2> /dev/null; then
             echo -e "${GREEN}$VM${NC}"
         fi
@@ -37,7 +37,7 @@ list_benchmark(){
             show_settings "$RUN_DIR"
 
             RUN_VERSION="`basename "$RUN_DIR" | cut -c 6-`"
-            VM="`"$IMAGE_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"`"
+            VM="`"$BENCH_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"`"
 
             for RUN_VM in `virsh list --all 2> /dev/null | grep "$VM""-[0-9+]" |  awk '{print $2}'`; do
                 echo -e "${GREEN}$RUN_VM${NC}"
@@ -56,9 +56,10 @@ list_benchmark(){
 }
 
 SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-BENCHMARKS_DIR="`realpath $SCRIPTS_DIR/../benchmarks/`"
+BENCHMARKS_DIR="`realpath "$SCRIPTS_DIR/../benchmarks/"`"
 IMAGE_MANAGEMENT_DIR="$SCRIPTS_DIR/image-management"
 IMAGE_UTIL_DIR="$IMAGE_MANAGEMENT_DIR/util"
+BENCH_UTIL_DIR="$SCRIPTS_DIR/bench/util"
 source "$SCRIPTS_DIR/config.env"
 
 SHOW_SETTINGS="${SHOW_SETTINGS:-}"

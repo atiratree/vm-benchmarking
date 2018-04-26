@@ -1,10 +1,10 @@
 #!/bin/bash
 
-IMAGE_UTIL_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-UTIL_DIR="`realpath $IMAGE_UTIL_DIR/../../util`"
+BENCH_UTIL_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+UTIL_DIR="`realpath "$BENCH_UTIL_DIR/../../util"`"
 source "$UTIL_DIR/common.sh"
-source "$IMAGE_UTIL_DIR/../../config.env"
-BENCHMARKS_DIR="`realpath $IMAGE_UTIL_DIR/../../../benchmarks`"
+source "$BENCH_UTIL_DIR/../../config.env"
+BENCHMARKS_DIR="`realpath "$BENCH_UTIL_DIR/../../../benchmarks"`"
 
 NAME="$1"
 INSTALL_VERSION="$2"
@@ -12,7 +12,7 @@ RUN_VERSION="$3"
 
 assert_run "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"
 
-PART_NAME="`DIR=TRUE "$IMAGE_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"`"
+PART_NAME="`DIR=TRUE "$BENCH_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"`"
 RUN_DIR="$BENCHMARKS_DIR/$PART_NAME"
 
 OUT_DIR="$RUN_DIR/out"

@@ -83,15 +83,6 @@ wait_for_benchmark(){
     fi
 }
 
-get_line(){
-    G_VAR="`sed "s/^\s*//; $1""q; d" "$SUITE" 2> /dev/null`"
-
-    if [ -z "$G_VAR" -o "${G_VAR:0:1}" == "#" ]; then
-        return 1
-    fi
-    echo "$G_VAR"
-}
-
 finish_suite_run(){
     U_LINE="$1"
     sed -i -e "$U_LINE"'s/^/# /' "$SUITE"
@@ -117,13 +108,13 @@ run_benchmark(){
 
     set_option "$OPTIONS" "MANAGED_BY_VM"
 
-    ID="`"$IMAGE_UTIL_DIR/get-new-run-id.sh" "$NAME" "$INSTALL_VERSION"  "$RUN_VERSION"`"
-    RUN_PART="`DIR=TRUE "$IMAGE_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION" "$ID"`"
+    ID="`"$BENCH_UTIL_DIR/get-new-run-id.sh" "$NAME" "$INSTALL_VERSION"  "$RUN_VERSION"`"
+    RUN_PART="`DIR=TRUE "$BENCH_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION" "$ID"`"
     OUTPUT_DIR="$BENCHMARKS_DIR/$RUN_PART"
 
     if [ -n "$MANAGED_BY_VM" ]; then
-       MANAGED_ID="`"$IMAGE_UTIL_DIR/get-new-run-id.sh" "$MANAGED_BY_VM" "$INSTALL_VERSION"  "$RUN_VERSION"`"
-       MANAGED_RUN_PART="`DIR=TRUE "$IMAGE_UTIL_DIR/get-name.sh" "$MANAGED_BY_VM" "$INSTALL_VERSION" "$RUN_VERSION" "$MANAGED_ID"`"
+       MANAGED_ID="`"$BENCH_UTIL_DIR/get-new-run-id.sh" "$MANAGED_BY_VM" "$INSTALL_VERSION"  "$RUN_VERSION"`"
+       MANAGED_RUN_PART="`DIR=TRUE "$BENCH_UTIL_DIR/get-name.sh" "$MANAGED_BY_VM" "$INSTALL_VERSION" "$RUN_VERSION" "$MANAGED_ID"`"
        MANAGED_OUTPUT_DIR="$BENCHMARKS_DIR/$MANAGED_RUN_PART"
     fi
 
@@ -170,8 +161,8 @@ run_benchmark_times(){
         return 3
     fi
 
-    RUN_BENCH_NAME="`"$IMAGE_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"`"
-    RUN_BENCH_DIR="$BENCHMARKS_DIR/`DIR=TRUE "$IMAGE_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"`"
+    RUN_BENCH_NAME="`"$BENCH_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"`"
+    RUN_BENCH_DIR="$BENCHMARKS_DIR/`DIR=TRUE "$BENCH_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"`"
 
     mkdir -p "$RUN_BENCH_DIR"
     if [ ! -d "$RUN_BENCH_DIR" ]; then
@@ -211,10 +202,11 @@ run_benchmark_times(){
 }
 
 SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-BENCHMARKS_DIR="`realpath $SCRIPTS_DIR/../benchmarks/`"
+BENCHMARKS_DIR="`realpath "$SCRIPTS_DIR/../benchmarks/"`"
 IMAGE_MANAGEMENT_DIR="$SCRIPTS_DIR/image-management"
 BENCH_DIR="$SCRIPTS_DIR/bench"
 IMAGE_UTIL_DIR="$IMAGE_MANAGEMENT_DIR/util"
+BENCH_UTIL_DIR="$BENCH_DIR/util"
 UTIL_DIR="$SCRIPTS_DIR/util"
 
 source "$SCRIPTS_DIR/config.env"

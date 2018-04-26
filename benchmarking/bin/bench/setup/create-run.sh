@@ -2,8 +2,8 @@
 
 
 SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-BIN_DIR="`realpath $SCRIPTS_DIR/../..`"
-BENCHMARKS_DIR="`realpath $BIN_DIR/../benchmarks/`"
+BIN_DIR="`realpath "$SCRIPTS_DIR/../.."`"
+BENCHMARKS_DIR="`realpath "$BIN_DIR/../benchmarks/"`"
 IMAGE_MANAGEMENT_DIR="$BIN_DIR/image-management"
 IMAGE_UTIL_DIR="$IMAGE_MANAGEMENT_DIR/util"
 source "$BIN_DIR/config.env"
