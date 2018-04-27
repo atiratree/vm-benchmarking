@@ -6,3 +6,4 @@ grub2-mkconfig -o /boot/grub2/grub.cfg
 yum -y install gcc wget qemu-guest-agent
 yum clean all
 rm -rf /var/cache/yum
+systemctl enable qemu-guest-agent

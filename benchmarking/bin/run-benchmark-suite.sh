@@ -144,6 +144,7 @@ run_benchmark(){
     if [ -n "$MANAGED_BY_VM" ]; then
         "$BENCH_DIR"/analysis.sh  "$MANAGED_BY_VM" "$INSTALL_VERSION" "$RUN_VERSION" "$ANALYSIS_NAME" &> /dev/null || echo -e "${RED}skipping MANAGED_BY_VM analysis${NC}"
     fi
+    "$UTIL_DIR/version-results.sh" "$NAME $INSTALL_VERSION $RUN_VERSION" &> /dev/null
 }
 
 run_benchmark_times(){
@@ -233,6 +234,7 @@ echo "# This is editable config:" >> "$SUITE"
 echo "# You can append new benchmark runs to this file and edit TIMES column in active benchmark " >> "$SUITE"
 echo >> "$SUITE"
 cat "$SUITE_ORIGIN" >> "$SUITE"
+FORCE_REMOVE=yes "$UTIL_DIR/version-results.sh" "benchmark suite run `echo "$SUITE" | cut -c 35-`" &> /dev/null
 
 LINE=1
 

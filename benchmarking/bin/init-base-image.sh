@@ -61,4 +61,8 @@ ssh-copy-id -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null" -i "
 
 $SSH "root@$IP" "bash -s" -- < "$BASE_IMAGE_INSTALL"
 
+virsh qemu-agent-command "$NAME" '{"execute":"guest-info"}' | jq
+
 virsh shutdown "$NAME"
+
+echo "done"
