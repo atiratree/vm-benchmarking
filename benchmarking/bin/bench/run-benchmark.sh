@@ -4,7 +4,32 @@ trap cleanup SIGINT SIGTERM
 
 cleanup(){
 	echo "killing benchmark $BENCHMARK_VM"
+	after_run
     finish_all 3
+}
+
+before_run(){
+    OLD_SWAPPINGESS="`cat /proc/sys/vm/swappiness`"
+    sysctl vm.swappiness=0 &> /dev/null
+
+    echo "synchronizing cached writes"
+    sync
+
+    echo "freeing caches"
+    swapoff -a && swapon -a &> /dev/null
+    # free pagecache, dentries and inodes:
+    echo 3 > /proc/sys/vm/drop_caches
+
+    echo "freeing buffers"
+    # excludes floppies and optical drives
+    for DEVICE in `lsblk  --list --nodeps --noheadings --output NAME --exclude 2,11`; do
+        blockdev --flushbufs /dev/"$DEVICE" &> /dev/null
+        hdparm -fF /dev/"$DEVICE" &> /dev/null
+    done
+}
+
+after_run(){
+    sysctl vm.swappiness="$OLD_SWAPPINGESS" &> /dev/null
 }
 
 finish_all(){
@@ -184,6 +209,11 @@ FORCE="${FORCE:-}"
 set_option "$OPTIONS" "MEASURE_RESOURCE_USAGE"
 set_option "$OPTIONS" "MANAGED_BY_VM"
 
+if [ "$EUID" -ne 0 ]; then
+    echo "Please run as root"
+    exit 1
+fi
+
 assert_run "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"
 
 if [ "$MEASURE_RESOURCE_USAGE" == "yes" ] && [ ! -e "$GENERATED_DIR/$SYSTAT_FILENAME" ]; then
@@ -205,8 +235,7 @@ if [ -n "$MANAGED_BY_VM" ]; then
     M_RUN_SCRIPT="$RUN_SCRIPT"
 fi
 
-echo "synchronizing cached writes"
-sync
+before_run
 
 resolve_libvirt_xml "$V_BENCHMARK_VM" "$V_RUN_RESULTS_DIR"
 if [ -n "$MANAGED_BY_VM" ]; then
@@ -260,3 +289,4 @@ fi
 
 echo -e "\nBenchmark Runtime: $((END-START)) s"
 echo -e "${GREEN}benchmark successfully finished${NC}"
+after_run

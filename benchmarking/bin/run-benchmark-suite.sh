@@ -219,14 +219,19 @@ if [  "$1" == "-v" ]; then
 	export VERBOSE_FILE=/dev/tty
 fi
 
+if [ "$EUID" -ne 0 ]; then
+    echo "Please run as root"
+    exit 1
+fi
+
 if [ ! -e "$SUITE_ORIGIN" ]; then
 	echo "$SUITE_ORIGIN must be specified" >&2
-	exit 1
+	exit 2
 fi
 
 if [ "`cat "$SUITE_ORIGIN" | wc -l`" -eq 0 ]; then
 	echo "$SUITE_ORIGIN empty" >&2
-	exit 2
+	exit 3
 fi
 
 SUITE=$(mktemp /tmp/benchmark-suite.editable-cfg.XXXXXX)
@@ -253,4 +258,4 @@ while [ "$LINE" -le "`cat "$SUITE" | wc -l`" ]; do
     LINE=$((LINE + 1))
 done
 
-rm -f "$SUITE"
+ rm -f /tmp/benchmark-suite.*

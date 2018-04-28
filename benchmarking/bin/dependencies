@@ -11,3 +11,6 @@ bc
 awk
 jq
 git
+sysctl
+systemctl
+hdparm
