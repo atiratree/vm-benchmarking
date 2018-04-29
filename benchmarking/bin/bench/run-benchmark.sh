@@ -8,11 +8,31 @@ cleanup(){
     finish_all 3
 }
 
+force_write_buffers(){
+    if [ -d "$POOL_LOCATION" ]; then
+        # write random stuff if write cache/buffers are used
+        FLUSH_CACHE_TMP="$POOL_LOCATION/flush-cache.tmp"
+        dd if=/dev/urandom of="$FLUSH_CACHE_TMP" iflag=fullblock bs=64M count=16 &> /dev/null
+    fi
+}
+
+force_flush_read_buffers(){
+    if [ -f "$FLUSH_CACHE_TMP" ]; then
+        echo "force overwriting disk buffers"
+        dd if="$FLUSH_CACHE_TMP" iflag=fullblock of=/dev/null &> /dev/null
+    else
+        echo -e "${RED}could not force overwrite disk buffers because POOL_LOCATION is missing in global-config.env${NC}"
+    fi
+}
+
 before_run(){
     OLD_SWAPPINGESS="`cat /proc/sys/vm/swappiness`"
     sysctl vm.swappiness=0 &> /dev/null
 
     echo "synchronizing cached writes"
+    sync
+    # after sync so only garbage is in write buffers
+    force_write_buffers
     sync
 
     echo "freeing caches"
@@ -26,10 +46,14 @@ before_run(){
         blockdev --flushbufs /dev/"$DEVICE" &> /dev/null
         hdparm -fF /dev/"$DEVICE" &> /dev/null
     done
+    force_flush_read_buffers
+    # free caches again after write
+    echo 3 > /proc/sys/vm/drop_caches
 }
 
 after_run(){
     sysctl vm.swappiness="$OLD_SWAPPINGESS" &> /dev/null
+    rm -f "$FLUSH_CACHE_TMP"
 }
 
 finish_all(){
