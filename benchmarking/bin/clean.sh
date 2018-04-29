@@ -61,7 +61,6 @@ IMAGE_UTIL_DIR="$IMAGE_MANAGEMENT_DIR/util"
 BENCH_UTIL_DIR="$SCRIPTS_DIR/bench/util"
 UTIL_DIR="$SCRIPTS_DIR/util"
 source "$UTIL_DIR/common.sh"
-source "$SCRIPTS_DIR/config.env"
 
 FORCE="${FORCE:-}"
 

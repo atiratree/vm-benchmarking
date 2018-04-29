@@ -28,7 +28,9 @@ IMAGE_MANAGEMENT_DIR="$SCRIPTS_DIR/image-management"
 GENERATED_DIR="$SCRIPTS_DIR/generated"
 DEPS="$SCRIPTS_DIR/dependencies"
 BENCHMARKS_DIR="`realpath "$SCRIPTS_DIR/../benchmarks"`"
-source "$SCRIPTS_DIR/config.env"
+UTIL_DIR="$SCRIPTS_DIR/util"
+
+source "$UTIL_DIR/common.sh"
 
 NAME="$1"
 

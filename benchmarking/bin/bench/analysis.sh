@@ -25,7 +25,7 @@ IMAGE_MANAGEMENT_DIR="`realpath "$SCRIPTS_DIR/../image-management"`"
 UTIL_DIR="`realpath "$SCRIPTS_DIR/../util"`"
 IMAGE_UTIL_DIR="$IMAGE_MANAGEMENT_DIR/util"
 BENCH_UTIL_DIR="$SCRIPTS_DIR/util"
-source "$SCRIPTS_DIR/../config.env"
+
 source "$UTIL_DIR/common.sh"
 
 BENCHMARKS_DIR="`realpath "$SCRIPTS_DIR/../../benchmarks"`"

@@ -7,7 +7,8 @@ BENCHMARKS_DIR="`realpath "$BIN_DIR/../benchmarks/"`"
 IMAGE_MANAGEMENT_DIR="$BIN_DIR/image-management"
 IMAGE_UTIL_DIR="$IMAGE_MANAGEMENT_DIR/util"
 BENCH_UTIL_DIR="$BIN_DIR/bench/util"
-source "$BIN_DIR/config.env"
+UTIL_DIR="$BIN_DIR/util"
+source "$UTIL_DIR/common.sh"
 
 
 RUN_NAME="$1"

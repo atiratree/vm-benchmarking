@@ -1,6 +1,37 @@
 #!/bin/bash
 
+export GREEN='\033[0;32m'
+export RED='\033[0;31m'
+export BLUE='\033[0;34m'
+export NC='\033[0m' # No Color
+
+GENERATED_DIR="`realpath "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../generated"`"
+GLOBAL_CONFIG="`realpath "$GENERATED_DIR/../../benchmarks/global-config.env"`"
+
+export ID_RSA="$GENERATED_DIR/id_rsa"
+
+export SYSTAT_FILENAME="sysstat-v11.7.2.tar.gz"
+
+export IP_4_REGEX='[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}'
+
+
+if [ -f "$GLOBAL_CONFIG" ]; then
+    for CONF in `sed -e "/^#.*/d; /^\s*$/d; /^\s*#.*$/d; s/[\"\']*//g" "$GLOBAL_CONFIG"`; do
+        CONFIG_VARIABLE="`echo "$CONF" | sed 's/=.*//'`"
+        if ! env | grep -q "^$CONFIG_VARIABLE="; then
+            export $CONF
+        fi
+    done
+fi
+
+if [ -n "$LIBVIRT_URI" ]; then
+    export LIBVIRT_DEFAULT_URI="$LIBVIRT_URI"
+fi
+
 # common functions
+
+export SSH="ssh -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null"  -i "$ID_RSA""
+export SCP="scp -o "StrictHostKeyChecking=no" -o "UserKnownHostsFile=/dev/null"  -i "$ID_RSA""
 
 set_option(){
     CM_OPTIONS="$1"

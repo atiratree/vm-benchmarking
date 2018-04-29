@@ -11,7 +11,6 @@ prepend_to_script(){
 BENCH_UTIL_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 UTIL_DIR="`realpath "$BENCH_UTIL_DIR/../../util"`"
 source "$UTIL_DIR/common.sh"
-source "$BENCH_UTIL_DIR/../../config.env"
 BENCHMARKS_DIR="`realpath "$BENCH_UTIL_DIR/../../../benchmarks"`"
 
 

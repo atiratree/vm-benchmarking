@@ -60,7 +60,9 @@ BENCHMARKS_DIR="`realpath "$SCRIPTS_DIR/../benchmarks/"`"
 IMAGE_MANAGEMENT_DIR="$SCRIPTS_DIR/image-management"
 IMAGE_UTIL_DIR="$IMAGE_MANAGEMENT_DIR/util"
 BENCH_UTIL_DIR="$SCRIPTS_DIR/bench/util"
-source "$SCRIPTS_DIR/config.env"
+UTIL_DIR="$SCRIPTS_DIR/util"
+
+source "$UTIL_DIR/common.sh"
 
 SHOW_SETTINGS="${SHOW_SETTINGS:-}"
 

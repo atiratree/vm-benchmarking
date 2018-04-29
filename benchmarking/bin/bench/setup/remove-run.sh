@@ -5,7 +5,6 @@ BIN_DIR="`realpath "$SCRIPTS_DIR/../.."`"
 BENCHMARKS_DIR="`realpath "$BIN_DIR/../benchmarks/"`"
 UTIL_DIR="$BIN_DIR/util"
 source "$UTIL_DIR/common.sh"
-source "$BIN_DIR/config.env"
 
 FORCE="${FORCE:-}"
 RUN_NAME="$1"

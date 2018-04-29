@@ -26,7 +26,6 @@ BENCHMARKS_DIR="`realpath "$SCRIPTS_DIR/../benchmarks/"`"
 BENCH_DIR="$SCRIPTS_DIR/bench"
 UTIL_DIR="$SCRIPTS_DIR/util"
 
-source "$SCRIPTS_DIR/config.env"
 source "$UTIL_DIR/common.sh"
 
 PARALLEL="${PARALLEL:-}"

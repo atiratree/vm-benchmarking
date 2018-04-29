@@ -8,4 +8,4 @@
 */analysis-blacklisted-entries
 benchmark-images.cfg
 benchmark-suite.cfg
-stop-suite.flag
+global-config.env

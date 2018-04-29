@@ -8,7 +8,8 @@ fail_handler(){
 
 SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 IMAGE_UTIL_DIR="$SCRIPTS_DIR/util"
-source "$SCRIPTS_DIR/../config.env"
+UTIL_DIR="`realpath "$SCRIPTS_DIR/../util"`"
+source "$UTIL_DIR/common.sh"
 
 OLD_NAME="$1"
 NEW_NAME="$2"

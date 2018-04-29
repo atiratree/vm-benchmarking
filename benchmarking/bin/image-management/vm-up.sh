@@ -7,8 +7,9 @@ fail_handler(){
 SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BENCH_UTIL_DIR="`realpath "$SCRIPTS_DIR/../bench/util"`"
 IMAGE_UTIL_DIR="$SCRIPTS_DIR/util"
+UTIL_DIR="`realpath "$SCRIPTS_DIR/../util"`"
 GET_NAME="$BENCH_UTIL_DIR/get-name.sh"
-source "$SCRIPTS_DIR/../config.env"
+source "$UTIL_DIR/common.sh"
 
 FORWARD_FROM="${FORWARD_FROM:-}"
 FORWARD_TO="${FORWARD_TO:-8080}"

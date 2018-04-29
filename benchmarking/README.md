@@ -8,7 +8,9 @@
 
 ### Setup
 
-`cd benchmarking`
+- `cd benchmarking`
+- `cp benchmarks/global-config.env{.example,}`
+- customize `/global-config.env` 
 
 #### Creating Base VM
 1. Install base vm for all benchmarks and start it

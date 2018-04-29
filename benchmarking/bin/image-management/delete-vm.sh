@@ -2,7 +2,8 @@
 
 SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 IMAGE_UTIL_DIR="$SCRIPTS_DIR/util"
-source "$SCRIPTS_DIR/../config.env"
+UTIL_DIR="`realpath "$SCRIPTS_DIR/../util"`"
+source "$UTIL_DIR/common.sh"
 
 NAME="$1"
 DISK_FILENAME="$2"

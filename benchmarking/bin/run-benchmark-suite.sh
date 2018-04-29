@@ -210,7 +210,6 @@ IMAGE_UTIL_DIR="$IMAGE_MANAGEMENT_DIR/util"
 BENCH_UTIL_DIR="$BENCH_DIR/util"
 UTIL_DIR="$SCRIPTS_DIR/util"
 
-source "$SCRIPTS_DIR/config.env"
 source "$UTIL_DIR/common.sh"
 
 SUITE_ORIGIN="$BENCHMARKS_DIR/benchmark-suite.cfg"
@@ -258,4 +257,4 @@ while [ "$LINE" -le "`cat "$SUITE" | wc -l`" ]; do
     LINE=$((LINE + 1))
 done
 
- rm -f /tmp/benchmark-suite.*
+rm -f /tmp/benchmark-suite.*

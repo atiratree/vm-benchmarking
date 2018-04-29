@@ -2,7 +2,8 @@
 
 set -e
 IMAGE_UTIL_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-source "$IMAGE_UTIL_DIR/../../config.env"
+UTIL_DIR="`realpath "$IMAGE_UTIL_DIR/../../util"`"
+source "$UTIL_DIR/common.sh"
 
 VM="$1"
 
