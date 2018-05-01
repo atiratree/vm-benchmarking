@@ -9,4 +9,4 @@ VM="$1"
 
 "$IMAGE_UTIL_DIR/assert-vm.sh" "$VM"
 
-virsh dumpxml "$VM" | grep "/.*/*$VM.qcow2" -o | head -1
+virsh dumpxml "$VM" | grep  -Eo "/.*/*$VM.[a-zA-Z0-9]+" | head -1

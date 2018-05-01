@@ -9,9 +9,9 @@ cleanup(){
 }
 
 force_write_buffers(){
-    if [ -d "$POOL_LOCATION" ]; then
+    if [ -d "$RUN_POOL_LOCATION" ]; then
         # write random stuff if write cache/buffers are used
-        FLUSH_CACHE_TMP="$POOL_LOCATION/flush-cache.tmp"
+        FLUSH_CACHE_TMP="$RUN_POOL_LOCATION/flush-cache.tmp"
         dd if=/dev/urandom of="$FLUSH_CACHE_TMP" iflag=fullblock bs=64M count=16 &> /dev/null
     fi
 }
@@ -21,7 +21,7 @@ force_flush_read_buffers(){
         echo "force overwriting disk buffers"
         dd if="$FLUSH_CACHE_TMP" iflag=fullblock of=/dev/null &> /dev/null
     else
-        echo -e "${RED}could not force overwrite disk buffers because POOL_LOCATION is missing in global-config.env${NC}"
+        echo -e "${RED}could not force overwrite disk buffers because RUN_POOL_LOCATION is missing in global-config.env${NC}"
     fi
 }
 
@@ -61,39 +61,37 @@ finish_all(){
     rm -f "/tmp/get-settings.*"
 
     if [ -n "$V_BENCHMARK_VM" ]; then
-        finish "$NAME" "$INSTALL_VERSION" "$V_BENCHMARK_VM" "$V_RUN_RESULT" "$1"
+        finish "$V_BENCHMARK_VM" "$V_RUN_RESULT" "$1"
     fi
 
     # remove unitialized vm
     if [ -z "$V_BENCHMARK_VM" ] || [ -n "$MANAGED_BY_VM" -a -z "$M_BENCHMARK_VM" ]; then
-        finish "$NAME" "$INSTALL_VERSION" "$BENCHMARK_VM" "$RUN_RESULT" "$1"
+        finish "$BENCHMARK_VM" "$RUN_RESULT" "$1"
         exit $1
     fi
 
     if [ -n "$MANAGED_BY_VM" -a -n "$M_BENCHMARK_VM" ]; then
-        finish "$MANAGED_BY_VM" "$INSTALL_VERSION" "$M_BENCHMARK_VM" "$M_RUN_RESULT" "$1"
+        finish "$M_BENCHMARK_VM" "$M_RUN_RESULT" "$1"
     fi
 
     exit $1
 }
 
 finish(){
-    F_NAME="$1"
-    F_INSTALL_VERSION="$2"
-    F_BENCHMARK_VM="$3"
-    F_RUN_RESULT="$4"
-    F_RETURN_CODE="$5"
+    F_BENCHMARK_VM="$1"
+    F_RUN_RESULT="$2"
+    F_RETURN_CODE="$3"
 
-    echo "cleaning up $F_NAME"
+    echo "cleaning up $F_BENCHMARK_VM"
 
     if [ -e "$F_RUN_RESULT" ]; then
         echo "failed with exit code $F_RETURN_CODE" >> "$F_RUN_RESULT"
     fi
 
     if [ -n "$F_BENCHMARK_VM" ]; then
-        BENCHMARK_BASE_VM="`"$BENCH_UTIL_DIR/get-name.sh" "$F_NAME" "$F_INSTALL_VERSION"`"
-        CLONED_DISK="`"$IMAGE_UTIL_DIR/get-clone-disk-filename.sh" "$BENCHMARK_BASE_VM" "$F_BENCHMARK_VM"`"
+        CLONED_DISK="`POOL_LOCATION="$RUN_POOL_LOCATION" "$IMAGE_UTIL_DIR/get-new-disk-filename.sh" "$F_BENCHMARK_VM"`"
         sync # wait in case script is in the middle of creating image
+        sleep 10
         "$IMAGE_MANAGEMENT_DIR/delete-vm.sh" "$F_BENCHMARK_VM" "$CLONED_DISK"
     fi
 }
@@ -137,7 +135,7 @@ initialize_run(){
 
     RUN_SCRIPT="`SCRIPT_FILE="$SCRIPT" "$BENCH_UTIL_DIR/get-settings.sh" "$I_NAME" "$I_INSTALL_VERSION" "$I_RUN_VERSION"`"
 
-    "$IMAGE_MANAGEMENT_DIR/clone-vm.sh" "$BENCHMARK_BASE_VM" "$BENCHMARK_VM" || finish_all $?
+    POOL_LOCATION="$RUN_POOL_LOCATION" "$IMAGE_MANAGEMENT_DIR/clone-vm.sh" "$BENCHMARK_BASE_VM" "$BENCHMARK_VM" || finish_all $?
 }
 
 resolve_libvirt_xml(){
@@ -154,8 +152,8 @@ resolve_libvirt_xml(){
         echo -e "${BLUE}$R_BENCHMARK_VM:${NC} using custom libvirt.xml"
         UUID_ELEM="`echo "$CURRENT_LIBVIRT_XML" | grep -Eo "<uuid>.*<"`"
         MAC_ADDR="`echo "$CURRENT_LIBVIRT_XML" | grep -Eo "<mac address='.*'" | head -1`"
-        FILE="`echo "$CURRENT_LIBVIRT_XML" | grep -Eo "/.*.qcow2" | sed 's;/;\\\/;g' | head -1`"
-        sed -e "s/<name>.*<\/name>/<name>$R_BENCHMARK_VM<\/name>/; s/<uuid>.*</$UUID_ELEM/g; s/\/.*.qcow2/$FILE/; s/<mac address='.*'/$MAC_ADDR/" \
+        FILE="`echo "$CURRENT_LIBVIRT_XML" | grep -Eo "/.*\.[a-zA-Z0-9]+" | sed 's;/;\\\/;g' | head -1`"
+        sed -e "s/<name>.*<\/name>/<name>$R_BENCHMARK_VM<\/name>/; s/<uuid>.*</$UUID_ELEM/g; s/\/.*\.[a-zA-Z0-9]\+/$FILE/; s/<mac address='.*'/$MAC_ADDR/" \
         "$RUN_LIBVIRT_XML" | virsh define /dev/stdin > /dev/null 2>&1 || finish_all $?
     fi
 
@@ -239,9 +237,14 @@ fi
 
 assert_run "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"
 
+if [ ! -d "$RUN_POOL_LOCATION" ]; then
+    echo "RUN_POOL_LOCATION must be specified" >&2
+    exit 5
+fi
+
 if [ "$MEASURE_RESOURCE_USAGE" == "yes" ] && [ ! -e "$GENERATED_DIR/$SYSTAT_FILENAME" ]; then
    echo "run init-base-image to download dependencies first" >&2
-   exit 5
+   exit 6
 fi
 
 initialize_run "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"
