@@ -78,13 +78,10 @@ safe_remove(){
 }
 
 verbose_remove(){
-    echo "rm -rf $@"
-    rm -rf "$@"
-}
-
-verbose_remove_files(){
-    echo "rm -f $@"
-    rm -f "$@"
+    if [ -e "$1" ]; then
+        echo "rm -rf $1"
+        rm -rf "$1"
+    fi
 }
 
 get_line(){

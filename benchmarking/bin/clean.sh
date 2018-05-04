@@ -40,18 +40,37 @@ remove_install(){
             continue
         fi
         RUN_VERSION="`basename "$RUN_DIR" | cut -c 6-`"
-        if [ -n "$DELETE_RUN" ]; then
-            verbose_remove "$RUN_DIR/out"
-        fi
-
-        if [ -n "$DELETE_ANALYSIS" ]; then
-            ANALYSIS_NAME="`"$BENCH_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"`"
-            ANALYSIS_DIR="$RUN_DIR/analysis"
-             if [ -d "$ANALYSIS_DIR" ]; then
-                safe_remove "${GREEN}Analysis ${RED}$ANALYSIS_NAME${NC}" "$FORCE" &&  verbose_remove "$ANALYSIS_DIR"
-            fi
-        fi
+        remove_run "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"
     done
+}
+
+remove_run(){
+    NAME="$1"
+    INSTALL_VERSION="$2"
+    RUN_VERSION="$3"
+
+    RUN_DIR="$BENCHMARKS_DIR/$NAME/install-v$INSTALL_VERSION/run-v$RUN_VERSION"
+
+    if [ -n "$DELETE_VMS_DISK_CACHE" ] && [ -d "$IMAGES_CACHE_LOCATION" ]; then
+        CACHE_BENCHMARK_VM="`"$BENCH_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"`"
+        CACHED_DISK_FILENAME="`POOL_LOCATION="$IMAGES_CACHE_LOCATION" "$IMAGE_UTIL_DIR"/get-new-disk-filename.sh "$CACHE_BENCHMARK_VM"`"
+        if [ -e "$CACHED_DISK_FILENAME" ]; then
+            safe_remove "${GREEN}cached image ${RED}$CACHED_DISK_FILENAME${NC}" "$FORCE" \
+                &&  verbose_remove "$CACHED_DISK_FILENAME"
+        fi
+    fi
+
+    if [ -n "$DELETE_RUN" ]; then
+        verbose_remove "$RUN_DIR/out"
+    fi
+
+    if [ -n "$DELETE_ANALYSIS" ]; then
+        ANALYSIS_NAME="`"$BENCH_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"`"
+        ANALYSIS_DIR="$RUN_DIR/analysis"
+        if [ -d "$ANALYSIS_DIR" ]; then
+            safe_remove "${GREEN}Analysis ${RED}$ANALYSIS_NAME${NC}" "$FORCE" &&  verbose_remove "$ANALYSIS_DIR"
+        fi
+    fi
 }
 
 
@@ -86,6 +105,10 @@ for ARG in $@; do
         DELETE_VMS="$ARG"
         shift
         ;;
+        --vms-disk-cache)
+        DELETE_VMS_DISK_CACHE="$ARG"
+        shift
+        ;;
         --install)
         DELETE_INSTALL="$ARG"
         shift
@@ -98,6 +121,17 @@ for ARG in $@; do
         DELETE_ANALYSIS="$ARG"
         shift
         ;;
+        -h|--help)
+        echo "clean.sh OPTIONS [NAME] [INSTALL_VERSION] "
+        echo "  --all"
+        echo "  --all-files"
+        echo "  --vms"
+        echo "  --vms-disk-cache"
+        echo "  --analysis"
+        echo "  --install"
+        echo "  --run"
+        exit 1
+        ;;
         *)
         POSITIONAL_ARGS+=("$1") # save it in an array for later
         shift
@@ -108,8 +142,15 @@ set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
 
 NAME="$1"
 INSTALL_VERSION="$2"
+RUN_VERSION="$3"
 
-if [ -n "$INSTALL_VERSION" ]; then
+if [ -n "$DELETE_VMS_DISK_CACHE" ] && [ ! -d "$IMAGES_CACHE_LOCATION" ]; then
+    echo "$IMAGES_CACHE_LOCATION is not a directory" >&2
+fi
+
+if [ -n "$RUN_VERSION" ]; then
+    remove_run "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"
+elif [ -n "$INSTALL_VERSION" ]; then
     remove_install "$NAME" "$INSTALL_VERSION"
 elif [ -n "$NAME" ]; then
     remove_benchmark "$NAME"

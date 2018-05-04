@@ -194,11 +194,23 @@ run_benchmark_times(){
         run_benchmark $NAME $INSTALL_VERSION $RUN_VERSION $ANALYSIS_NAME $OPTIONS
     done
 
-
     set_option "$OPTIONS" "CLEAN"
-    if [ "$CLEAN" == "yes" ]; then
-         echo -e "${RED}cleaning up run directory${NC}"
-        "$SCRIPTS_DIR"/clean.sh --run "$NAME" "$INSTALL_VERSION" > "$VERBOSE_FILE"
+
+    CLEAN_PARAMS=""
+    case "$CLEAN" in
+        all)
+        CLEAN_PARAMS="--run --vms-disk-cache"
+        ;;
+        image_cache)
+        CLEAN_PARAMS="--vms-disk-cache"
+        ;;
+        run_output)
+        CLEAN_PARAMS="--run"
+        ;;
+    esac
+    if [ -n "$CLEAN_PARAMS" ]; then
+        echo -e "${RED}cleaning up $CLEAN_PARAMS${NC}"
+        FORCE=yes "$SCRIPTS_DIR"/clean.sh $CLEAN_PARAMS "$NAME" "$INSTALL_VERSION" "$RUN_VERSION" > "$VERBOSE_FILE"
     fi
 }
 

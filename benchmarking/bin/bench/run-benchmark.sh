@@ -121,21 +121,46 @@ initialize_run(){
 
     ID="`"$BENCH_UTIL_DIR/get-new-run-id.sh" "$I_NAME" "$I_INSTALL_VERSION"  "$I_RUN_VERSION"`"
 
+    CACHE_BENCHMARK_VM="`"$BENCH_UTIL_DIR/get-name.sh" "$I_NAME" "$I_INSTALL_VERSION" "$I_RUN_VERSION" "$ID"`"
     BENCHMARK_VM="`"$BENCH_UTIL_DIR/get-name.sh" "$I_NAME" "$I_INSTALL_VERSION" "$I_RUN_VERSION" "$ID"`"
     echo -e "${BLUE}initializing $BENCHMARK_VM${NC}"
 
     RUN_RESULTS_DIR="$RESULTS_DIR/$ID"
     RUN_RESULT="$RUN_RESULTS_DIR/output"
     RUN_RESULT_SETTINGS="$RUN_RESULTS_DIR/settings.env"
+    RUN_RESULT_GLOBAL_CONFIG="$RUN_RESULTS_DIR/global-config.env"
 
     mkdir -p "$RUN_RESULTS_DIR"
 
     > "$RUN_RESULT"
     "$BENCH_UTIL_DIR/get-settings.sh" "$I_NAME" "$I_INSTALL_VERSION" "$I_RUN_VERSION" | sed -e '1{/.*/d}'> "$RUN_RESULT_SETTINGS"
+    sed -e "/^#.*/d; /^\s*$/d; /^\s*#.*$/d; s/[\"\']*//g" "$GLOBAL_CONFIG" > "$RUN_RESULT_GLOBAL_CONFIG"
 
     RUN_SCRIPT="`SCRIPT_FILE="$SCRIPT" "$BENCH_UTIL_DIR/get-settings.sh" "$I_NAME" "$I_INSTALL_VERSION" "$I_RUN_VERSION"`"
 
-    POOL_LOCATION="$RUN_POOL_LOCATION" "$IMAGE_MANAGEMENT_DIR/clone-vm.sh" "$BENCHMARK_BASE_VM" "$BENCHMARK_VM" || finish_all $?
+    if [ -d "$IMAGES_CACHE_LOCATION" ]; then
+        clone_with_cached_disk
+    else
+        POOL_LOCATION="$RUN_POOL_LOCATION" "$IMAGE_MANAGEMENT_DIR/clone-vm.sh" "$BENCHMARK_BASE_VM" "$BENCHMARK_VM" || finish_all $?
+    fi
+}
+
+clone_with_cached_disk(){
+    CACHE_BENCHMARK_VM="`"$BENCH_UTIL_DIR/get-name.sh" "$I_NAME" "$I_INSTALL_VERSION" "$I_RUN_VERSION"`"
+    CACHED_DISK_FILENAME="`POOL_LOCATION="$IMAGES_CACHE_LOCATION" "$IMAGE_UTIL_DIR"/get-new-disk-filename.sh "$CACHE_BENCHMARK_VM"`"
+    NEW_DISK_FILENAME="`POOL_LOCATION="$RUN_POOL_LOCATION" "$IMAGE_UTIL_DIR"/get-new-disk-filename.sh "$BENCHMARK_VM"`"
+
+    if [ ! -e "$CACHED_DISK_FILENAME" ]; then
+	    echo -e "${BLUE}creating cached disk at $CACHED_DISK_FILENAME${NC}"
+        POOL_LOCATION="$IMAGES_CACHE_LOCATION" DISK_ONLY=yes "$IMAGE_MANAGEMENT_DIR/clone-vm.sh" \
+            "$BENCHMARK_BASE_VM" "$CACHE_BENCHMARK_VM" &> /dev/null || finish_all $?
+	fi
+
+	echo -e "${GREEN}copying cached disk${NC}"
+	echo "$CACHED_DISK_FILENAME -> $NEW_DISK_FILENAME"
+    cp "$CACHED_DISK_FILENAME" "$NEW_DISK_FILENAME"
+
+    "$IMAGE_MANAGEMENT_DIR/clone-vm.sh" "$BENCHMARK_BASE_VM" "$BENCHMARK_VM" "$NEW_DISK_FILENAME" 2> /dev/null
 }
 
 resolve_libvirt_xml(){

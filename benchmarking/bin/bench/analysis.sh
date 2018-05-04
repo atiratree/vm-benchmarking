@@ -8,6 +8,9 @@ function log_detailed(){
 	echo "$1" | tee "$VERBOSE_FILE" >> "$DETAILED_ANALYSIS"
 }
 
+function log_settings(){
+	echo "$1" | sort | uniq | sed -e '/^\s*$/d; /^[^=]*=$/d; s/^/# /g' >> "$DETAILED_ANALYSIS"
+}
 
 function finish(){
 	log "$1"
@@ -68,17 +71,24 @@ ANALYSIS_USAGES_DIR="$ANALYSIS_DIR/$ANALYSIS_NAME""-USAGE"
 rm -rf "$ANALYSIS_USAGES_DIR"
 
 > "$ANALYSIS"
+> "$DETAILED_ANALYSIS"
 PRINT_HEADER=TRUE "$ANALYSIS_SCRIPT" "$ANALYSIS" "$DETAILED_ANALYSIS"
 
 ALL_SETTINGS=""
+ALL_GLOBAL_CONFIGS=""
 for RUN_DIR in "$RESULT_DIR"/*; do
-    if [ ! -f "$RUN_DIR/settings.env" ]; then
-        continue
+    if [ -f "$RUN_DIR/settings.env" ]; then
+        ALL_SETTINGS="$ALL_SETTINGS`echo && cat "$RUN_DIR/settings.env"`"
     fi
-    ALL_SETTINGS="$ALL_SETTINGS`echo && cat "$RUN_DIR/settings.env"`"
+
+    if [ -f "$RUN_DIR/global-config.env" ]; then
+        ALL_GLOBAL_CONFIGS="$ALL_GLOBAL_CONFIGS`echo && cat "$RUN_DIR/global-config.env"`"
+    fi
 done
 
-echo "$ALL_SETTINGS" | sort | uniq | sed -e '/^\s*$/d; s/^/# /g' > "$DETAILED_ANALYSIS"
+log_settings "$ALL_GLOBAL_CONFIGS"
+log_detailed "#"
+log_settings "$ALL_SETTINGS"
 log_detailed "# --------------------"
 
 echo -e "${BLUE}analyzing `"$BENCH_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"` into $ANALYSIS_DIR as $ANALYSIS_NAME${NC}"

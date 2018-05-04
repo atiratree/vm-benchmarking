@@ -1,16 +1,14 @@
 ## Benchmarking Guide
 
-### Optional Settings
-1. Set these env variables or customize defaults in `bin/config.env` 
-   - LIBVIRT_DEFAULT_URI
-   - DISTRO: is just for naming vms
-   - VERBOSE_FILE: set to `/dev/tty` to see verbose output, all the verbose output will be still logged
-
 ### Setup
 
 - `cd benchmarking`
 - `cp benchmarks/global-config.env{.example,}`
-- customize `/global-config.env` 
+- customize variables in `benchmarks/global-config.env`. Pay attention mostly to 
+  `RUN_POOL_LOCATION`, 
+  `IMAGE_FORMAT`, 
+  `SPARSE_IMAGES` and 
+  `IMAGES_CACHE_LOCATION`, because this will affect performance
 
 #### Creating Base VM
 1. Install base vm for all benchmarks and start it
@@ -23,6 +21,7 @@
    - select benchmarks to initialize
    - fill in the name of the base image
 3. for each benchmark you want to initialize
+
    - `cp benchmarks/$BENCHMARK_NAME/settings.env{.example,}`
    - `cp benchmarks/$BENCHMARK_NAME/install-$INSTALL_VERSION/settings.env{.example,}`
    - customize each settings.env
