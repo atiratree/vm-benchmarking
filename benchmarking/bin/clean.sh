@@ -24,11 +24,11 @@ remove_install(){
         return
     fi
 
-    if [  "$SELECT" == "--all" -o "$SELECT" == "--all-files" -o "$SELECT" == "--install" ]; then
+    if [ -n "$DELETE_INSTALL" ]; then
        verbose_remove "$INSTALL_DIR/out"
     fi
 
-    if [  "$SELECT" == "--all" -o "$SELECT" == "--vms" ]; then
+    if [ -n "$DELETE_VMS" ]; then
         VM="`"$BENCH_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION"`"
         if "$IMAGE_UTIL_DIR/"assert-vm.sh "$VM" 2> /dev/null; then
             safe_remove "${GREEN}Vm ${RED}$VM${NC}" "$FORCE" && "$IMAGE_MANAGEMENT_DIR"/delete-vm.sh "$VM" > /dev/null 2>&1 && echo "removed $VM"
@@ -36,14 +36,15 @@ remove_install(){
     fi
 
     for RUN_DIR in "$INSTALL_DIR/"run-v*; do
-         if [ ! -d "$RUN_DIR" ]; then
+        if [ ! -d "$RUN_DIR" ]; then
             continue
         fi
         RUN_VERSION="`basename "$RUN_DIR" | cut -c 6-`"
-        if [  "$SELECT" == "--all" -o "$SELECT" == "--all-files" -o "$SELECT" == "--run" ]; then
+        if [ -n "$DELETE_RUN" ]; then
             verbose_remove "$RUN_DIR/out"
         fi
-        if [  "$SELECT" == "--all" -o "$SELECT" == "--all-files" -o "$SELECT" == "--analysis" ]; then
+
+        if [ -n "$DELETE_ANALYSIS" ]; then
             ANALYSIS_NAME="`"$BENCH_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION" "$RUN_VERSION"`"
             ANALYSIS_DIR="$RUN_DIR/analysis"
              if [ -d "$ANALYSIS_DIR" ]; then
@@ -63,22 +64,50 @@ UTIL_DIR="$SCRIPTS_DIR/util"
 source "$UTIL_DIR/common.sh"
 
 FORCE="${FORCE:-}"
+POSITIONAL_ARGS=()
 
-SELECT="$1"
-NAME="$2"
-INSTALL_VERSION="$3"
+for ARG in $@; do
+    case $ARG in
+        --all)
+        DELETE_VMS="$ARG"
+        DELETE_VMS_DISK_CACHE="$ARG"
+        DELETE_INSTALL="$ARG"
+        DELETE_RUN="$ARG"
+        DELETE_ANALYSIS="$ARG"
+        shift
+        ;;
+        --all-files)
+        DELETE_INSTALL="$ARG"
+        DELETE_RUN="$ARG"
+        DELETE_ANALYSIS="$ARG"
+        shift
+        ;;
+        --vms)
+        DELETE_VMS="$ARG"
+        shift
+        ;;
+        --install)
+        DELETE_INSTALL="$ARG"
+        shift
+        ;;
+        --run)
+        DELETE_RUN="$ARG"
+        shift
+        ;;
+        --analysis)
+        DELETE_ANALYSIS="$ARG"
+        shift
+        ;;
+        *)
+        POSITIONAL_ARGS+=("$1") # save it in an array for later
+        shift
+        ;;
+    esac
+done
+set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
 
-if [  "$SELECT" != "--all" -a "$SELECT" != "--analysis" -a "$SELECT" != "--all-files" \
-    -a "$SELECT" != "--install" -a "$SELECT" != "--run"  -a "$SELECT" != "--vms" ]; then
-    echo "clean.sh OPTION [NAME] "
-    echo "  --all"
-    echo "  --vms"
-    echo "  --all-files"
-    echo "  --analysis"
-    echo "  --install"
-    echo "  --run"
-    exit 1
-fi
+NAME="$1"
+INSTALL_VERSION="$2"
 
 if [ -n "$INSTALL_VERSION" ]; then
     remove_install "$NAME" "$INSTALL_VERSION"
