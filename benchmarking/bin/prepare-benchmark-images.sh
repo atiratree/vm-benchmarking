@@ -1,5 +1,13 @@
 #!/bin/bash
 
+help(){
+    echo "prepare-benchmark-images.sh [OPTIONS] [NAME]"
+    echo
+    echo "  -v, --verbose"
+    echo "  -p, --parallel"
+    echo "  -h, --help"
+}
+
 fail_handler(){
 	if [ $1 -ne 0 ]; then
 	    echo -e "${RED}preparing $NAME $INSTALL_VERSION from $BASE_IMAGE failed${NC}"
@@ -28,13 +36,30 @@ UTIL_DIR="$SCRIPTS_DIR/util"
 
 source "$UTIL_DIR/common.sh"
 
-PARALLEL="${PARALLEL:-}"
+POSITIONAL_ARGS=()
+for ARG in $@; do
+    case $ARG in
+        -v|--verbose)
+        export VERBOSE_FILE=/dev/tty
+        shift
+        ;;
+        -p|--parallel)
+        PARALLEL="YES"
+        shift
+        ;;
+        -h|--help)
+        help
+        exit 0
+        ;;
+        *)
+        POSITIONAL_ARGS+=("$1") # save it in an array for later
+        shift
+        ;;
+    esac
+done
+set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
 
 SUITE="$BENCHMARKS_DIR/benchmark-images.cfg"
-
-if [  "$1" == "-v" ]; then
-	export VERBOSE_FILE=/dev/tty
-fi
 
 if [ ! -e "$SUITE" ]; then
 	echo "$SUITE must be specified" >&2
@@ -43,7 +68,7 @@ fi
 
 LINES=`cat "$SUITE" | wc -l`
 for LINE in `seq 1 $LINES`; do
-    VAR="`get_line "$LINE"`" || continue
+    VAR="`get_line "$SUITE" "$LINE"`" || continue
     if [ -z "$PARALLEL" ]; then
         prepare_vm $VAR
     else

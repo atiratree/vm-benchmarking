@@ -2,6 +2,14 @@
 
 trap cleanup SIGTERM SIGINT
 
+help(){
+    echo "run-benchmark-suite.sh [OPTIONS]"
+    echo
+    echo "  -v, --verbose"
+    echo "  -s, --skip-git"
+    echo "  -h, --help"
+}
+
 cleanup(){
     kill_current_benchmark 3 "cleaning up"
     rm -f /tmp/benchmark-suite.*
@@ -144,7 +152,10 @@ run_benchmark(){
     if [ -n "$MANAGED_BY_VM" ]; then
         "$BENCH_DIR"/analysis.sh  "$MANAGED_BY_VM" "$INSTALL_VERSION" "$RUN_VERSION" "$ANALYSIS_NAME" &> /dev/null || echo -e "${RED}skipping MANAGED_BY_VM analysis${NC}"
     fi
-    "$UTIL_DIR/version-results.sh" "$NAME $INSTALL_VERSION $RUN_VERSION" &> /dev/null
+
+    if [ -z "$SKIP_GIT" ]; then
+        "$UTIL_DIR/version-results.sh" "$NAME $INSTALL_VERSION $RUN_VERSION" &> /dev/null
+    fi
 }
 
 run_benchmark_times(){
@@ -175,7 +186,7 @@ run_benchmark_times(){
 
     while true; do
         # update TIMES and ACCEPTED FROM FILE
-        R_LINE="`get_line "$LINE"`" || break
+        R_LINE="`get_line "$SUITE" "$LINE"`" || break
         TIMES_FIELDS="`echo "$R_LINE" | awk '{print $4}'`"
 
         set_option_by_position  "$TIMES_FIELDS" "TIMES" 0
@@ -199,10 +210,10 @@ run_benchmark_times(){
     CLEAN_PARAMS=""
     case "$CLEAN" in
         all)
-        CLEAN_PARAMS="--run --vms-disk-cache"
+        CLEAN_PARAMS="--run `add_clean_vm_disk_cache_option`"
         ;;
         image_cache)
-        CLEAN_PARAMS="--vms-disk-cache"
+        CLEAN_PARAMS="`add_clean_vm_disk_cache_option`"
         ;;
         run_output)
         CLEAN_PARAMS="--run"
@@ -211,6 +222,12 @@ run_benchmark_times(){
     if [ -n "$CLEAN_PARAMS" ]; then
         echo -e "${RED}cleaning up $CLEAN_PARAMS${NC}"
         FORCE=yes "$SCRIPTS_DIR"/clean.sh $CLEAN_PARAMS "$NAME" "$INSTALL_VERSION" "$RUN_VERSION" > "$VERBOSE_FILE"
+    fi
+}
+
+add_clean_vm_disk_cache_option(){
+    if [ -d "$IMAGES_CACHE_LOCATION" ]; then
+        echo "--vms-disk-cache"
     fi
 }
 
@@ -226,9 +243,28 @@ source "$UTIL_DIR/common.sh"
 
 SUITE_ORIGIN="$BENCHMARKS_DIR/benchmark-suite.cfg"
 
-if [  "$1" == "-v" ]; then
-	export VERBOSE_FILE=/dev/tty
-fi
+POSITIONAL_ARGS=()
+for ARG in $@; do
+    case $ARG in
+        -v|--verbose)
+        export VERBOSE_FILE=/dev/tty
+        shift
+        ;;
+        -s|--skip-git)
+        SKIP_GIT="YES"
+        shift
+        ;;
+        -h|--help)
+        help
+        exit 0
+        ;;
+        *)
+        POSITIONAL_ARGS+=("$1") # save it in an array for later
+        shift
+        ;;
+    esac
+done
+set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
 
 if [ "$EUID" -ne 0 ]; then
     echo "Please run as root"
@@ -250,12 +286,15 @@ echo "# This is editable config:" >> "$SUITE"
 echo "# You can append new benchmark runs to this file and edit TIMES column in active benchmark " >> "$SUITE"
 echo >> "$SUITE"
 cat "$SUITE_ORIGIN" >> "$SUITE"
-FORCE_REMOVE=yes "$UTIL_DIR/version-results.sh" "benchmark suite run `echo "$SUITE" | cut -c 35-`" &> /dev/null
+
+if [ -z "$SKIP_GIT" ]; then
+    FORCE_REMOVE=yes "$UTIL_DIR/version-results.sh" "benchmark suite run `echo "$SUITE" | cut -c 35-`" &> /dev/null
+fi
 
 LINE=1
 
 while [ "$LINE" -le "`cat "$SUITE" | wc -l`" ]; do
-    VAR="`get_line "$LINE"`"
+    VAR="`get_line "$SUITE" "$LINE"`"
 
     if [ $? -ne 0 ]; then
         LINE=$((LINE + 1))

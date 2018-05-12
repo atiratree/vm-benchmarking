@@ -1,5 +1,19 @@
 #!/bin/bash
 
+help(){
+    echo "clean.sh [OPTIONS] [NAME] [INSTALL_VERSION] "
+    echo
+    echo "  --all"
+    echo "  --all-files"
+    echo "  --vms"
+    echo "  --vms-disk-cache"
+    echo "  --analysis"
+    echo "  --install"
+    echo "  --run"
+    echo "  -h, --help"
+    echo "  -f, --force    Removes everything without asking"
+}
+
 remove_benchmark(){
     NAME="$1"
     BENCHMARK_DIR="$BENCHMARKS_DIR/$NAME"
@@ -121,16 +135,13 @@ for ARG in $@; do
         DELETE_ANALYSIS="$ARG"
         shift
         ;;
+        -f|--force)
+        FORCE="yes"
+        shift
+        ;;
         -h|--help)
-        echo "clean.sh OPTIONS [NAME] [INSTALL_VERSION] "
-        echo "  --all"
-        echo "  --all-files"
-        echo "  --vms"
-        echo "  --vms-disk-cache"
-        echo "  --analysis"
-        echo "  --install"
-        echo "  --run"
-        exit 1
+        help
+        exit 0
         ;;
         *)
         POSITIONAL_ARGS+=("$1") # save it in an array for later
@@ -145,7 +156,7 @@ INSTALL_VERSION="$2"
 RUN_VERSION="$3"
 
 if [ -n "$DELETE_VMS_DISK_CACHE" ] && [ ! -d "$IMAGES_CACHE_LOCATION" ]; then
-    echo "$IMAGES_CACHE_LOCATION is not a directory" >&2
+    echo "IMAGES_CACHE_LOCATION \"$IMAGES_CACHE_LOCATION\" is not a directory" >&2
 fi
 
 if [ -n "$RUN_VERSION" ]; then

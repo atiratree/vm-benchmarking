@@ -1,5 +1,11 @@
 #!/bin/bash
 
+help(){
+    echo "init-base-image.sh [OPTIONS] NAME "
+    echo
+    echo "  -h, --help"
+}
+
 fail_handler(){
     exit "$1"
 }
@@ -31,6 +37,21 @@ BENCHMARKS_DIR="`realpath "$SCRIPTS_DIR/../benchmarks"`"
 UTIL_DIR="$SCRIPTS_DIR/util"
 
 source "$UTIL_DIR/common.sh"
+
+POSITIONAL_ARGS=()
+for ARG in $@; do
+    case $ARG in
+        -h|--help)
+        help
+        exit 0
+        ;;
+        *)
+        POSITIONAL_ARGS+=("$1") # save it in an array for later
+        shift
+        ;;
+    esac
+done
+set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
 
 NAME="$1"
 

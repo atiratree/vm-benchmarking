@@ -153,7 +153,7 @@ clone_with_cached_disk(){
     if [ ! -e "$CACHED_DISK_FILENAME" ]; then
 	    echo -e "${BLUE}creating cached disk at $CACHED_DISK_FILENAME${NC}"
         POOL_LOCATION="$IMAGES_CACHE_LOCATION" DISK_ONLY=yes "$IMAGE_MANAGEMENT_DIR/clone-vm.sh" \
-            "$BENCHMARK_BASE_VM" "$CACHE_BENCHMARK_VM" &> /dev/null || finish_all $?
+            "$BENCHMARK_BASE_VM" "$CACHE_BENCHMARK_VM" > /dev/null || finish_all $?
 	fi
 
 	echo -e "${GREEN}copying cached disk${NC}"
@@ -249,8 +249,6 @@ NAME="$1"
 INSTALL_VERSION="$2"
 RUN_VERSION="$3"
 OPTIONS="$4"
-
-FORCE="${FORCE:-}"
 
 set_option "$OPTIONS" "MEASURE_RESOURCE_USAGE"
 set_option "$OPTIONS" "MANAGED_BY_VM"

@@ -28,7 +28,7 @@ clone_disk(){
         echo "copying as sparse disk ($IMAGE_FORMAT)"
     fi
     echo "$OLD_DISK_FILENAME -> $DISK_FILENAME"
-    qemu-img convert $SPARSE_OPTION -O "$IMAGE_FORMAT" "$OLD_DISK_FILENAME" "$DISK_FILENAME"
+    qemu-img convert $SPARSE_OPTION -O "$IMAGE_FORMAT" "$OLD_DISK_FILENAME" "$DISK_FILENAME" || fail_handler $?
 }
 
 clone_with_disk(){

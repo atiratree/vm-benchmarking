@@ -6,6 +6,7 @@ export BLUE='\033[0;34m'
 export NC='\033[0m' # No Color
 
 GENERATED_DIR="`realpath "$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )/../generated"`"
+mkdir -p "$GENERATED_DIR"
 GLOBAL_CONFIG="`realpath "$GENERATED_DIR/../../benchmarks/global-config.env"`"
 
 export ID_RSA="$GENERATED_DIR/id_rsa"
@@ -85,7 +86,7 @@ verbose_remove(){
 }
 
 get_line(){
-    G_VAR="`sed "s/^\s*//; $1""q; d" "$SUITE" 2> /dev/null`"
+    G_VAR="`sed "s/^\s*//; $2""q; d" "$1" 2> /dev/null`"
 
     if [ -z "$G_VAR" -o "${G_VAR:0:1}" == "#" ]; then
         return 1

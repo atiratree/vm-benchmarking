@@ -1,5 +1,12 @@
 #!/bin/bash
 
+help(){
+    echo "list.sh [OPTIONS] [NAME]"
+    echo
+    echo "  -s, --show-settings"
+    echo "  -h, --help"
+}
+
 show_settings(){
     if [ -n "$SHOW_SETTINGS" ]; then
         SETTINGS="$1/settings.env"
@@ -64,7 +71,24 @@ UTIL_DIR="$SCRIPTS_DIR/util"
 
 source "$UTIL_DIR/common.sh"
 
-SHOW_SETTINGS="${SHOW_SETTINGS:-}"
+POSITIONAL_ARGS=()
+for ARG in $@; do
+    case $ARG in
+        -s|--show-settings)
+        SHOW_SETTINGS="YES"
+        shift
+        ;;
+        -h|--help)
+        help
+        exit 0
+        ;;
+        *)
+        POSITIONAL_ARGS+=("$1") # save it in an array for later
+        shift
+        ;;
+    esac
+done
+set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
 
 NAME="$1"
 

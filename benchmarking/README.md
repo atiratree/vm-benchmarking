@@ -16,8 +16,8 @@
 3. fill in the root password when asked
 
 #### Preparing benchmarks
-1. `cp benchmarks/benchmarks-images.cfg{.example,}`
-2. customize `benchmarks-images.cfg` 
+1. `cp benchmarks/benchmark-images.cfg{.example,}`
+2. customize `benchmark-images.cfg` 
    - select benchmarks to initialize
    - fill in the name of the base image
 3. for each benchmark you want to initialize
