@@ -3,3 +3,7 @@
 # these tests might not work because of missing RANDOM device
 org.jboss.as.test.integration.ws.wsse.signencrypt.EJBSignEncryptMultipleClientsTestCase
 org.jboss.as.test.integration.ws.wsse.signencrypt.EJBSignEncryptTestCase
+org.jboss.as.test.integration.ws.wsse.signencrypt.SignEncryptMultipleClientsTestCase
+
+org.jboss.as.test.clustering.cluster.ejb.stateful.StatefulFailoverTestCase
+org.jboss.as.test.clustering.cluster.web.ConcurrentCoarseWebFailoverTestCase
