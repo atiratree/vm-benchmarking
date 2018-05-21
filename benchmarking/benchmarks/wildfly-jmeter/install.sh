@@ -14,8 +14,9 @@ yum clean all
 rm -rf /var/cache/yum
 
 
-wget http://mirror.hosting90.cz/apache/jmeter/binaries/apache-jmeter-4.0.tgz
-extract "apache-jmeter-4.0.tgz"
+ARCHIVE_NAME="apache-jmeter.tgz"
+wget -O "$ARCHIVE_NAME" "$APACHE_JMETER_MIRROR"
+extract "$ARCHIVE_NAME"
 
 cp  /tmp/dependencies/daytrader.jmx .
 

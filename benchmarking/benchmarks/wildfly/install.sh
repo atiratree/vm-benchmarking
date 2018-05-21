@@ -20,9 +20,11 @@ rm -rf /var/cache/yum
 
 # install maven
 cd /usr/local
-wget http://www-eu.apache.org/dist/maven/maven-3/3.5.2/binaries/apache-maven-3.5.2-bin.tar.gz
-extract apache-maven-3.5.2-bin.tar.gz
-ln -s apache-maven-3.5.2 maven
+ARCHIVE_NAME="apache-maven.tar.gz"
+wget -O "$ARCHIVE_NAME" "$APACHE_MAVEN_MIRROR"
+
+extract "$ARCHIVE_NAME"
+ln -s "apache-maven-$APACHE_MAVEN_VERSION" maven
 
 set_env "M2_HOME=/usr/local/maven"
 set_env "PATH=${M2_HOME}/bin:${PATH}"
