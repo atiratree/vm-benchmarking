@@ -31,3 +31,13 @@ postgres            2-memory             3-one-iothread   1          analysis-re
 postgres            3-disk               3-one-iothread   1          analysis-result             CLEAN=all
 wildfly             1-main               3-one-iothread   1          analysis-result             CLEAN=all,NO_OUTPUT_CHECK_MIN=30
 wildfly             2-daytrader          3-one-iothread   1          analysis-result             CLEAN=all,MANAGED_BY_VM=wildfly-jmeter
+
+# 4-native-thread
+compression         1-main               4-native-thread  1          analysis-result             CLEAN=all
+npb                 1-main               4-native-thread  1          analysis-result             CLEAN=all
+npb                 2-thorough           4-native-thread  1          analysis-result             CLEAN=all
+postgres            1-buffer             4-native-thread  1          analysis-result             CLEAN=all
+postgres            2-memory             4-native-thread  1          analysis-result             CLEAN=all
+postgres            3-disk               4-native-thread  1          analysis-result             CLEAN=all
+wildfly             1-main               4-native-thread  1          analysis-result             CLEAN=all,NO_OUTPUT_CHECK_MIN=30
+wildfly             2-daytrader          4-native-thread  1          analysis-result             CLEAN=all,MANAGED_BY_VM=wildfly-jmeter

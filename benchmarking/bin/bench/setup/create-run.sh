@@ -25,7 +25,7 @@ if [ -z "$LIBVIRT_XML_EXAMPLE" ]; then
 fi
 
 if [ ! -f "$LIBVIRT_XML_EXAMPLE" ]; then
-    echo "source libvirt.xml.example does not exist" >&2
+    echo "source libvirt.xml.example $LIBVIRT_XML_EXAMPLE does not exist" >&2
     exit 1
 fi
 
