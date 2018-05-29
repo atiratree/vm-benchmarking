@@ -1,0 +1,8 @@
+<!-- merge this with your base vm xml and put it into ./libvirt.xml -->
+<domain>
+  <devices>
+      <disk type='file' device='disk'>
+        <driver name='qemu' type='qcow2' io='native' cache='none'/>
+      </disk>
+  </devices>
+</domain>
