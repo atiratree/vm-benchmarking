@@ -68,7 +68,7 @@ fetch_libvirtxml(){
 
 finish_libvirtxml(){
     diff -U 0 "$LIBVIRT_XML_RESULT_PREPARING" "$LIBVIRT_XML_RESULT" > "$LIBVIRT_XML_RESULT_PATCH" || :
-    echo "patch created"
+    echo "patch created: $LIBVIRT_XML_RESULT_PATCH"
     rm -rf "$LIBVIRT_XML_RESULT_PREPARING" "$LIBVIRT_XML_RESULT"
 }
 
@@ -83,7 +83,6 @@ if [ "$FINISH" != "--finish" ]; then
     echo "1. edit $LIBVIRT_XML_RESULT"
     echo "2. merge with current libvirt.xml.example bellow"
     echo -e "3. run ${GREEN} \"$SCRIPTS_DIR/prepare-libvirtxml.sh $RUN_NAME --finish\"${NC}"
-    echo "4. run \"$SCRIPTS_DIR/patch-run-libvirtxls.sh $RUN_NAME\""
     echo
 
     if [ -f "$LIBVIRT_XML_EXAMPLE" ]; then
@@ -102,6 +101,7 @@ else
     fi
 
     finish_libvirtxml
+    "$SCRIPTS_DIR"/util/patch-run-libvirtxmls.sh "$RUN_NAME"
 fi
 
 
