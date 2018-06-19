@@ -3,7 +3,6 @@
 # 1-baseline
 compression         1-main               1-baseline       1          analysis-result             CLEAN=all
 npb                 1-main               1-baseline       1          analysis-result             CLEAN=all
-npb                 2-thorough           1-baseline       1          analysis-result             CLEAN=all
 postgres            1-buffer             1-baseline       1          analysis-result             CLEAN=all
 postgres            2-memory             1-baseline       1          analysis-result             CLEAN=all
 postgres            3-disk               1-baseline       1          analysis-result             CLEAN=all
@@ -14,7 +13,6 @@ wildfly             2-daytrader          1-baseline       1          analysis-re
 # 2-rand
 compression         1-main               2-rand           1          analysis-result             CLEAN=all
 npb                 1-main               2-rand           1          analysis-result             CLEAN=all
-npb                 2-thorough           2-rand           1          analysis-result             CLEAN=all
 postgres            1-buffer             2-rand           1          analysis-result             CLEAN=all
 postgres            2-memory             2-rand           1          analysis-result             CLEAN=all
 postgres            3-disk               2-rand           1          analysis-result             CLEAN=all
@@ -25,7 +23,6 @@ wildfly             2-daytrader          2-rand           1          analysis-re
 # 3-one-iothread
 compression         1-main               3-one-iothread   1          analysis-result             CLEAN=all
 npb                 1-main               3-one-iothread   1          analysis-result             CLEAN=all
-npb                 2-thorough           3-one-iothread   1          analysis-result             CLEAN=all
 postgres            1-buffer             3-one-iothread   1          analysis-result             CLEAN=all
 postgres            2-memory             3-one-iothread   1          analysis-result             CLEAN=all
 postgres            3-disk               3-one-iothread   1          analysis-result             CLEAN=all
@@ -35,7 +32,6 @@ wildfly             2-daytrader          3-one-iothread   1          analysis-re
 # 4-native-thread
 compression         1-main               4-native-thread  1          analysis-result             CLEAN=all
 npb                 1-main               4-native-thread  1          analysis-result             CLEAN=all
-npb                 2-thorough           4-native-thread  1          analysis-result             CLEAN=all
 postgres            1-buffer             4-native-thread  1          analysis-result             CLEAN=all
 postgres            2-memory             4-native-thread  1          analysis-result             CLEAN=all
 postgres            3-disk               4-native-thread  1          analysis-result             CLEAN=all
@@ -45,9 +41,18 @@ wildfly             2-daytrader          4-native-thread  1          analysis-re
 # 5-native-thread-no-cache
 compression         1-main               5-native-thread-no-cache  1 analysis-result             CLEAN=all
 npb                 1-main               5-native-thread-no-cache  1 analysis-result             CLEAN=all
-npb                 2-thorough           5-native-thread-no-cache  1 analysis-result             CLEAN=all
 postgres            1-buffer             5-native-thread-no-cache  1 analysis-result             CLEAN=all
 postgres            2-memory             5-native-thread-no-cache  1 analysis-result             CLEAN=all
 postgres            3-disk               5-native-thread-no-cache  1 analysis-result             CLEAN=all
 wildfly             1-main               5-native-thread-no-cache  1 analysis-result             CLEAN=all,NO_OUTPUT_CHECK_MIN=30
 wildfly             2-daytrader          5-native-thread-no-cache  1 analysis-result             CLEAN=all,MANAGED_BY_VM=wildfly-jmeter
+
+
+# 6-no-ballooning
+compression         1-main               6-no-ballooning  1 analysis-result                      CLEAN=all
+npb                 1-main               6-no-ballooning  1 analysis-result                      CLEAN=all
+postgres            1-buffer             6-no-ballooning  1 analysis-result                      CLEAN=all
+postgres            2-memory             6-no-ballooning  1 analysis-result                      CLEAN=all
+postgres            3-disk               6-no-ballooning  1 analysis-result                      CLEAN=all
+wildfly             1-main               6-no-ballooning  1 analysis-result                      CLEAN=all,NO_OUTPUT_CHECK_MIN=30
+wildfly             2-daytrader          6-no-ballooning  1 analysis-result                      CLEAN=all,MANAGED_BY_VM=wildfly-jmeter

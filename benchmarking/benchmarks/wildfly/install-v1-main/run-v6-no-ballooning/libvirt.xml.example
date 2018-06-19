@@ -1,0 +1,6 @@
+<!-- merge this with your base vm xml and put it into ./libvirt.xml -->
+<domain>
+ <devices>
+   <memballoon model='none'/>
+ </devices>
+</domain>
