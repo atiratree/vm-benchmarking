@@ -1,7 +1,7 @@
 #!/bin/bash
 
 help(){
-    echo "clean.sh [OPTIONS] [NAME] [INSTALL_VERSION] "
+    echo "clean.sh [OPTIONS] [NAME] [INSTALL_VERSION] [RUN_VERSION]"
     echo
     echo "  --all"
     echo "  --all-files"

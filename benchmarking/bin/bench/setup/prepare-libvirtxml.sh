@@ -1,5 +1,12 @@
 #!/bin/bash
 
+help(){
+    echo "prepare-libvirtxml.sh RUN_NAME "
+    echo
+    echo "  -f, --finish          Run second step of this RUN_NAME preparation."
+    echo "  -h, --help"
+}
+
 SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BIN_DIR="`realpath "$SCRIPTS_DIR/../.."`"
 BENCHMARKS_DIR="`realpath "$BIN_DIR/../benchmarks/"`"
@@ -9,8 +16,27 @@ BENCH_UTIL_DIR="$BIN_DIR/bench/util"
 UTIL_DIR="$BIN_DIR/util"
 source "$UTIL_DIR/common.sh"
 
+FINISH=""
+POSITIONAL_ARGS=()
+for ARG in $@; do
+    case $ARG in
+        -f|--finish)
+        FINISH=yes
+        shift
+        ;;
+        -h|--help)
+        help
+        exit 0
+        ;;
+        *)
+        POSITIONAL_ARGS+=("$1") # save it in an array for later
+        shift
+        ;;
+    esac
+done
+set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
+
 RUN_NAME="$1"
-FINISH="$2"
 
 set -eu
 
@@ -72,7 +98,7 @@ finish_libvirtxml(){
     rm -rf "$LIBVIRT_XML_RESULT_PREPARING" "$LIBVIRT_XML_RESULT"
 }
 
-if [ "$FINISH" != "--finish" ]; then
+if [ -z "$FINISH" ]; then
     for BENCHMARK_DIR in "$BENCHMARKS_DIR/"*; do
         if [ -d "$BENCHMARK_DIR" ]; then
             fetch_libvirtxml "$BENCHMARK_DIR"
@@ -82,7 +108,7 @@ if [ "$FINISH" != "--finish" ]; then
     echo
     echo "1. edit $LIBVIRT_XML_RESULT"
     echo "2. merge with current libvirt.xml.example bellow"
-    echo -e "3. run ${GREEN} \"$SCRIPTS_DIR/prepare-libvirtxml.sh $RUN_NAME --finish\"${NC}"
+    echo "3. run $SCRIPTS_DIR/prepare-libvirtxml.sh $RUN_NAME --finish"
     echo
 
     if [ -f "$LIBVIRT_XML_EXAMPLE" ]; then

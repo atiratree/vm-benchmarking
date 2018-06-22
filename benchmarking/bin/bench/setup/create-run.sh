@@ -1,23 +1,66 @@
 #!/bin/bash
 
+help(){
+    echo "create-run.sh RUN_NAME [LIBVIRT_XML_EXAMPLE]"
+    echo
+    echo "  -h, --help"
+}
+
 
 SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BIN_DIR="`realpath "$SCRIPTS_DIR/../.."`"
 BENCHMARKS_DIR="`realpath "$BIN_DIR/../benchmarks/"`"
+SUITE_EXAMPLE="`realpath "$BENCHMARKS_DIR/benchmark-suite.cfg.example"`"
 IMAGE_MANAGEMENT_DIR="$BIN_DIR/image-management"
 IMAGE_UTIL_DIR="$IMAGE_MANAGEMENT_DIR/util"
 UTIL_DIR="$BIN_DIR/util"
 source "$UTIL_DIR/common.sh"
 
+run_exists(){
+    grep "$1" -q "$SUITE_EXAMPLE"
+}
+
+POSITIONAL_ARGS=()
+for ARG in $@; do
+    case $ARG in
+        -h|--help)
+        help
+        exit 0
+        ;;
+        *)
+        POSITIONAL_ARGS+=("$1") # save it in an array for later
+        shift
+        ;;
+    esac
+done
+set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
+
 BASE_RUN_NAME="${BASE_RUN_NAME:-1-baseline}"
+NAME_MAX_LENGTH=35
+
 NEW_RUN_NAME="$1"
 LIBVIRT_XML_EXAMPLE="$2"
 
 set -eu
 
 if [ -z "$NEW_RUN_NAME" ]; then
-    echo "new run name must be specified" >&2
+    echo "run name must be specified" >&2
     exit 1
+fi
+
+if [ "`echo "$NEW_RUN_NAME" | wc -c`" -gt "$NAME_MAX_LENGTH" ]; then
+    echo "run name should not exceed $NAME_MAX_LENGTH characters" >&2
+    exit 2
+fi
+
+if echo "$NEW_RUN_NAME" | grep "\s" -q; then
+    echo "run name should not have whitespace characters" >&2
+    exit 3
+fi
+
+if run_exists "$NEW_RUN_NAME"; then
+    echo "$NEW_RUN_NAME already exists!"
+    exit 4
 fi
 
 if [ -z "$LIBVIRT_XML_EXAMPLE" ]; then
@@ -26,7 +69,7 @@ fi
 
 if [ ! -f "$LIBVIRT_XML_EXAMPLE" ]; then
     echo "source libvirt.xml.example $LIBVIRT_XML_EXAMPLE does not exist" >&2
-    exit 1
+    exit 5
 fi
 
 supports_xml(){
@@ -91,9 +134,22 @@ create_runs(){
     done
 }
 
-
 for BENCHMARK_DIR in "$BENCHMARKS_DIR/"*; do
     if [ -d "$BENCHMARK_DIR" ]; then
         create_runs "$BENCHMARK_DIR"
     fi
 done
+
+echo
+echo -n "updating $SUITE_EXAMPLE ... "
+BASE_RUN="1-baseline"
+echo >> "$SUITE_EXAMPLE"
+PADDED_LENGTH=$((NAME_MAX_LENGTH + 1))
+NEW_RUN_NAME_PADDED="`printf "%-$PADDED_LENGTH""s" "$NEW_RUN_NAME"`"
+grep "$BASE_RUN" "$SUITE_EXAMPLE" | sed -E "s/$BASE_RUN\s+([0-9]+)/$NEW_RUN_NAME_PADDED\1/g; s/$BASE_RUN/$NEW_RUN_NAME/g" >> "$SUITE_EXAMPLE"
+
+if run_exists "$NEW_RUN_NAME"; then
+    echo -e "${GREEN}DONE${NC}"
+else
+    echo -e "${RED}FAILED${NC}"
+fi

@@ -1,12 +1,39 @@
 #!/bin/bash
 
+help(){
+    echo "remove-run.sh RUN_NAME"
+    echo
+    echo "  -f, --force"
+    echo "  -h, --help"
+}
+
+
 SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BIN_DIR="`realpath "$SCRIPTS_DIR/../.."`"
 BENCHMARKS_DIR="`realpath "$BIN_DIR/../benchmarks/"`"
+SUITE_EXAMPLE="`realpath "$BENCHMARKS_DIR/benchmark-suite.cfg.example"`"
 UTIL_DIR="$BIN_DIR/util"
 source "$UTIL_DIR/common.sh"
 
-FORCE="${FORCE:-}"
+POSITIONAL_ARGS=()
+for ARG in $@; do
+    case $ARG in
+        -f|--force)
+        FORCE="YES"
+        shift
+        ;;
+        -h|--help)
+        help
+        exit 0
+        ;;
+        *)
+        POSITIONAL_ARGS+=("$1") # save it in an array for later
+        shift
+        ;;
+    esac
+done
+set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
+
 RUN_NAME="$1"
 
 set -eu
@@ -36,3 +63,10 @@ if safe_remove "all ${RED}run-v$RUN_NAME${NC} directories" "$FORCE"; then
         fi
     done
 fi
+
+# remove run
+sed -i -E "/\s+$RUN_NAME\s+/d; /#.*$RUN_NAME/d" "$SUITE_EXAMPLE"
+# remove superfluous empty lines
+sed -i '/^$/N;/^\n$/D' "$SUITE_EXAMPLE"
+# remove trailing empty lines
+sed -i -e :a -e '/^\n*$/{$d;N;};/\n$/ba' "$SUITE_EXAMPLE"

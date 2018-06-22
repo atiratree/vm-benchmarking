@@ -1,5 +1,10 @@
 #!/bin/bash
 
+help(){
+    echo "patch-run-libvirtxml.sh RUN_NAME "
+    echo
+    echo "  -h, --help"
+}
 
 SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BIN_DIR="`realpath "$SCRIPTS_DIR/../../.."`"
@@ -11,6 +16,20 @@ BENCH_UTIL_DIR="$BIN_DIR/bench/util"
 UTIL_DIR="$BIN_DIR/util"
 source "$UTIL_DIR/common.sh"
 
+POSITIONAL_ARGS=()
+for ARG in $@; do
+    case $ARG in
+        -h|--help)
+        help
+        exit 0
+        ;;
+        *)
+        POSITIONAL_ARGS+=("$1") # save it in an array for later
+        shift
+        ;;
+    esac
+done
+set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
 
 RUN_NAME="$1"
 
@@ -23,6 +42,11 @@ fi
 
 LIBVIRT_XML_RESULT_PATCH="$GENERATED_DIR/libvirt.xml.$RUN_NAME.patch"
 
+
+if [ ! -f "$LIBVIRT_XML_RESULT_PATCH" ]; then
+    echo "cannot continue: $LIBVIRT_XML_RESULT_PATCH does not exist"
+    exit 2
+fi
 
 supports_xml(){
     echo "$1" | grep -qvf "$SETUP_DIR/.run_libvirtxml_ignore"
@@ -44,16 +68,19 @@ fetch_libvirtxmls(){
         VM="`"$BENCH_UTIL_DIR/get-name.sh" "$NAME" "$INSTALL_VERSION"`"
 
         if ! "$IMAGE_UTIL_DIR/"assert-vm.sh "$VM" 2> /dev/null; then
-            echo -e "${RED}skipping $VM ... does not exit${NC}"
+            echo -e "skipping $VM ... ${RED}VM does not exit${NC}"
             continue
         fi
 
         RUN_DIR="$INSTALL_DIR/run-v$RUN_NAME"
         LIBVIRT_XML="$RUN_DIR/libvirt.xml"
 
-        mkdir -p "$RUN_DIR"
-        virsh dumpxml "$VM" > "$LIBVIRT_XML"
-        patch  "$LIBVIRT_XML" "$LIBVIRT_XML_RESULT_PATCH"
+        if [ -d "$RUN_DIR" ]; then
+            virsh dumpxml "$VM" > "$LIBVIRT_XML"
+            patch  "$LIBVIRT_XML" "$LIBVIRT_XML_RESULT_PATCH"
+        else
+             echo -e "skipping $VM ... ${RED}RUN does not exit${NC}"
+        fi
     done
 }
 
