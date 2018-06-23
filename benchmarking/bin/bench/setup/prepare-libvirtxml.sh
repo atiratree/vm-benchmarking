@@ -18,8 +18,8 @@ source "$UTIL_DIR/common.sh"
 
 FINISH=""
 POSITIONAL_ARGS=()
-for ARG in $@; do
-    case $ARG in
+while [[ $# -gt 0 ]]; do
+    case "$1" in
         -f|--finish)
         FINISH=yes
         shift

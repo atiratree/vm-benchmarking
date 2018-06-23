@@ -99,40 +99,40 @@ source "$UTIL_DIR/common.sh"
 FORCE="${FORCE:-}"
 POSITIONAL_ARGS=()
 
-for ARG in $@; do
-    case $ARG in
+while [[ $# -gt 0 ]]; do
+    case "$1" in
         --all)
-        DELETE_VMS="$ARG"
-        DELETE_VMS_DISK_CACHE="$ARG"
-        DELETE_INSTALL="$ARG"
-        DELETE_RUN="$ARG"
-        DELETE_ANALYSIS="$ARG"
+        DELETE_VMS="yes"
+        DELETE_VMS_DISK_CACHE="yes"
+        DELETE_INSTALL="yes"
+        DELETE_RUN=""yes""
+        DELETE_ANALYSIS="yes"
         shift
         ;;
         --all-files)
-        DELETE_INSTALL="$ARG"
-        DELETE_RUN="$ARG"
-        DELETE_ANALYSIS="$ARG"
+        DELETE_INSTALL="yes"
+        DELETE_RUN="yes"
+        DELETE_ANALYSIS="yes"
         shift
         ;;
         --vms)
-        DELETE_VMS="$ARG"
+        DELETE_VMS="yes"
         shift
         ;;
         --vms-disk-cache)
-        DELETE_VMS_DISK_CACHE="$ARG"
+        DELETE_VMS_DISK_CACHE="yes"
         shift
         ;;
         --install)
-        DELETE_INSTALL="$ARG"
+        DELETE_INSTALL="yes"
         shift
         ;;
         --run)
-        DELETE_RUN="$ARG"
+        DELETE_RUN="yes"
         shift
         ;;
         --analysis)
-        DELETE_ANALYSIS="$ARG"
+        DELETE_ANALYSIS="yes"
         shift
         ;;
         -f|--force)

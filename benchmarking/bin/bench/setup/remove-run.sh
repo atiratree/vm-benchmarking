@@ -16,8 +16,8 @@ UTIL_DIR="$BIN_DIR/util"
 source "$UTIL_DIR/common.sh"
 
 POSITIONAL_ARGS=()
-for ARG in $@; do
-    case $ARG in
+while [[ $# -gt 0 ]]; do
+    case "$1" in
         -f|--force)
         FORCE="YES"
         shift

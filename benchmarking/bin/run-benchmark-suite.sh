@@ -244,8 +244,8 @@ source "$UTIL_DIR/common.sh"
 SUITE_ORIGIN="$BENCHMARKS_DIR/benchmark-suite.cfg"
 
 POSITIONAL_ARGS=()
-for ARG in $@; do
-    case $ARG in
+while [[ $# -gt 0 ]]; do
+    case "$1" in
         -v|--verbose)
         export VERBOSE_FILE=/dev/tty
         shift
