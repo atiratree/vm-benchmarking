@@ -22,19 +22,25 @@ if [ ! -d "$BENCH_GIT_RESULTS/.git" ]; then
     exit 2
 fi
 
+copy_status(){
+    cp /tmp/benchmark-suite.editable-cfg.* "$BENCH_EDITABLE_CFG" 2> /dev/null
+    cp /tmp/benchmark-suite.out.* "$BENCH_OUTPUT" 2> /dev/null
+}
+
 cd "$BENCHMARKS_DIR"
 
 if [ -z "$FORCE_REMOVE" ]; then
     find . -regex ".*analysis" -exec cp --parents -r {} "$BENCH_GIT_RESULTS" \;
 
-    cp /tmp/benchmark-suite.editable-cfg.* "$BENCH_EDITABLE_CFG" 2> /dev/null
-    cp /tmp/benchmark-suite.output "$BENCH_OUTPUT" 2> /dev/null
+    copy_status
 
     cd "$BENCH_GIT_RESULTS"
     git add -A
 else
     cd "$BENCH_GIT_RESULTS"
     git rm -r '*'
+    copy_status
+    git add -A
 fi
 
 date > "$COMMIT_TIME"

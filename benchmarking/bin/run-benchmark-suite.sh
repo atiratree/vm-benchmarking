@@ -287,9 +287,19 @@ echo "# You can append new benchmark runs to this file and edit TIMES column in 
 echo >> "$SUITE"
 cat "$SUITE_ORIGIN" >> "$SUITE"
 
+SUITE_RND_STRING="`echo "$SUITE" | cut -c 35-`"
+MESSAGE="benchmark suite run $SUITE_RND_STRING"
 if [ -z "$SKIP_GIT" ]; then
-    FORCE_REMOVE=yes "$UTIL_DIR/version-results.sh" "benchmark suite run `echo "$SUITE" | cut -c 35-`" &> /dev/null
+    FORCE_REMOVE=yes "$UTIL_DIR/version-results.sh" "$MESSAGE" &> /dev/null
 fi
+
+EMAIL_START="""
+started
+
+`cat "$SUITE"`
+"""
+
+[ -n "$NOTIFICATION_EMAIL_ADDRESS" ] && "$UTIL_DIR/send-email.sh" "$EMAIL_START" "$MESSAGE"
 
 LINE=1
 
@@ -308,4 +318,6 @@ while [ "$LINE" -le "`cat "$SUITE" | wc -l`" ]; do
     LINE=$((LINE + 1))
 done
 
+"$UTIL_DIR/version-results.sh" "$MESSAGE finished" &> /dev/null
+[ -n "$NOTIFICATION_EMAIL_ADDRESS" ] && "$UTIL_DIR/send-email.sh" "finished" "$MESSAGE"
 rm -f /tmp/benchmark-suite.*
