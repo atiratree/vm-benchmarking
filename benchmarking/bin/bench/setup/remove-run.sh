@@ -16,6 +16,8 @@ UTIL_DIR="$BIN_DIR/util"
 source "$UTIL_DIR/common.sh"
 
 POSITIONAL_ARGS=()
+FORCE=""
+
 while [[ $# -gt 0 ]]; do
     case "$1" in
         -f|--force)
