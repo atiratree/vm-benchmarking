@@ -4,6 +4,10 @@
 org.jboss.as.test.integration.ws.wsse.signencrypt.EJBSignEncryptMultipleClientsTestCase
 org.jboss.as.test.integration.ws.wsse.signencrypt.EJBSignEncryptTestCase
 org.jboss.as.test.integration.ws.wsse.signencrypt.SignEncryptMultipleClientsTestCase
+org.jboss.as.test.integration.ws.wsse.signencrypt.SignEncryptTestCase
+org.jboss.as.test.integration.ws.wsse.trust.WSTrustTestCase
 
 org.jboss.as.test.clustering.cluster.ejb.stateful.StatefulFailoverTestCase
 org.jboss.as.test.clustering.cluster.web.ConcurrentCoarseWebFailoverTestCase
+
+org.jboss.as.test.integration.messaging.mgmt.JMSQueueManagementTestCase
