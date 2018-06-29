@@ -31,20 +31,16 @@ cd "$BENCHMARKS_DIR"
 
 if [ -z "$FORCE_REMOVE" ]; then
     find . -regex ".*analysis" -exec cp --parents -r {} "$BENCH_GIT_RESULTS" \;
-
-    copy_status
-
     cd "$BENCH_GIT_RESULTS"
-    git add -A
 else
     cd "$BENCH_GIT_RESULTS"
     git rm -r '*'
-    copy_status
-    git add -A
 fi
 
+copy_status
 date > "$COMMIT_TIME"
-git add "$COMMIT_TIME"
+sync
+git add -A
 
 LAST_MESSAGE="`git log --pretty=oneline  --pretty=format:'%s' | head -1`"
 
