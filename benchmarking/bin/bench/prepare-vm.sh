@@ -1,5 +1,13 @@
 #!/bin/bash
 
+
+show_help(){
+    echo "prepare-vm.sh [OPTIONS] BASE_VM_NAME NAME INSTALL_VERSION"
+    echo
+    echo "  -f, --force"
+    echo "  -h, --help"
+}
+
 fail_handler(){
     echo "exiting unexpectedly: cleaning up"
     if [ -e "$RESULT" ]; then
@@ -26,7 +34,24 @@ BENCH_UTIL_DIR="$SCRIPTS_DIR/util"
 
 source "$UTIL_DIR/common.sh"
 
-FORCE="${FORCE:-}"
+POSITIONAL_ARGS=()
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        -f|--force)
+        FORCE=yes
+        exit 0
+        ;;
+        -h|--help)
+        show_help
+        exit 0
+        ;;
+        *)
+        POSITIONAL_ARGS+=("$1") # save it in an array for later
+        shift
+        ;;
+    esac
+done
+set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
 
 BASE_VM="$1"
 NAME="$2"
@@ -87,7 +112,15 @@ virsh start "$FULL_NAME" || fail_handler $?
 
 if [ $? -ne 0 ]; then
     echo -e "${RED}Could not connect to the vm!${NC}"
-    exit 5
+    fail_handler 5
+fi
+
+
+if virsh qemu-agent-command "$FULL_NAME" '{"execute":"guest-info"}' > /dev/null; then
+    echo "Detected qemu quest agent."
+else
+    echo -e "${RED}Could not detect qemu quest agent!${NC}"
+    fail_handler 6
 fi
 
 IP="`"$IMAGE_UTIL_DIR/get-ip.sh" "$FULL_NAME"`"
