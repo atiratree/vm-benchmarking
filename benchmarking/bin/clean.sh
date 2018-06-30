@@ -1,6 +1,6 @@
 #!/bin/bash
 
-help(){
+show_help(){
     echo "clean.sh [OPTIONS] [NAME] [INSTALL_VERSION] [RUN_VERSION]"
     echo
     echo "  --all"
@@ -140,7 +140,7 @@ while [[ $# -gt 0 ]]; do
         shift
         ;;
         -h|--help)
-        help
+        show_help
         exit 0
         ;;
         *)

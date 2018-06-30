@@ -1,6 +1,6 @@
 #!/bin/bash
 
-help(){
+show_help(){
     echo "prepare-libvirtxml.sh RUN_NAME "
     echo
     echo "  -f, --finish          Run second step of this RUN_NAME preparation."
@@ -25,7 +25,7 @@ while [[ $# -gt 0 ]]; do
         shift
         ;;
         -h|--help)
-        help
+        show_help
         exit 0
         ;;
         *)

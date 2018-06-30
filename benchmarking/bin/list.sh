@@ -1,6 +1,6 @@
 #!/bin/bash
 
-help(){
+show_help(){
     echo "list.sh [OPTIONS] [NAME]"
     echo
     echo "  -s, --show-settings"
@@ -79,7 +79,7 @@ while [[ $# -gt 0 ]]; do
         shift
         ;;
         -h|--help)
-        help
+        show_help
         exit 0
         ;;
         *)

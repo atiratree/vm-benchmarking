@@ -1,6 +1,6 @@
 #!/bin/bash
 
-help(){
+show_help(){
     echo "patch-run-libvirtxml.sh RUN_NAME "
     echo
     echo "  -h, --help"
@@ -20,7 +20,7 @@ POSITIONAL_ARGS=()
 while [[ $# -gt 0 ]]; do
     case "$1" in
         -h|--help)
-        help
+        show_help
         exit 0
         ;;
         *)

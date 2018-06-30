@@ -1,6 +1,6 @@
 #!/bin/bash
 
-help(){
+show_help(){
     echo "remove-run.sh RUN_NAME"
     echo
     echo "  -f, --force"
@@ -25,7 +25,7 @@ while [[ $# -gt 0 ]]; do
         shift
         ;;
         -h|--help)
-        help
+        show_help
         exit 0
         ;;
         *)

@@ -2,7 +2,7 @@
 
 trap cleanup SIGTERM SIGINT
 
-help(){
+show_help(){
     echo "run-benchmark-suite.sh [OPTIONS]"
     echo
     echo "  -v, --verbose"
@@ -255,7 +255,7 @@ while [[ $# -gt 0 ]]; do
         shift
         ;;
         -h|--help)
-        help
+        show_help
         exit 0
         ;;
         *)

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-help(){
+show_help(){
     echo "prepare-benchmark-images.sh [OPTIONS] [NAME]"
     echo
     echo "  -v, --verbose"
@@ -48,7 +48,7 @@ while [[ $# -gt 0 ]]; do
         shift
         ;;
         -h|--help)
-        help
+        show_help
         exit 0
         ;;
         *)

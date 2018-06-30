@@ -1,6 +1,6 @@
 #!/bin/bash
 
-help(){
+show_help(){
     echo "init-base-image.sh [OPTIONS] NAME "
     echo
     echo "  -h, --help"
@@ -42,7 +42,7 @@ POSITIONAL_ARGS=()
 while [[ $# -gt 0 ]]; do
     case "$1" in
         -h|--help)
-        help
+        show_help
         exit 0
         ;;
         *)

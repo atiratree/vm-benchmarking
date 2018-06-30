@@ -1,6 +1,6 @@
 #!/bin/bash
 
-help(){
+show_help(){
     echo "create-run.sh RUN_NAME [LIBVIRT_XML_EXAMPLE]"
     echo
     echo "  -h, --help"
@@ -24,7 +24,7 @@ POSITIONAL_ARGS=()
 while [[ $# -gt 0 ]]; do
     case "$1" in
         -h|--help)
-        help
+        show_help
         exit 0
         ;;
         *)
