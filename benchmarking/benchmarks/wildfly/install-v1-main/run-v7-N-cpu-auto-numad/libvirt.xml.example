@@ -1,0 +1,7 @@
+<!-- merge this with your base vm xml and put it into ./libvirt.xml -->
+<!-- the domain process will be pinned to the advisory nodeset from querying numad -->
+<domain>
+  <vcpu placement='auto'>X</vcpu>
+</domain>
+
+
