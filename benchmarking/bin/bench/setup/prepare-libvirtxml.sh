@@ -7,6 +7,30 @@ show_help(){
     echo "  -h, --help"
 }
 
+parse_args(){
+    FINISH=""
+    POSITIONAL_ARGS=()
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            -f|--finish)
+            FINISH=yes
+            shift
+            ;;
+            -h|--help)
+            show_help
+            exit 0
+            ;;
+            *)
+            POSITIONAL_ARGS+=("$1")
+            shift
+            ;;
+        esac
+    done
+    set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
+
+    RUN_NAME="$1"
+}
+
 SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BIN_DIR="`realpath "$SCRIPTS_DIR/../.."`"
 BENCHMARKS_DIR="`realpath "$BIN_DIR/../benchmarks/"`"
@@ -16,27 +40,7 @@ BENCH_UTIL_DIR="$BIN_DIR/bench/util"
 UTIL_DIR="$BIN_DIR/util"
 source "$UTIL_DIR/common.sh"
 
-FINISH=""
-POSITIONAL_ARGS=()
-while [[ $# -gt 0 ]]; do
-    case "$1" in
-        -f|--finish)
-        FINISH=yes
-        shift
-        ;;
-        -h|--help)
-        show_help
-        exit 0
-        ;;
-        *)
-        POSITIONAL_ARGS+=("$1") # save it in an array for later
-        shift
-        ;;
-    esac
-done
-set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
-
-RUN_NAME="$1"
+parse_args $@
 
 set -eu
 

@@ -8,6 +8,31 @@ show_help(){
     echo "  -h, --help"
 }
 
+parse_args(){
+    POSITIONAL_ARGS=()
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            -f|--force)
+            FORCE=yes
+            exit 0
+            ;;
+            -h|--help)
+            show_help
+            exit 0
+            ;;
+            *)
+            POSITIONAL_ARGS+=("$1")
+            shift
+            ;;
+        esac
+    done
+    set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
+
+    BASE_VM="$1"
+    NAME="$2"
+    INSTALL_VERSION="$3"
+}
+
 fail_handler(){
     echo "exiting unexpectedly: cleaning up"
     if [ -e "$RESULT" ]; then
@@ -34,28 +59,7 @@ BENCH_UTIL_DIR="$SCRIPTS_DIR/util"
 
 source "$UTIL_DIR/common.sh"
 
-POSITIONAL_ARGS=()
-while [[ $# -gt 0 ]]; do
-    case "$1" in
-        -f|--force)
-        FORCE=yes
-        exit 0
-        ;;
-        -h|--help)
-        show_help
-        exit 0
-        ;;
-        *)
-        POSITIONAL_ARGS+=("$1") # save it in an array for later
-        shift
-        ;;
-    esac
-done
-set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
-
-BASE_VM="$1"
-NAME="$2"
-INSTALL_VERSION="$3"
+parse_args $@
 
 assert_install "$NAME" "$INSTALL_VERSION"
 

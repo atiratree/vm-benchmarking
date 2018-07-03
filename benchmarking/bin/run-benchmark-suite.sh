@@ -10,6 +10,31 @@ show_help(){
     echo "  -h, --help"
 }
 
+parse_args(){
+    POSITIONAL_ARGS=()
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            -v|--verbose)
+            export VERBOSE_FILE=/dev/tty
+            shift
+            ;;
+            -s|--skip-git)
+            SKIP_GIT="YES"
+            shift
+            ;;
+            -h|--help)
+            show_help
+            exit 0
+            ;;
+            *)
+            POSITIONAL_ARGS+=("$1")
+            shift
+            ;;
+        esac
+    done
+    set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
+}
+
 cleanup(){
     kill_current_benchmark 3 "cleaning up"
     rm -f /tmp/benchmark-suite.*
@@ -221,7 +246,7 @@ run_benchmark_times(){
     esac
     if [ -n "$CLEAN_PARAMS" ]; then
         echo -e "${RED}cleaning up $CLEAN_PARAMS${NC}"
-        FORCE=yes "$SCRIPTS_DIR"/clean.sh $CLEAN_PARAMS "$NAME" "$INSTALL_VERSION" "$RUN_VERSION" > "$VERBOSE_FILE"
+        "$SCRIPTS_DIR"/clean.sh --force $CLEAN_PARAMS "$NAME" "$INSTALL_VERSION" "$RUN_VERSION" > "$VERBOSE_FILE"
     fi
 }
 
@@ -241,30 +266,9 @@ UTIL_DIR="$SCRIPTS_DIR/util"
 
 source "$UTIL_DIR/common.sh"
 
-SUITE_ORIGIN="$BENCHMARKS_DIR/benchmark-suite.cfg"
+parse_args $@
 
-POSITIONAL_ARGS=()
-while [[ $# -gt 0 ]]; do
-    case "$1" in
-        -v|--verbose)
-        export VERBOSE_FILE=/dev/tty
-        shift
-        ;;
-        -s|--skip-git)
-        SKIP_GIT="YES"
-        shift
-        ;;
-        -h|--help)
-        show_help
-        exit 0
-        ;;
-        *)
-        POSITIONAL_ARGS+=("$1") # save it in an array for later
-        shift
-        ;;
-    esac
-done
-set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
+SUITE_ORIGIN="$BENCHMARKS_DIR/benchmark-suite.cfg"
 
 if [ "$EUID" -ne 0 ]; then
     echo "Please run as root"

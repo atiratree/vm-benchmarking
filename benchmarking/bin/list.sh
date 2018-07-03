@@ -17,6 +17,29 @@ show_settings(){
     fi
 }
 
+parse_args(){
+    POSITIONAL_ARGS=()
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            -s|--show-settings)
+            SHOW_SETTINGS="YES"
+            shift
+            ;;
+            -h|--help)
+            show_help
+            exit 0
+            ;;
+            *)
+            POSITIONAL_ARGS+=("$1")
+            shift
+            ;;
+        esac
+    done
+    set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
+
+    NAME="$1"
+}
+
 list_benchmark(){
     BENCHMARK_DIR="$1"
     NAME="`basename "$BENCHMARK_DIR"`"
@@ -71,26 +94,7 @@ UTIL_DIR="$SCRIPTS_DIR/util"
 
 source "$UTIL_DIR/common.sh"
 
-POSITIONAL_ARGS=()
-while [[ $# -gt 0 ]]; do
-    case "$1" in
-        -s|--show-settings)
-        SHOW_SETTINGS="YES"
-        shift
-        ;;
-        -h|--help)
-        show_help
-        exit 0
-        ;;
-        *)
-        POSITIONAL_ARGS+=("$1") # save it in an array for later
-        shift
-        ;;
-    esac
-done
-set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
-
-NAME="$1"
+parse_args $@
 
 if [ -z "$NAME" ]; then
     for BENCHMARK_DIR in "$BENCHMARKS_DIR/"*; do

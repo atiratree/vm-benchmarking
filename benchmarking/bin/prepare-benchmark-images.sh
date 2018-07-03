@@ -8,6 +8,31 @@ show_help(){
     echo "  -h, --help"
 }
 
+parse_args(){
+    POSITIONAL_ARGS=()
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            -v|--verbose)
+            export VERBOSE_FILE=/dev/tty
+            shift
+            ;;
+            -p|--parallel)
+            PARALLEL="YES"
+            shift
+            ;;
+            -h|--help)
+            show_help
+            exit 0
+            ;;
+            *)
+            POSITIONAL_ARGS+=("$1")
+            shift
+            ;;
+        esac
+    done
+    set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
+}
+
 fail_handler(){
 	if [ $1 -ne 0 ]; then
 	    echo -e "${RED}preparing $NAME $INSTALL_VERSION from $BASE_IMAGE failed${NC}"
@@ -36,28 +61,7 @@ UTIL_DIR="$SCRIPTS_DIR/util"
 
 source "$UTIL_DIR/common.sh"
 
-POSITIONAL_ARGS=()
-while [[ $# -gt 0 ]]; do
-    case "$1" in
-        -v|--verbose)
-        export VERBOSE_FILE=/dev/tty
-        shift
-        ;;
-        -p|--parallel)
-        PARALLEL="YES"
-        shift
-        ;;
-        -h|--help)
-        show_help
-        exit 0
-        ;;
-        *)
-        POSITIONAL_ARGS+=("$1") # save it in an array for later
-        shift
-        ;;
-    esac
-done
-set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
+parse_args $@
 
 SUITE="$BENCHMARKS_DIR/benchmark-images.cfg"
 

@@ -14,6 +14,65 @@ show_help(){
     echo "  -f, --force    Removes everything without asking"
 }
 
+parse_args(){
+    POSITIONAL_ARGS=()
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            --all)
+            DELETE_VMS="yes"
+            DELETE_VMS_DISK_CACHE="yes"
+            DELETE_INSTALL="yes"
+            DELETE_RUN=""yes""
+            DELETE_ANALYSIS="yes"
+            shift
+            ;;
+            --all-files)
+            DELETE_INSTALL="yes"
+            DELETE_RUN="yes"
+            DELETE_ANALYSIS="yes"
+            shift
+            ;;
+            --vms)
+            DELETE_VMS="yes"
+            shift
+            ;;
+            --vms-disk-cache)
+            DELETE_VMS_DISK_CACHE="yes"
+            shift
+            ;;
+            --install)
+            DELETE_INSTALL="yes"
+            shift
+            ;;
+            --run)
+            DELETE_RUN="yes"
+            shift
+            ;;
+            --analysis)
+            DELETE_ANALYSIS="yes"
+            shift
+            ;;
+            -f|--force)
+            FORCE="yes"
+            shift
+            ;;
+            -h|--help)
+            show_help
+            exit 0
+            ;;
+            *)
+            POSITIONAL_ARGS+=("$1")
+            shift
+            ;;
+        esac
+    done
+    set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
+
+    NAME="$1"
+    INSTALL_VERSION="$2"
+    RUN_VERSION="$3"
+}
+
 remove_benchmark(){
     NAME="$1"
     BENCHMARK_DIR="$BENCHMARKS_DIR/$NAME"
@@ -96,64 +155,7 @@ BENCH_UTIL_DIR="$SCRIPTS_DIR/bench/util"
 UTIL_DIR="$SCRIPTS_DIR/util"
 source "$UTIL_DIR/common.sh"
 
-FORCE="${FORCE:-}"
-POSITIONAL_ARGS=()
-
-while [[ $# -gt 0 ]]; do
-    case "$1" in
-        --all)
-        DELETE_VMS="yes"
-        DELETE_VMS_DISK_CACHE="yes"
-        DELETE_INSTALL="yes"
-        DELETE_RUN=""yes""
-        DELETE_ANALYSIS="yes"
-        shift
-        ;;
-        --all-files)
-        DELETE_INSTALL="yes"
-        DELETE_RUN="yes"
-        DELETE_ANALYSIS="yes"
-        shift
-        ;;
-        --vms)
-        DELETE_VMS="yes"
-        shift
-        ;;
-        --vms-disk-cache)
-        DELETE_VMS_DISK_CACHE="yes"
-        shift
-        ;;
-        --install)
-        DELETE_INSTALL="yes"
-        shift
-        ;;
-        --run)
-        DELETE_RUN="yes"
-        shift
-        ;;
-        --analysis)
-        DELETE_ANALYSIS="yes"
-        shift
-        ;;
-        -f|--force)
-        FORCE="yes"
-        shift
-        ;;
-        -h|--help)
-        show_help
-        exit 0
-        ;;
-        *)
-        POSITIONAL_ARGS+=("$1") # save it in an array for later
-        shift
-        ;;
-    esac
-done
-set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
-
-NAME="$1"
-INSTALL_VERSION="$2"
-RUN_VERSION="$3"
+parse_args $@
 
 if [ -n "$DELETE_VMS_DISK_CACHE" ] && [ ! -d "$IMAGES_CACHE_LOCATION" ]; then
     echo "IMAGES_CACHE_LOCATION \"$IMAGES_CACHE_LOCATION\" is not a directory" >&2

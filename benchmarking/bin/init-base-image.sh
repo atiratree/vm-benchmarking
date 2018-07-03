@@ -6,6 +6,25 @@ show_help(){
     echo "  -h, --help"
 }
 
+parse_args(){
+    POSITIONAL_ARGS=()
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            -h|--help)
+            show_help
+            exit 0
+            ;;
+            *)
+            POSITIONAL_ARGS+=("$1")
+            shift
+            ;;
+        esac
+    done
+    set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
+
+    NAME="$1"
+}
+
 fail_handler(){
     exit "$1"
 }
@@ -38,22 +57,7 @@ UTIL_DIR="$SCRIPTS_DIR/util"
 
 source "$UTIL_DIR/common.sh"
 
-POSITIONAL_ARGS=()
-while [[ $# -gt 0 ]]; do
-    case "$1" in
-        -h|--help)
-        show_help
-        exit 0
-        ;;
-        *)
-        POSITIONAL_ARGS+=("$1") # save it in an array for later
-        shift
-        ;;
-    esac
-done
-set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
-
-NAME="$1"
+parse_args $@
 
 check_dependencies "$DEPS"
 download_dependencies

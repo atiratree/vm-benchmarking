@@ -3,9 +3,35 @@
 show_help(){
     echo "create-run.sh RUN_NAME [LIBVIRT_XML_EXAMPLE]"
     echo
+    echo "  -b, --base-run-name      (default: 1-baseline)"
     echo "  -h, --help"
 }
 
+parse_args(){
+    NAME_MAX_LENGTH=35
+    BASE_RUN_NAME="1-baseline"
+    POSITIONAL_ARGS=()
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            -b|--base-run-name)
+            BASE_RUN_NAME="$2"
+            shift 2
+            ;;
+            -h|--help)
+            show_help
+            exit 0
+            ;;
+            *)
+            POSITIONAL_ARGS+=("$1")
+            shift
+            ;;
+        esac
+    done
+    set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
+
+    NEW_RUN_NAME="$1"
+    LIBVIRT_XML_EXAMPLE="$2"
+}
 
 SCRIPTS_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 BIN_DIR="`realpath "$SCRIPTS_DIR/../.."`"
@@ -16,30 +42,11 @@ IMAGE_UTIL_DIR="$IMAGE_MANAGEMENT_DIR/util"
 UTIL_DIR="$BIN_DIR/util"
 source "$UTIL_DIR/common.sh"
 
+parse_args $@
+
 run_exists(){
     grep "$1" -q "$SUITE_EXAMPLE"
 }
-
-POSITIONAL_ARGS=()
-while [[ $# -gt 0 ]]; do
-    case "$1" in
-        -h|--help)
-        show_help
-        exit 0
-        ;;
-        *)
-        POSITIONAL_ARGS+=("$1") # save it in an array for later
-        shift
-        ;;
-    esac
-done
-set -- "${POSITIONAL_ARGS[@]}" # restore positional parameters
-
-BASE_RUN_NAME="${BASE_RUN_NAME:-1-baseline}"
-NAME_MAX_LENGTH=35
-
-NEW_RUN_NAME="$1"
-LIBVIRT_XML_EXAMPLE="$2"
 
 set -eu
 
