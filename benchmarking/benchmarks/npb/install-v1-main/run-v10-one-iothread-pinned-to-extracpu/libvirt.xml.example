@@ -1,0 +1,19 @@
+<!-- merge this with your base vm xml and put it into ./libvirt.xml -->
+<!-- replace EXTRA_CPU with cpu not included in vcpus and vcpupins -->
+<domain>
+  <iothreads>1</iothreads>
+  <iothreadids>
+    <iothread id="1"/>
+  </iothreadids>
+  <cputune>
+      <iothreadpin iothread="1" cpuset="EXTRA_CPU"/>
+      <vcpupin vcpu="0" cpuset="0"/>
+      <vcpupin vcpu="1" cpuset="1"/>
+      ...
+  </cputune>
+  <devices>
+      <disk type='file' device='disk'>
+         <driver name='qemu' type='qcow2' io='threads'/>
+      </disk>
+  </devices>
+</domain>
