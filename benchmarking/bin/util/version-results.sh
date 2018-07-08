@@ -22,9 +22,16 @@ if [ ! -d "$BENCH_GIT_RESULTS/.git" ]; then
     exit 2
 fi
 
+copy_first_file_starts(){
+    for file in "$1"*; do
+        cp "$file" "$2" 2> /dev/null
+        break
+    done
+}
+
 copy_status(){
-    cp /tmp/benchmark-suite.editable-cfg.* "$BENCH_EDITABLE_CFG" 2> /dev/null
-    cp /tmp/benchmark-suite.out.* "$BENCH_OUTPUT" 2> /dev/null
+    copy_first_file_starts "/tmp/benchmark-suite.editable-cfg." "$BENCH_EDITABLE_CFG"
+    copy_first_file_starts "/tmp/benchmark-suite.out." "$BENCH_OUTPUT"
 }
 
 cd "$BENCHMARKS_DIR"

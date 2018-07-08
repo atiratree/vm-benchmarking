@@ -71,3 +71,12 @@ postgres            2-memory             8-pinned-cpus                       1  
 postgres            3-disk               8-pinned-cpus                       1       analysis-result             CLEAN=all
 wildfly             1-main               8-pinned-cpus                       1       analysis-result             CLEAN=all,NO_OUTPUT_CHECK_MIN=30
 wildfly             2-daytrader          8-pinned-cpus                       1       analysis-result             CLEAN=all,MANAGED_BY_VM=wildfly-jmeter
+
+# 9-one-iothread-pinned-to-samecpu
+compression         1-main               9-one-iothread-pinned-to-samecpu    1       analysis-result             CLEAN=all
+npb                 1-main               9-one-iothread-pinned-to-samecpu    1       analysis-result             CLEAN=all
+postgres            1-buffer             9-one-iothread-pinned-to-samecpu    1       analysis-result             CLEAN=all
+postgres            2-memory             9-one-iothread-pinned-to-samecpu    1       analysis-result             CLEAN=all
+postgres            3-disk               9-one-iothread-pinned-to-samecpu    1       analysis-result             CLEAN=all
+wildfly             1-main               9-one-iothread-pinned-to-samecpu    1       analysis-result             CLEAN=all,NO_OUTPUT_CHECK_MIN=30
+wildfly             2-daytrader          9-one-iothread-pinned-to-samecpu    1       analysis-result             CLEAN=all,MANAGED_BY_VM=wildfly-jmeter

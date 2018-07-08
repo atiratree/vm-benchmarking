@@ -9,7 +9,6 @@ nmap
 wget
 bc
 awk
-jq
 git
 sysctl
 systemctl
