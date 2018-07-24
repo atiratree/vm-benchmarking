@@ -3,8 +3,8 @@
 show_help(){
     echo "clean.sh [OPTIONS] [NAME] [INSTALL_VERSION] [RUN_VERSION]"
     echo
-    echo "  --all"
-    echo "  --all-files"
+    echo "  -a,  --all"
+    echo "  -l,  --all-files"
     echo "  --vms"
     echo "  --vms-disk-cache"
     echo "  --analysis"
@@ -18,7 +18,7 @@ parse_args(){
     POSITIONAL_ARGS=()
     while [[ $# -gt 0 ]]; do
         case "$1" in
-            --all)
+            -a|--all)
             DELETE_VMS="yes"
             DELETE_VMS_DISK_CACHE="yes"
             DELETE_INSTALL="yes"
@@ -26,7 +26,7 @@ parse_args(){
             DELETE_ANALYSIS="yes"
             shift
             ;;
-            --all-files)
+            -l|--all-files)
             DELETE_INSTALL="yes"
             DELETE_RUN="yes"
             DELETE_ANALYSIS="yes"

@@ -89,3 +89,12 @@ postgres            2-memory             10-one-iothread-pinned-to-extracpu  1  
 postgres            3-disk               10-one-iothread-pinned-to-extracpu  1       analysis-result             CLEAN=all
 wildfly             1-main               10-one-iothread-pinned-to-extracpu  1       analysis-result             CLEAN=all,NO_OUTPUT_CHECK_MIN=30
 wildfly             2-daytrader          10-one-iothread-pinned-to-extracpu  1       analysis-result             CLEAN=all,MANAGED_BY_VM=wildfly-jmeter
+
+# 11-host-passthrough
+compression         1-main               11-host-passthrough                 1       analysis-result             CLEAN=all
+npb                 1-main               11-host-passthrough                 1       analysis-result             CLEAN=all
+postgres            1-buffer             11-host-passthrough                 1       analysis-result             CLEAN=all
+postgres            2-memory             11-host-passthrough                 1       analysis-result             CLEAN=all
+postgres            3-disk               11-host-passthrough                 1       analysis-result             CLEAN=all
+wildfly             1-main               11-host-passthrough                 1       analysis-result             CLEAN=all,NO_OUTPUT_CHECK_MIN=30
+wildfly             2-daytrader          11-host-passthrough                 1       analysis-result             CLEAN=all,MANAGED_BY_VM=wildfly-jmeter

@@ -1,0 +1,6 @@
+<!-- merge this with your base vm xml and put it into ./libvirt.xml -->
+<domain>
+  <cpu mode='host-passthrough'  match='exact' check='full'>
+    <cache mode='passthrough'/>
+  </cpu>
+</domain>
