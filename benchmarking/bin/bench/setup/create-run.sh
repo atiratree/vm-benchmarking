@@ -4,6 +4,7 @@ show_help(){
     echo "create-run.sh RUN_NAME [LIBVIRT_XML_EXAMPLE]"
     echo
     echo "  -b, --base-run-name      (default: 1-baseline)"
+    echo "  -c, --commit             (commit the changes with default message)"
     echo "  -h, --help"
 }
 
@@ -16,6 +17,10 @@ parse_args(){
             -b|--base-run-name)
             BASE_RUN_NAME="$2"
             shift 2
+            ;;
+            -c|--commit)
+            COMMIT="YES"
+            shift
             ;;
             -h|--help)
             show_help
@@ -83,11 +88,28 @@ supports_xml(){
     echo "$1" | grep -qvf "$SCRIPTS_DIR/.run_libvirtxml_ignore"
 }
 
+git_add(){
+    if [ -n "$COMMIT" ]; then
+        pushd "$BENCHMARKS_DIR" > /dev/null
+        git add "$1" > /dev/null
+        popd > /dev/null
+    fi
+}
+
+git_commit(){
+    if [ -n "$COMMIT" ]; then
+        pushd "$BENCHMARKS_DIR" > /dev/null
+        git commit -m "$1"
+        popd > /dev/null
+    fi
+}
+
 copy(){
     if [ -e "$1" ] && [ ! -e "$2" ]; then
         echo -e "${GREEN}$1${NC}"
         echo "coppied as $2"
         cp -d "$1" "$2"
+        git_add "$2"
     fi
 }
 
@@ -95,6 +117,7 @@ create(){
     if [ ! -e "$1" ]; then
         echo "created $1"
         touch "$1"
+        git_add "$1"
     fi
 }
 
@@ -156,6 +179,8 @@ NEW_RUN_NAME_PADDED="`printf "%-$PADDED_LENGTH""s" "$NEW_RUN_NAME"`"
 grep "$BASE_RUN" "$SUITE_EXAMPLE" | sed -E "s/$BASE_RUN\s+([0-9]+)/$NEW_RUN_NAME_PADDED\1/g; s/$BASE_RUN/$NEW_RUN_NAME/g" >> "$SUITE_EXAMPLE"
 
 if run_exists "$NEW_RUN_NAME"; then
+    git_add "$SUITE_EXAMPLE"
+    git_commit "add run: $NEW_RUN_NAME"
     echo -e "${GREEN}DONE${NC}"
 else
     echo -e "${RED}FAILED${NC}"

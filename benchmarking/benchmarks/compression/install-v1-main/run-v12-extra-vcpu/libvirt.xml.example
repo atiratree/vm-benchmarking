@@ -1,0 +1,5 @@
+<!-- merge this with your base vm xml and put it into ./libvirt.xml -->
+<!-- add one extra vcpu -->
+<domain>
+  <vcpu placement='static'>N+1</vcpu>
+</domain>
