@@ -179,7 +179,7 @@ resolve_libvirt_xml(){
         MAC_ADDR="`echo "$CURRENT_LIBVIRT_XML" | grep -Eo "<mac address='.*'" | head -1`"
         FILE="`echo "$CURRENT_LIBVIRT_XML" | grep -Eo "/.*\.[a-zA-Z0-9]+" | sed 's;/;\\\/;g' | head -1`"
         sed -e "s/<name>.*<\/name>/<name>$R_BENCHMARK_VM<\/name>/; s/<uuid>.*</$UUID_ELEM/g; s/\/.*\.[a-zA-Z0-9]\+/$FILE/; s/<mac address='.*'/$MAC_ADDR/" \
-        "$RUN_LIBVIRT_XML" | virsh define /dev/stdin > /dev/null 2>&1 || finish_all $?
+        "$RUN_LIBVIRT_XML" | virsh define /dev/stdin > /dev/null || finish_all $?
     fi
 
     virsh dumpxml "$R_BENCHMARK_VM" > "$RUN_RESULT_LIBVIRT_XML" || finish_all $?

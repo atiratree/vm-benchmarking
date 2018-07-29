@@ -90,15 +90,6 @@ postgres            3-disk               10-one-iothread-pinned-to-extracpu  1  
 wildfly             1-main               10-one-iothread-pinned-to-extracpu  1       analysis-result             NO_OUTPUT_CHECK_MIN=30
 wildfly             2-daytrader          10-one-iothread-pinned-to-extracpu  1       analysis-result             MANAGED_BY_VM=wildfly-jmeter
 
-# 11-host-passthrough
-compression         1-main               11-host-passthrough                 1       analysis-result
-npb                 1-main               11-host-passthrough                 1       analysis-result
-postgres            1-buffer             11-host-passthrough                 1       analysis-result
-postgres            2-memory             11-host-passthrough                 1       analysis-result
-postgres            3-disk               11-host-passthrough                 1       analysis-result
-wildfly             1-main               11-host-passthrough                 1       analysis-result             NO_OUTPUT_CHECK_MIN=30
-wildfly             2-daytrader          11-host-passthrough                 1       analysis-result             MANAGED_BY_VM=wildfly-jmeter
-
 # 12-extra-vcpu
 compression         1-main               12-extra-vcpu                       1       analysis-result
 npb                 1-main               12-extra-vcpu                       1       analysis-result
@@ -107,3 +98,12 @@ postgres            2-memory             12-extra-vcpu                       1  
 postgres            3-disk               12-extra-vcpu                       1       analysis-result
 wildfly             1-main               12-extra-vcpu                       1       analysis-result             NO_OUTPUT_CHECK_MIN=30
 wildfly             2-daytrader          12-extra-vcpu                       1       analysis-result             MANAGED_BY_VM=wildfly-jmeter
+
+# 11-host-passthrough
+compression         1-main               11-host-passthrough                 1       analysis-result
+npb                 1-main               11-host-passthrough                 1       analysis-result
+postgres            1-buffer             11-host-passthrough                 1       analysis-result
+postgres            2-memory             11-host-passthrough                 1       analysis-result
+postgres            3-disk               11-host-passthrough                 1       analysis-result
+wildfly             1-main               11-host-passthrough                 1       analysis-result             NO_OUTPUT_CHECK_MIN=30
+wildfly             2-daytrader          11-host-passthrough                 1       analysis-result             MANAGED_BY_VM=wildfly-jmeter
