@@ -1,0 +1,10 @@
+<!-- merge this with your base vm xml and put it into ./libvirt.xml -->
+<!-- replace EXTRA_CPU with cpu not included in vcpus and vcpupins -->
+<domain>
+  <cputune>
+      <emulatorpin cpuset="EXTRA_CPU"/>
+      <vcpupin vcpu="0" cpuset="0"/>
+      <vcpupin vcpu="1" cpuset="1"/>
+      ...
+  </cputune>
+</domain>

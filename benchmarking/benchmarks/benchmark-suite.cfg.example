@@ -116,3 +116,12 @@ postgres            2-memory             13-emulator-pinned-to-samecpu       1  
 postgres            3-disk               13-emulator-pinned-to-samecpu       1       analysis-result
 wildfly             1-main               13-emulator-pinned-to-samecpu       1       analysis-result             NO_OUTPUT_CHECK_MIN=30
 wildfly             2-daytrader          13-emulator-pinned-to-samecpu       1       analysis-result             MANAGED_BY_VM=wildfly-jmeter
+
+# 14-emulator-pinned-to-extracpu
+compression         1-main               14-emulator-pinned-to-extracpu      1       analysis-result
+npb                 1-main               14-emulator-pinned-to-extracpu      1       analysis-result
+postgres            1-buffer             14-emulator-pinned-to-extracpu      1       analysis-result
+postgres            2-memory             14-emulator-pinned-to-extracpu      1       analysis-result
+postgres            3-disk               14-emulator-pinned-to-extracpu      1       analysis-result
+wildfly             1-main               14-emulator-pinned-to-extracpu      1       analysis-result             NO_OUTPUT_CHECK_MIN=30
+wildfly             2-daytrader          14-emulator-pinned-to-extracpu      1       analysis-result             MANAGED_BY_VM=wildfly-jmeter

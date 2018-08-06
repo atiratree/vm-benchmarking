@@ -9,6 +9,7 @@ show_help(){
 }
 
 parse_args(){
+    COMMIT=""
     NAME_MAX_LENGTH=35
     BASE_RUN_NAME="1-baseline"
     POSITIONAL_ARGS=()
