@@ -179,7 +179,7 @@ run_benchmark(){
     fi
 
     if [ -z "$SKIP_GIT" ]; then
-        "$UTIL_DIR/version-results.sh" "$NAME $INSTALL_VERSION $RUN_VERSION" &> /dev/null
+        "$UTIL_DIR/version-results.sh" "$SUITE_RND_STRING $NAME $INSTALL_VERSION $RUN_VERSION" &> /dev/null
     fi
 }
 
