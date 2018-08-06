@@ -1,0 +1,9 @@
+<!-- merge this with your base vm xml and put it into ./libvirt.xml -->
+<domain>
+  <cputune>
+      <emulatorpin cpuset="0"/>
+      <vcpupin vcpu="0" cpuset="0"/>
+      <vcpupin vcpu="1" cpuset="1"/>
+      ...
+  </cputune>
+</domain>
