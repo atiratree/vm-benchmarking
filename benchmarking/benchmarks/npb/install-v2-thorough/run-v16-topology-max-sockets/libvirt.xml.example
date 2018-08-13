@@ -1,0 +1,7 @@
+<!-- merge this with your base vm xml and put it into ./libvirt.xml -->
+<!-- replace MAX with the number of vcpus -->
+<domain>
+  <cpu>
+    <topology sockets='MAX' cores='1' threads='1'/>
+  </cpu>
+</domain>
