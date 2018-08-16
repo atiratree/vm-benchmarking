@@ -1,0 +1,8 @@
+<!-- merge this with your base vm xml and put it into ./libvirt.xml -->
+<!-- use underlying topology -->
+<!-- replace ARCH_SOCKETS, ARCH_CORES, ARCH_THREADS with topology representing current architecture -->
+<domain>
+  <cpu>
+    <topology sockets='ARCH_SOCKETS' cores='ARCH_CORES' threads='ARCH_THREADS'/>
+  </cpu>
+</domain>

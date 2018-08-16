@@ -134,3 +134,12 @@ postgres            2-memory             16-topology-max-sockets             1  
 postgres            3-disk               16-topology-max-sockets             1       analysis-result
 wildfly             1-main               16-topology-max-sockets             1       analysis-result             NO_OUTPUT_CHECK_MIN=30
 wildfly             2-daytrader          16-topology-max-sockets             1       analysis-result             MANAGED_BY_VM=wildfly-jmeter
+
+# 17-topology-underlying
+compression         1-main               17-topology-underlying              1       analysis-result
+npb                 1-main               17-topology-underlying              1       analysis-result
+postgres            1-buffer             17-topology-underlying              1       analysis-result
+postgres            2-memory             17-topology-underlying              1       analysis-result
+postgres            3-disk               17-topology-underlying              1       analysis-result
+wildfly             1-main               17-topology-underlying              1       analysis-result             NO_OUTPUT_CHECK_MIN=30
+wildfly             2-daytrader          17-topology-underlying              1       analysis-result             MANAGED_BY_VM=wildfly-jmeter
