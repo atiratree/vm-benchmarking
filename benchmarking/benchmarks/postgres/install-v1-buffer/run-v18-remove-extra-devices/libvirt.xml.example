@@ -1,0 +1,2 @@
+<!-- merge this with your base vm xml and put it into ./libvirt.xml -->
+<!-- remove all unneeded extra devices from libvirt.xml -->
