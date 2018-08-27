@@ -161,3 +161,12 @@ postgres            2-memory             15-N-pinned-cpus-pinclosernode      1  
 postgres            3-disk               15-N-pinned-cpus-pinclosernode      1       analysis-result
 wildfly             1-main               15-N-pinned-cpus-pinclosernode      1       analysis-result             NO_OUTPUT_CHECK_MIN=30
 wildfly             2-daytrader          15-N-pinned-cpus-pinclosernode      1       analysis-result             MANAGED_BY_VM=wildfly-jmeter
+
+# 19-N-numa-topology-pinclosernode
+compression         1-main               19-N-numa-topology-pinclosernode    1       analysis-result
+npb                 1-main               19-N-numa-topology-pinclosernode    1       analysis-result
+postgres            1-buffer             19-N-numa-topology-pinclosernode    1       analysis-result
+postgres            2-memory             19-N-numa-topology-pinclosernode    1       analysis-result
+postgres            3-disk               19-N-numa-topology-pinclosernode    1       analysis-result
+wildfly             1-main               19-N-numa-topology-pinclosernode    1       analysis-result             NO_OUTPUT_CHECK_MIN=30
+wildfly             2-daytrader          19-N-numa-topology-pinclosernode    1       analysis-result             MANAGED_BY_VM=wildfly-jmeter
