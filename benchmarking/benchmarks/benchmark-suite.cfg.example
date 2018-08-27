@@ -179,3 +179,12 @@ postgres            2-memory             20-l3cache-alocation-pinclosernode  1  
 postgres            3-disk               20-l3cache-alocation-pinclosernode  1       analysis-result
 wildfly             1-main               20-l3cache-alocation-pinclosernode  1       analysis-result             NO_OUTPUT_CHECK_MIN=30
 wildfly             2-daytrader          20-l3cache-alocation-pinclosernode  1       analysis-result             MANAGED_BY_VM=wildfly-jmeter
+
+# 21-l2cache-alocation-pinclosernode
+compression         1-main               21-l2cache-alocation-pinclosernode  1       analysis-result
+npb                 1-main               21-l2cache-alocation-pinclosernode  1       analysis-result
+postgres            1-buffer             21-l2cache-alocation-pinclosernode  1       analysis-result
+postgres            2-memory             21-l2cache-alocation-pinclosernode  1       analysis-result
+postgres            3-disk               21-l2cache-alocation-pinclosernode  1       analysis-result
+wildfly             1-main               21-l2cache-alocation-pinclosernode  1       analysis-result             NO_OUTPUT_CHECK_MIN=30
+wildfly             2-daytrader          21-l2cache-alocation-pinclosernode  1       analysis-result             MANAGED_BY_VM=wildfly-jmeter
