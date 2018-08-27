@@ -152,3 +152,12 @@ postgres            2-memory             18-remove-extra-devices             1  
 postgres            3-disk               18-remove-extra-devices             1       analysis-result
 wildfly             1-main               18-remove-extra-devices             1       analysis-result             NO_OUTPUT_CHECK_MIN=30
 wildfly             2-daytrader          18-remove-extra-devices             1       analysis-result             MANAGED_BY_VM=wildfly-jmeter
+
+# 15-N-pinned-cpus-pinclosernode
+compression         1-main               15-N-pinned-cpus-pinclosernode      1       analysis-result
+npb                 1-main               15-N-pinned-cpus-pinclosernode      1       analysis-result
+postgres            1-buffer             15-N-pinned-cpus-pinclosernode      1       analysis-result
+postgres            2-memory             15-N-pinned-cpus-pinclosernode      1       analysis-result
+postgres            3-disk               15-N-pinned-cpus-pinclosernode      1       analysis-result
+wildfly             1-main               15-N-pinned-cpus-pinclosernode      1       analysis-result             NO_OUTPUT_CHECK_MIN=30
+wildfly             2-daytrader          15-N-pinned-cpus-pinclosernode      1       analysis-result             MANAGED_BY_VM=wildfly-jmeter
