@@ -1,0 +1,2 @@
+<!-- merge this with your base vm xml and put it into ./libvirt.xml -->
+<!-- change SPARSE_IMAGES to 'yes' in global-config.env  -->
