@@ -197,3 +197,12 @@ postgres            2-memory             22-sparse-disks                     1  
 postgres            3-disk               22-sparse-disks                     1       analysis-result
 wildfly             1-main               22-sparse-disks                     1       analysis-result             NO_OUTPUT_CHECK_MIN=30
 wildfly             2-daytrader          22-sparse-disks                     1       analysis-result             MANAGED_BY_VM=wildfly-jmeter
+
+# 23-N-numa-topology
+compression         1-main               23-N-numa-topology                  1       analysis-result
+npb                 1-main               23-N-numa-topology                  1       analysis-result
+postgres            1-buffer             23-N-numa-topology                  1       analysis-result
+postgres            2-memory             23-N-numa-topology                  1       analysis-result
+postgres            3-disk               23-N-numa-topology                  1       analysis-result
+wildfly             1-main               23-N-numa-topology                  1       analysis-result             NO_OUTPUT_CHECK_MIN=30
+wildfly             2-daytrader          23-N-numa-topology                  1       analysis-result             MANAGED_BY_VM=wildfly-jmeter
