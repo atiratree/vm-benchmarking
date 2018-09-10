@@ -20,7 +20,10 @@ if [ -z "$MESSAGE" ]; then
     exit 1
 fi
 
-pushd tmp
+if [ -d "$BENCH_GIT_RESULTS" ]; then
+    pushd "$BENCH_GIT_RESULTS"
+fi
+
 if [ ! -d "$BENCH_GIT_RESULTS/.git" ] || ! git status &> /dev/null; then
     if [ -x "$INIT_GIT_SCRIPT" ]; then
         "$INIT_GIT_SCRIPT"
@@ -28,6 +31,7 @@ if [ ! -d "$BENCH_GIT_RESULTS/.git" ] || ! git status &> /dev/null; then
             echo "$INIT_GIT_SCRIPT failed to produce valid $BENCH_GIT_RESULTS" >&2
             exit 2
         fi
+        pushd "$BENCH_GIT_RESULTS"
     else
         echo "$BENCH_GIT_RESULTS must be initialized git directory (hint: use init-git.sh in /tmp for that)" >&2
         exit 2
