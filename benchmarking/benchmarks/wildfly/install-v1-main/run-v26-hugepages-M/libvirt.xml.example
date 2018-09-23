@@ -1,0 +1,30 @@
+<!-- merge this with your base vm xml and put it into ./libvirt.xml -->
+
+<!-- Medium HugePage size should be 2MiB for x86_64 -->
+<!-- Medium HugePage size should be 16MiB for Power8 architecture -->
+
+<!-- activate hugepages support on the system if not already there-->
+<!-- echo "hugetlbfs       /dev/hugepages  hugetlbfs       mode=1770,gid=78        0 0" >> /etc/fstab -->
+<!-- umount /dev/hugepages -->
+<!-- mount /dev/hugepages -->
+<!-- grep Hugepagesize /proc/meminfo # PAGE_SIZE_IN_MB = 2MiB-->
+
+<!-- NUM_OF_PAGES="`python -c "from math import ceil; print(ceil($VM_MEMORY/$PAGE_SIZE_IN_MB))`" -->
+<!-- echo "$NUM_OF_PAGES" > /proc/sys/vm/nr_hugepages -->
+<!-- grep HugePages_Total /proc/meminfo # check allocation successful -->
+<!-- grep HugePages /proc/meminfo -->
+<!-- systemctl restart libvirtd -->
+
+<domain>
+  <memoryBacking>
+    <hugepages>
+      <!-- grep Hugepagesize /proc/meminfo -->
+      <page size="PAGE_SIZE_IN_MB" unit="M" />
+    </hugepages>
+  </memoryBacking>
+</domain>
+
+
+
+<!-- echo 0 > /proc/sys/vm/nr_hugepages # after the benchmarks finish-->
+

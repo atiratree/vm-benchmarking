@@ -224,3 +224,12 @@ postgres            2-memory             25-N-topology-pin-underlying-pinCN  1  
 postgres            3-disk               25-N-topology-pin-underlying-pinCN  1       analysis-result
 wildfly             1-main               25-N-topology-pin-underlying-pinCN  1       analysis-result             NO_OUTPUT_CHECK_MIN=30
 wildfly             2-daytrader          25-N-topology-pin-underlying-pinCN  1       analysis-result             MANAGED_BY_VM=wildfly-jmeter
+
+# 26-hugepages-M
+compression         1-main               26-hugepages-M                      1       analysis-result
+npb                 1-main               26-hugepages-M                      1       analysis-result
+postgres            1-buffer             26-hugepages-M                      1       analysis-result
+postgres            2-memory             26-hugepages-M                      1       analysis-result
+postgres            3-disk               26-hugepages-M                      1       analysis-result
+wildfly             1-main               26-hugepages-M                      1       analysis-result             NO_OUTPUT_CHECK_MIN=30
+wildfly             2-daytrader          26-hugepages-M                      1       analysis-result             MANAGED_BY_VM=wildfly-jmeter
