@@ -5,15 +5,13 @@
 
 
 <!-- activate hugepages support on the system if not already there-->
-<!-- mkdir /dev/hugepages1G -->
-<!-- mkdir mount -t hugetlbfs -o pagesize=1G none /dev/hugepages1G -->
 <!-- grep Hugepagesize /proc/meminfo # PAGE_SIZE_IN_MB = 16MiB-->
 
-<!-- NUM_OF_PAGES="`python -c "from math import ceil; print(ceil($VM_MEMORY/$PAGE_SIZE_IN_MB))`" -->
-<!-- echo $NUM_OF_PAGES_PER_NODE > /sys/devices/system/node/node1/hugepages/hugepages-1048576kB/nr_hugepages -->
-<!-- echo $NUM_OF_PAGES_PER_NODE > /sys/devices/system/node/nodeN/hugepages/hugepages-1048576kB/nr_hugepages -->
-<!-- cat /sys/devices/system/node/node1/hugepages/hugepages-1048576kB/nr_hugepages # check allocation successful -->
-<!-- cat /sys/devices/system/node/nodeN/hugepages/hugepages-1048576kB/nr_hugepages # check allocation successful -->
+<!-- NUM_OF_PAGES_PER_NODE="`python -c "from math import ceil; print(int(ceil($VM_MEMORY_IN_MIB/$PAGE_SIZE_IN_MB/$NUM_OF_NODES)))""`" -->
+<!-- echo $NUM_OF_PAGES_PER_NODE > /sys/devices/system/node/node1/hugepages/hugepages-16384kB/nr_hugepages -->
+<!-- echo $NUM_OF_PAGES_PER_NODE > /sys/devices/system/node/nodeN/hugepages/hugepages-16384kB/nr_hugepages -->
+<!-- cat /sys/devices/system/node/node1/hugepages/hugepages-16384kB/nr_hugepages # check allocation successful -->
+<!-- cat /sys/devices/system/node/nodeN/hugepages/hugepages-16384kB/nr_hugepages # check allocation successful -->
 <!-- systemctl restart libvirtd -->
 
 
@@ -54,8 +52,8 @@
 
 
 
-<!-- echo 0 > /sys/devices/system/node/node1/hugepages/hugepages-1048576kB/nr_hugepages # after the benchmarks finish-->
-<!-- echo 0 > /sys/devices/system/node/nodeN/hugepages/hugepages-1048576kB/nr_hugepages -->
+<!-- echo 0 > /sys/devices/system/node/node1/hugepages/hugepages-16384kB/nr_hugepages # after the benchmarks finish-->
+<!-- echo 0 > /sys/devices/system/node/nodeN/hugepages/hugepages-16384kB/nr_hugepages -->
 <!-- umount /dev/hugepages1G -->
 <!-- systemctl restart libvirtd -->
 

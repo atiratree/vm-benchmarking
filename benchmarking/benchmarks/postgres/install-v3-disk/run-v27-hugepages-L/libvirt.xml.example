@@ -4,10 +4,11 @@
 
 <!-- activate hugepages support on the system if not already there-->
 <!-- mkdir /dev/hugepages1G -->
-<!-- mkdir mount -t hugetlbfs -o pagesize=1G none /dev/hugepages1G -->
-<!-- PAGE_SIZE_IN_GiB=1-->
+<!-- mount -t hugetlbfs -o pagesize=1G none /dev/hugepages1G -->
+<!-- PAGE_SIZE_IN_GIB=1-->
 
-<!-- NUM_OF_PAGES="`python -c "from math import ceil; print(ceil($VM_MEMORY/$PAGE_SIZE_IN_GiB))`" -->
+<!-- NUM_OF_PAGES="$VM_MEMORY_IN_GIB" -->
+
 <!-- echo $NUM_OF_PAGES > /sys/kernel/mm/hugepages/hugepages-1048576kB/nr_hugepages -->
 <!-- cat /sys/kernel/mm/hugepages/hugepages-1048576kB/free_hugepages # check allocation successful -->
 <!-- systemctl restart libvirtd -->
