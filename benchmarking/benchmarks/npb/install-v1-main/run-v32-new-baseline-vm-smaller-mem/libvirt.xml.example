@@ -1,0 +1,3 @@
+<!-- merge this with your base vm xml and put it into ./libvirt.xml -->
+
+<!-- create new baseline so that it's memory fits to available hugepages -->

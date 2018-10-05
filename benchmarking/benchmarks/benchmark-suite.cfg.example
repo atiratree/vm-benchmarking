@@ -278,3 +278,12 @@ postgres            2-memory             31-N-hugepages-M-perNo-TL           1  
 postgres            3-disk               31-N-hugepages-M-perNo-TL           1       analysis-result
 wildfly             1-main               31-N-hugepages-M-perNo-TL           1       analysis-result             NO_OUTPUT_CHECK_MIN=30
 wildfly             2-daytrader          31-N-hugepages-M-perNo-TL           1       analysis-result             MANAGED_BY_VM=wildfly-jmeter
+
+# 32-new-baseline-vm-smaller-mem
+compression         1-main               32-new-baseline-vm-smaller-mem      1       analysis-result
+npb                 1-main               32-new-baseline-vm-smaller-mem      1       analysis-result
+postgres            1-buffer             32-new-baseline-vm-smaller-mem      1       analysis-result
+postgres            2-memory             32-new-baseline-vm-smaller-mem      1       analysis-result
+postgres            3-disk               32-new-baseline-vm-smaller-mem      1       analysis-result
+wildfly             1-main               32-new-baseline-vm-smaller-mem      1       analysis-result             NO_OUTPUT_CHECK_MIN=30
+wildfly             2-daytrader          32-new-baseline-vm-smaller-mem      1       analysis-result             MANAGED_BY_VM=wildfly-jmeter
