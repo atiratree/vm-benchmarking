@@ -1,0 +1,13 @@
+<!-- merge this with your base vm xml and put it into ./libvirt.xml -->
+<!-- replace MAX with the number of vcpus -->
+<!-- pin to further NUMA node when using NUMA -->
+<domain>
+  <cputune>
+      <vcpupin vcpu="0" cpuset="0"/>
+      <vcpupin vcpu="1" cpuset="1"/>
+      ...
+  </cputune>
+  <cpu>
+      <topology sockets='MAX' cores='1' threads='1'/>
+    </cpu>
+</domain>
