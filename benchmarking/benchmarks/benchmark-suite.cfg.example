@@ -305,3 +305,12 @@ postgres            2-memory             34-topology-pin-max-sockets         1  
 postgres            3-disk               34-topology-pin-max-sockets         1       analysis-result
 wildfly             1-main               34-topology-pin-max-sockets         1       analysis-result             NO_OUTPUT_CHECK_MIN=30
 wildfly             2-daytrader          34-topology-pin-max-sockets         1       analysis-result             MANAGED_BY_VM=wildfly-jmeter
+
+# 35-N-topolo-pin-max-sockets-pinCN
+compression         1-main               35-N-topolo-pin-max-sockets-pinCN   1       analysis-result
+npb                 1-main               35-N-topolo-pin-max-sockets-pinCN   1       analysis-result
+postgres            1-buffer             35-N-topolo-pin-max-sockets-pinCN   1       analysis-result
+postgres            2-memory             35-N-topolo-pin-max-sockets-pinCN   1       analysis-result
+postgres            3-disk               35-N-topolo-pin-max-sockets-pinCN   1       analysis-result
+wildfly             1-main               35-N-topolo-pin-max-sockets-pinCN   1       analysis-result             NO_OUTPUT_CHECK_MIN=30
+wildfly             2-daytrader          35-N-topolo-pin-max-sockets-pinCN   1       analysis-result             MANAGED_BY_VM=wildfly-jmeter
