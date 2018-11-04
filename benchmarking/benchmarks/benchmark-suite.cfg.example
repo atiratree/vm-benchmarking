@@ -314,3 +314,12 @@ postgres            2-memory             35-N-topolo-pin-max-sockets-pinCN   1  
 postgres            3-disk               35-N-topolo-pin-max-sockets-pinCN   1       analysis-result
 wildfly             1-main               35-N-topolo-pin-max-sockets-pinCN   1       analysis-result             NO_OUTPUT_CHECK_MIN=30
 wildfly             2-daytrader          35-N-topolo-pin-max-sockets-pinCN   1       analysis-result             MANAGED_BY_VM=wildfly-jmeter
+
+# 36-two-iothreads
+compression         1-main               36-two-iothreads                    1       analysis-result
+npb                 1-main               36-two-iothreads                    1       analysis-result
+postgres            1-buffer             36-two-iothreads                    1       analysis-result
+postgres            2-memory             36-two-iothreads                    1       analysis-result
+postgres            3-disk               36-two-iothreads                    1       analysis-result
+wildfly             1-main               36-two-iothreads                    1       analysis-result             NO_OUTPUT_CHECK_MIN=30
+wildfly             2-daytrader          36-two-iothreads                    1       analysis-result             MANAGED_BY_VM=wildfly-jmeter

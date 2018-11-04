@@ -3,7 +3,7 @@
 
 set -eu
 
-# download EPEL repository for postgres dependencies
+# download EPEL repository for dependencies
 wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 
 # add EPEL repos
