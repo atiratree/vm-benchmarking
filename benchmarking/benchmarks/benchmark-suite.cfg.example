@@ -332,3 +332,12 @@ postgres            2-memory             37-three-iothreads                  1  
 postgres            3-disk               37-three-iothreads                  1       analysis-result
 wildfly             1-main               37-three-iothreads                  1       analysis-result             NO_OUTPUT_CHECK_MIN=30
 wildfly             2-daytrader          37-three-iothreads                  1       analysis-result             MANAGED_BY_VM=wildfly-jmeter
+
+# 38-N-numa-topology-pinspread
+compression         1-main               38-N-numa-topology-pinspread        1       analysis-result
+npb                 1-main               38-N-numa-topology-pinspread        1       analysis-result
+postgres            1-buffer             38-N-numa-topology-pinspread        1       analysis-result
+postgres            2-memory             38-N-numa-topology-pinspread        1       analysis-result
+postgres            3-disk               38-N-numa-topology-pinspread        1       analysis-result
+wildfly             1-main               38-N-numa-topology-pinspread        1       analysis-result             NO_OUTPUT_CHECK_MIN=30
+wildfly             2-daytrader          38-N-numa-topology-pinspread        1       analysis-result             MANAGED_BY_VM=wildfly-jmeter

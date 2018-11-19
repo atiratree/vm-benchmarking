@@ -1,0 +1,40 @@
+<!-- merge this with your base vm xml and put it into ./libvirt.xml -->
+<!-- pin to all the NUMA nodes when using NUMA -->
+<domain>
+  <cputune>
+    <vcpupin vcpu="0" cpuset="1"/>
+    <vcpupin vcpu="1" cpuset="2"/>
+    <vcpupin vcpu="2" cpuset="3"/>
+    <vcpupin vcpu="3" cpuset="4"/>
+    ...
+  </cputune>
+  <numatune>
+    <memory mode="strict" nodeset="0-1"/>
+  </numatune>
+  <cpu>
+    <numa>
+      <cell id="0" cpus="0" memory="4" unit="GiB">
+        <distances>
+          <sibling id='0' value='10'/>
+          <sibling id='1' value='21'/>
+          <sibling id='2' value='21'/>
+        </distances>
+      </cell>
+      <cell id="1" cpus="1" memory="4" unit="GiB">
+        <distances>
+          <sibling id='0' value='21'/>
+          <sibling id='1' value='10'/>
+          <sibling id='2' value='21'/>
+        </distances>
+      </cell>
+      <cell id="2" cpus="2-3" memory="4" unit="GiB">
+        <distances>
+          <sibling id='0' value='21'/>
+          <sibling id='1' value='21'/>
+          <sibling id='2' value='10'/>
+        </distances>
+      </cell>
+      ...
+    </numa>
+  </cpu>
+</domain>
