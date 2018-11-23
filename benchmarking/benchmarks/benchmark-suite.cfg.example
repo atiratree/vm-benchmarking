@@ -341,3 +341,12 @@ postgres            2-memory             38-N-numa-topology-pinspread        1  
 postgres            3-disk               38-N-numa-topology-pinspread        1       analysis-result
 wildfly             1-main               38-N-numa-topology-pinspread        1       analysis-result             NO_OUTPUT_CHECK_MIN=30
 wildfly             2-daytrader          38-N-numa-topology-pinspread        1       analysis-result             MANAGED_BY_VM=wildfly-jmeter
+
+# 39-shifted-baseline
+compression         1-main               39-shifted-baseline                 1       analysis-result
+npb                 1-main               39-shifted-baseline                 1       analysis-result
+postgres            1-buffer             39-shifted-baseline                 1       analysis-result
+postgres            2-memory             39-shifted-baseline                 1       analysis-result
+postgres            3-disk               39-shifted-baseline                 1       analysis-result
+wildfly             1-main               39-shifted-baseline                 1       analysis-result             NO_OUTPUT_CHECK_MIN=30
+wildfly             2-daytrader          39-shifted-baseline                 1       analysis-result             MANAGED_BY_VM=wildfly-jmeter
