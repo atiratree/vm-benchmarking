@@ -368,3 +368,12 @@ postgres            2-memory             41-directsync-iothread              1  
 postgres            3-disk               41-directsync-iothread              1       analysis-result
 wildfly             1-main               41-directsync-iothread              1       analysis-result             NO_OUTPUT_CHECK_MIN=30
 wildfly             2-daytrader          41-directsync-iothread              1       analysis-result             MANAGED_BY_VM=wildfly-jmeter
+
+# 42-native-thread-iothread
+compression         1-main               42-native-thread-iothread           1       analysis-result
+npb                 1-main               42-native-thread-iothread           1       analysis-result
+postgres            1-buffer             42-native-thread-iothread           1       analysis-result
+postgres            2-memory             42-native-thread-iothread           1       analysis-result
+postgres            3-disk               42-native-thread-iothread           1       analysis-result
+wildfly             1-main               42-native-thread-iothread           1       analysis-result             NO_OUTPUT_CHECK_MIN=30
+wildfly             2-daytrader          42-native-thread-iothread           1       analysis-result             MANAGED_BY_VM=wildfly-jmeter
