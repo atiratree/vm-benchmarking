@@ -1,0 +1,16 @@
+<!-- merge this with your base vm xml and put it into ./libvirt.xml -->
+<!-- activate resctrl -->
+<domain>
+  <cputune>
+    <vcpupin vcpu="0" cpuset="1"/>
+    <vcpupin vcpu="1" cpuset="2"/>
+    ...
+    <cachetune vcpus='0'>
+      <cache id='1' level='2' type='unified' size='8' unit='MiB'/>
+    </cachetune>
+    <cachetune vcpus='1'>
+      <cache id='2' level='2' type='unified' size='8' unit='MiB'/>
+    </cachetune>
+    ...
+  </cputune>
+</domain>
