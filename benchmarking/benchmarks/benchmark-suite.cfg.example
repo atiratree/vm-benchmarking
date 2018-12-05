@@ -377,3 +377,12 @@ postgres            2-memory             42-native-thread-iothread           1  
 postgres            3-disk               42-native-thread-iothread           1       analysis-result
 wildfly             1-main               42-native-thread-iothread           1       analysis-result             NO_OUTPUT_CHECK_MIN=30
 wildfly             2-daytrader          42-native-thread-iothread           1       analysis-result             MANAGED_BY_VM=wildfly-jmeter
+
+# 43-final
+compression         1-main               43-final                            1       analysis-result
+npb                 1-main               43-final                            1       analysis-result
+postgres            1-buffer             43-final                            1       analysis-result
+postgres            2-memory             43-final                            1       analysis-result
+postgres            3-disk               43-final                            1       analysis-result
+wildfly             1-main               43-final                            1       analysis-result             NO_OUTPUT_CHECK_MIN=30
+wildfly             2-daytrader          43-final                            1       analysis-result             MANAGED_BY_VM=wildfly-jmeter
