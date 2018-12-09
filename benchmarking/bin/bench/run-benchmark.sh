@@ -177,7 +177,7 @@ resolve_libvirt_xml(){
         echo -e "${BLUE}$R_BENCHMARK_VM:${NC} using custom libvirt.xml"
         UUID_ELEM="`echo "$CURRENT_LIBVIRT_XML" | grep -Eo "<uuid>.*<"`"
         MAC_ADDR="`echo "$CURRENT_LIBVIRT_XML" | grep -Eo "<mac address='.*'" | head -1`"
-        FILE="`echo "$CURRENT_LIBVIRT_XML" | grep -Eo "/.*\.[a-zA-Z0-9]+" | sed 's;/;\\\/;g' | head -1`"
+        FILE="`echo "$CURRENT_LIBVIRT_XML" | grep -Eo "file=./.*\.[a-zA-Z0-9]+"  | sed 's/file=.//; s-/-\\\/-g' | head -1`"
         sed -e "s/<name>.*<\/name>/<name>$R_BENCHMARK_VM<\/name>/; s/<uuid>.*</$UUID_ELEM/g; s/\/.*\.[a-zA-Z0-9]\+/$FILE/; s/<mac address='.*'/$MAC_ADDR/" \
         "$RUN_LIBVIRT_XML" | virsh define /dev/stdin > /dev/null || finish_all $?
     fi
