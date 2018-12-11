@@ -1,0 +1,136 @@
+# DISTRO=centos
+# IMAGE_FORMAT=qcow2
+# LIBVIRT_URI=qemu:///system
+# RUN_POOL_LOCATION=/home/ansy/images-run
+# SPARSE_IMAGES=no
+# VERBOSE_FILE=/dev/null
+#
+# ARCHITECTURE=ppc64le
+# CENTOS=7
+# NAME="pg-benchmark"
+# RAM=10
+# RUN_TIME=3600
+# SCALE_MULTIPLIER_CONSTANT="0.9"
+# THREADS=10
+# --------------------
+transaction type: <builtin: TPC-B (sort of)>
+scaling factor: 675
+query mode: simple
+number of clients: 20
+number of threads: 10
+duration: 3600 s
+number of transactions actually processed: 751979
+latency average = 95.756 ms
+tps = 208.863742 (including connections establishing)
+tps = 208.864147 (excluding connections establishing)
+# --------------------
+transaction type: <builtin: TPC-B (sort of)>
+scaling factor: 675
+query mode: simple
+number of clients: 20
+number of threads: 10
+duration: 3600 s
+number of transactions actually processed: 753025
+latency average = 95.616 ms
+tps = 209.169052 (including connections establishing)
+tps = 209.169465 (excluding connections establishing)
+# --------------------
+transaction type: <builtin: TPC-B (sort of)>
+scaling factor: 675
+query mode: simple
+number of clients: 20
+number of threads: 10
+duration: 3600 s
+number of transactions actually processed: 751010
+latency average = 95.876 ms
+tps = 208.603514 (including connections establishing)
+tps = 208.603942 (excluding connections establishing)
+# --------------------
+transaction type: <builtin: TPC-B (sort of)>
+scaling factor: 675
+query mode: simple
+number of clients: 20
+number of threads: 10
+duration: 3600 s
+number of transactions actually processed: 752128
+latency average = 95.729 ms
+tps = 208.922683 (including connections establishing)
+tps = 208.923063 (excluding connections establishing)
+# --------------------
+transaction type: <builtin: TPC-B (sort of)>
+scaling factor: 675
+query mode: simple
+number of clients: 20
+number of threads: 10
+duration: 3600 s
+number of transactions actually processed: 751508
+latency average = 95.828 ms
+tps = 208.707661 (including connections establishing)
+tps = 208.708166 (excluding connections establishing)
+# --------------------
+transaction type: <builtin: TPC-B (sort of)>
+scaling factor: 675
+query mode: simple
+number of clients: 20
+number of threads: 10
+duration: 3600 s
+number of transactions actually processed: 751455
+latency average = 95.815 ms
+tps = 208.735665 (including connections establishing)
+tps = 208.736050 (excluding connections establishing)
+# --------------------
+transaction type: <builtin: TPC-B (sort of)>
+scaling factor: 675
+query mode: simple
+number of clients: 20
+number of threads: 10
+duration: 3600 s
+number of transactions actually processed: 750348
+latency average = 95.964 ms
+tps = 208.412262 (including connections establishing)
+tps = 208.412648 (excluding connections establishing)
+# --------------------
+transaction type: <builtin: TPC-B (sort of)>
+scaling factor: 675
+query mode: simple
+number of clients: 20
+number of threads: 10
+duration: 3600 s
+number of transactions actually processed: 750938
+latency average = 95.903 ms
+tps = 208.543955 (including connections establishing)
+tps = 208.544413 (excluding connections establishing)
+# --------------------
+transaction type: <builtin: TPC-B (sort of)>
+scaling factor: 675
+query mode: simple
+number of clients: 20
+number of threads: 10
+duration: 3600 s
+number of transactions actually processed: 752143
+latency average = 95.728 ms
+tps = 208.926081 (including connections establishing)
+tps = 208.926494 (excluding connections establishing)
+# --------------------
+transaction type: <builtin: TPC-B (sort of)>
+scaling factor: 675
+query mode: simple
+number of clients: 20
+number of threads: 10
+duration: 3600 s
+number of transactions actually processed: 752527
+latency average = 95.680 ms
+tps = 209.030944 (including connections establishing)
+tps = 209.031222 (excluding connections establishing)
+# --------------------
+transaction type: <builtin: TPC-B (sort of)>
+scaling factor: 675
+query mode: simple
+number of clients: 20
+number of threads: 10
+duration: 3600 s
+number of transactions actually processed: 751872
+latency average = 95.765 ms
+tps = 208.843556 (including connections establishing)
+tps = 208.843965 (excluding connections establishing)
+# --------------------

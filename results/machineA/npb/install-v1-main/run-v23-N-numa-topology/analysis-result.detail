@@ -1,0 +1,1560 @@
+# DISTRO=centos
+# IMAGE_FORMAT=qcow2
+# LIBVIRT_URI=qemu:///system
+# RUN_POOL_LOCATION=/home/ansy/images-run
+# SPARSE_IMAGES=no
+# VERBOSE_FILE=/dev/null
+#
+# BT=C
+# CG=C
+# DC=B
+# EP=D
+# FFLAGS=""
+# FT=C
+# IS=C
+# LU=C
+# MG=C
+# SP=C
+# THREADS=10
+# UA=C
+# --------------------
+BT Benchmark Completed.
+Class           =                        C
+Size            =            162x 162x 162
+Iterations      =                      200
+Time in seconds =                    95.85
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 29903.77
+Mop/s/thread    =                  2990.38
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+CG Benchmark Completed.
+Class           =                        C
+Size            =                   150000
+Iterations      =                       75
+Time in seconds =                    28.28
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                  5069.00
+Mop/s/thread    =                   506.90
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+EP Benchmark Completed.
+Class           =                        D
+Size            =             137438953472
+Iterations      =                        0
+Time in seconds =                   450.95
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                   304.78
+Mop/s/thread    =                    30.48
+Operation type  = Random numbers generated
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+FT Benchmark Completed.
+Class           =                        C
+Size            =            512x 512x 512
+Iterations      =                       20
+Time in seconds =                    19.49
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 20335.26
+Mop/s/thread    =                  2033.53
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+IS Benchmark Completed
+Class           =                        C
+Size            =                134217728
+Iterations      =                       10
+Time in seconds =                     1.17
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                  1146.59
+Mop/s/thread    =                   114.66
+Operation type  =              keys ranked
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+LU Benchmark Completed.
+Class           =                        C
+Size            =            162x 162x 162
+Iterations      =                      250
+Time in seconds =                    66.05
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 30871.40
+Mop/s/thread    =                  3087.14
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+MG Benchmark Completed.
+Class           =                        C
+Size            =            512x 512x 512
+Iterations      =                       20
+Time in seconds =                     8.11
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 19194.89
+Mop/s/thread    =                  1919.49
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+SP Benchmark Completed.
+Class           =                        C
+Size            =            162x 162x 162
+Iterations      =                      400
+Time in seconds =                    77.11
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 18805.38
+Mop/s/thread    =                  1880.54
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+UA Benchmark Completed.
+Class           =                        C
+Size            =                        8
+Iterations      =                      200
+Time in seconds =                   126.78
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                    69.25
+Mop/s/thread    =                     6.93
+Operation type  =     coll. point advanced
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+DC Benchmark Completed
+Class           =                        B
+Size            =                 10000000
+Iterations      =                        1
+Time in seconds =                   100.94
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                     5.90
+Mop/s/thread    =                     0.59
+Operation type  =         Tuples generated
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+# --------------------
+BT Benchmark Completed.
+Class           =                        C
+Size            =            162x 162x 162
+Iterations      =                      200
+Time in seconds =                    96.45
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 29718.10
+Mop/s/thread    =                  2971.81
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+CG Benchmark Completed.
+Class           =                        C
+Size            =                   150000
+Iterations      =                       75
+Time in seconds =                    27.32
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                  5247.22
+Mop/s/thread    =                   524.72
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+EP Benchmark Completed.
+Class           =                        D
+Size            =             137438953472
+Iterations      =                        0
+Time in seconds =                   450.96
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                   304.77
+Mop/s/thread    =                    30.48
+Operation type  = Random numbers generated
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+FT Benchmark Completed.
+Class           =                        C
+Size            =            512x 512x 512
+Iterations      =                       20
+Time in seconds =                    19.51
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 20317.22
+Mop/s/thread    =                  2031.72
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+IS Benchmark Completed
+Class           =                        C
+Size            =                134217728
+Iterations      =                       10
+Time in seconds =                     2.39
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                   560.55
+Mop/s/thread    =                    56.06
+Operation type  =              keys ranked
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+LU Benchmark Completed.
+Class           =                        C
+Size            =            162x 162x 162
+Iterations      =                      250
+Time in seconds =                    65.87
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 30954.07
+Mop/s/thread    =                  3095.41
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+MG Benchmark Completed.
+Class           =                        C
+Size            =            512x 512x 512
+Iterations      =                       20
+Time in seconds =                     8.17
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 19048.40
+Mop/s/thread    =                  1904.84
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+SP Benchmark Completed.
+Class           =                        C
+Size            =            162x 162x 162
+Iterations      =                      400
+Time in seconds =                    77.85
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 18626.07
+Mop/s/thread    =                  1862.61
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+UA Benchmark Completed.
+Class           =                        C
+Size            =                        8
+Iterations      =                      200
+Time in seconds =                   127.32
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                    68.96
+Mop/s/thread    =                     6.90
+Operation type  =     coll. point advanced
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+DC Benchmark Completed
+Class           =                        B
+Size            =                 10000000
+Iterations      =                        1
+Time in seconds =                    98.08
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                     6.07
+Mop/s/thread    =                     0.61
+Operation type  =         Tuples generated
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+# --------------------
+BT Benchmark Completed.
+Class           =                        C
+Size            =            162x 162x 162
+Iterations      =                      200
+Time in seconds =                    97.31
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 29453.76
+Mop/s/thread    =                  2945.38
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+CG Benchmark Completed.
+Class           =                        C
+Size            =                   150000
+Iterations      =                       75
+Time in seconds =                    27.20
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                  5270.30
+Mop/s/thread    =                   527.03
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+EP Benchmark Completed.
+Class           =                        D
+Size            =             137438953472
+Iterations      =                        0
+Time in seconds =                   450.94
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                   304.79
+Mop/s/thread    =                    30.48
+Operation type  = Random numbers generated
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+FT Benchmark Completed.
+Class           =                        C
+Size            =            512x 512x 512
+Iterations      =                       20
+Time in seconds =                    19.43
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 20399.32
+Mop/s/thread    =                  2039.93
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+IS Benchmark Completed
+Class           =                        C
+Size            =                134217728
+Iterations      =                       10
+Time in seconds =                     1.17
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                  1148.37
+Mop/s/thread    =                   114.84
+Operation type  =              keys ranked
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+LU Benchmark Completed.
+Class           =                        C
+Size            =            162x 162x 162
+Iterations      =                      250
+Time in seconds =                    66.00
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 30893.99
+Mop/s/thread    =                  3089.40
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+MG Benchmark Completed.
+Class           =                        C
+Size            =            512x 512x 512
+Iterations      =                       20
+Time in seconds =                     8.06
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 19324.67
+Mop/s/thread    =                  1932.47
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+SP Benchmark Completed.
+Class           =                        C
+Size            =            162x 162x 162
+Iterations      =                      400
+Time in seconds =                    76.38
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 18984.68
+Mop/s/thread    =                  1898.47
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+UA Benchmark Completed.
+Class           =                        C
+Size            =                        8
+Iterations      =                      200
+Time in seconds =                   131.80
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                    66.62
+Mop/s/thread    =                     6.66
+Operation type  =     coll. point advanced
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+DC Benchmark Completed
+Class           =                        B
+Size            =                 10000000
+Iterations      =                        1
+Time in seconds =                    91.52
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                     6.50
+Mop/s/thread    =                     0.65
+Operation type  =         Tuples generated
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+# --------------------
+BT Benchmark Completed.
+Class           =                        C
+Size            =            162x 162x 162
+Iterations      =                      200
+Time in seconds =                    99.18
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 28900.63
+Mop/s/thread    =                  2890.06
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+CG Benchmark Completed.
+Class           =                        C
+Size            =                   150000
+Iterations      =                       75
+Time in seconds =                    29.94
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                  4787.52
+Mop/s/thread    =                   478.75
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+EP Benchmark Completed.
+Class           =                        D
+Size            =             137438953472
+Iterations      =                        0
+Time in seconds =                   450.96
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                   304.77
+Mop/s/thread    =                    30.48
+Operation type  = Random numbers generated
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+FT Benchmark Completed.
+Class           =                        C
+Size            =            512x 512x 512
+Iterations      =                       20
+Time in seconds =                    19.54
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 20285.84
+Mop/s/thread    =                  2028.58
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+IS Benchmark Completed
+Class           =                        C
+Size            =                134217728
+Iterations      =                       10
+Time in seconds =                     1.15
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                  1163.81
+Mop/s/thread    =                   116.38
+Operation type  =              keys ranked
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+LU Benchmark Completed.
+Class           =                        C
+Size            =            162x 162x 162
+Iterations      =                      250
+Time in seconds =                    84.03
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 24264.83
+Mop/s/thread    =                  2426.48
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+MG Benchmark Completed.
+Class           =                        C
+Size            =            512x 512x 512
+Iterations      =                       20
+Time in seconds =                     8.73
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 17841.41
+Mop/s/thread    =                  1784.14
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+SP Benchmark Completed.
+Class           =                        C
+Size            =            162x 162x 162
+Iterations      =                      400
+Time in seconds =                    77.68
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 18668.60
+Mop/s/thread    =                  1866.86
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+UA Benchmark Completed.
+Class           =                        C
+Size            =                        8
+Iterations      =                      200
+Time in seconds =                   125.85
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                    69.77
+Mop/s/thread    =                     6.98
+Operation type  =     coll. point advanced
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+DC Benchmark Completed
+Class           =                        B
+Size            =                 10000000
+Iterations      =                        1
+Time in seconds =                    93.38
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                     6.37
+Mop/s/thread    =                     0.64
+Operation type  =         Tuples generated
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+# --------------------
+BT Benchmark Completed.
+Class           =                        C
+Size            =            162x 162x 162
+Iterations      =                      200
+Time in seconds =                    96.81
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 29608.43
+Mop/s/thread    =                  2960.84
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+CG Benchmark Completed.
+Class           =                        C
+Size            =                   150000
+Iterations      =                       75
+Time in seconds =                    28.21
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                  5081.72
+Mop/s/thread    =                   508.17
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+EP Benchmark Completed.
+Class           =                        D
+Size            =             137438953472
+Iterations      =                        0
+Time in seconds =                   451.00
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                   304.74
+Mop/s/thread    =                    30.47
+Operation type  = Random numbers generated
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+FT Benchmark Completed.
+Class           =                        C
+Size            =            512x 512x 512
+Iterations      =                       20
+Time in seconds =                    19.36
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 20479.30
+Mop/s/thread    =                  2047.93
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+IS Benchmark Completed
+Class           =                        C
+Size            =                134217728
+Iterations      =                       10
+Time in seconds =                     1.17
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                  1150.16
+Mop/s/thread    =                   115.02
+Operation type  =              keys ranked
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+LU Benchmark Completed.
+Class           =                        C
+Size            =            162x 162x 162
+Iterations      =                      250
+Time in seconds =                    65.90
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 30941.26
+Mop/s/thread    =                  3094.13
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+MG Benchmark Completed.
+Class           =                        C
+Size            =            512x 512x 512
+Iterations      =                       20
+Time in seconds =                     7.99
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 19492.11
+Mop/s/thread    =                  1949.21
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+SP Benchmark Completed.
+Class           =                        C
+Size            =            162x 162x 162
+Iterations      =                      400
+Time in seconds =                    76.07
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 19062.13
+Mop/s/thread    =                  1906.21
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+UA Benchmark Completed.
+Class           =                        C
+Size            =                        8
+Iterations      =                      200
+Time in seconds =                   121.27
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                    72.41
+Mop/s/thread    =                     7.24
+Operation type  =     coll. point advanced
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+DC Benchmark Completed
+Class           =                        B
+Size            =                 10000000
+Iterations      =                        1
+Time in seconds =                    90.94
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                     6.55
+Mop/s/thread    =                     0.65
+Operation type  =         Tuples generated
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+# --------------------
+BT Benchmark Completed.
+Class           =                        C
+Size            =            162x 162x 162
+Iterations      =                      200
+Time in seconds =                    97.47
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 29408.15
+Mop/s/thread    =                  2940.81
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+CG Benchmark Completed.
+Class           =                        C
+Size            =                   150000
+Iterations      =                       75
+Time in seconds =                    27.78
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                  5160.28
+Mop/s/thread    =                   516.03
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+EP Benchmark Completed.
+Class           =                        D
+Size            =             137438953472
+Iterations      =                        0
+Time in seconds =                   450.99
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                   304.75
+Mop/s/thread    =                    30.48
+Operation type  = Random numbers generated
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+FT Benchmark Completed.
+Class           =                        C
+Size            =            512x 512x 512
+Iterations      =                       20
+Time in seconds =                    19.60
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 20227.45
+Mop/s/thread    =                  2022.75
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+IS Benchmark Completed
+Class           =                        C
+Size            =                134217728
+Iterations      =                       10
+Time in seconds =                     1.13
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                  1188.36
+Mop/s/thread    =                   118.84
+Operation type  =              keys ranked
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+LU Benchmark Completed.
+Class           =                        C
+Size            =            162x 162x 162
+Iterations      =                      250
+Time in seconds =                    65.76
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 31004.90
+Mop/s/thread    =                  3100.49
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+MG Benchmark Completed.
+Class           =                        C
+Size            =            512x 512x 512
+Iterations      =                       20
+Time in seconds =                     9.61
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 16198.51
+Mop/s/thread    =                  1619.85
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+SP Benchmark Completed.
+Class           =                        C
+Size            =            162x 162x 162
+Iterations      =                      400
+Time in seconds =                    75.79
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 19134.21
+Mop/s/thread    =                  1913.42
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+UA Benchmark Completed.
+Class           =                        C
+Size            =                        8
+Iterations      =                      200
+Time in seconds =                   121.75
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                    72.12
+Mop/s/thread    =                     7.21
+Operation type  =     coll. point advanced
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+DC Benchmark Completed
+Class           =                        B
+Size            =                 10000000
+Iterations      =                        1
+Time in seconds =                    97.79
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                     6.09
+Mop/s/thread    =                     0.61
+Operation type  =         Tuples generated
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+# --------------------
+BT Benchmark Completed.
+Class           =                        C
+Size            =            162x 162x 162
+Iterations      =                      200
+Time in seconds =                    99.22
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 28887.46
+Mop/s/thread    =                  2888.75
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+CG Benchmark Completed.
+Class           =                        C
+Size            =                   150000
+Iterations      =                       75
+Time in seconds =                    29.21
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                  4907.73
+Mop/s/thread    =                   490.77
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+EP Benchmark Completed.
+Class           =                        D
+Size            =             137438953472
+Iterations      =                        0
+Time in seconds =                   451.12
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                   304.66
+Mop/s/thread    =                    30.47
+Operation type  = Random numbers generated
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+FT Benchmark Completed.
+Class           =                        C
+Size            =            512x 512x 512
+Iterations      =                       20
+Time in seconds =                    19.50
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 20327.26
+Mop/s/thread    =                  2032.73
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+IS Benchmark Completed
+Class           =                        C
+Size            =                134217728
+Iterations      =                       10
+Time in seconds =                     1.14
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                  1180.87
+Mop/s/thread    =                   118.09
+Operation type  =              keys ranked
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+LU Benchmark Completed.
+Class           =                        C
+Size            =            162x 162x 162
+Iterations      =                      250
+Time in seconds =                    72.20
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 28240.05
+Mop/s/thread    =                  2824.00
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+MG Benchmark Completed.
+Class           =                        C
+Size            =            512x 512x 512
+Iterations      =                       20
+Time in seconds =                    10.01
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 15547.03
+Mop/s/thread    =                  1554.70
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+SP Benchmark Completed.
+Class           =                        C
+Size            =            162x 162x 162
+Iterations      =                      400
+Time in seconds =                    75.00
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 19334.20
+Mop/s/thread    =                  1933.42
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+UA Benchmark Completed.
+Class           =                        C
+Size            =                        8
+Iterations      =                      200
+Time in seconds =                   121.05
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                    72.53
+Mop/s/thread    =                     7.25
+Operation type  =     coll. point advanced
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+DC Benchmark Completed
+Class           =                        B
+Size            =                 10000000
+Iterations      =                        1
+Time in seconds =                    97.03
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                     6.13
+Mop/s/thread    =                     0.61
+Operation type  =         Tuples generated
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+# --------------------
+BT Benchmark Completed.
+Class           =                        C
+Size            =            162x 162x 162
+Iterations      =                      200
+Time in seconds =                    96.67
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 29650.79
+Mop/s/thread    =                  2965.08
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+CG Benchmark Completed.
+Class           =                        C
+Size            =                   150000
+Iterations      =                       75
+Time in seconds =                    27.91
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                  5135.30
+Mop/s/thread    =                   513.53
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+EP Benchmark Completed.
+Class           =                        D
+Size            =             137438953472
+Iterations      =                        0
+Time in seconds =                   450.97
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                   304.76
+Mop/s/thread    =                    30.48
+Operation type  = Random numbers generated
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+FT Benchmark Completed.
+Class           =                        C
+Size            =            512x 512x 512
+Iterations      =                       20
+Time in seconds =                    19.55
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 20275.95
+Mop/s/thread    =                  2027.59
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+IS Benchmark Completed
+Class           =                        C
+Size            =                134217728
+Iterations      =                       10
+Time in seconds =                     1.10
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                  1222.75
+Mop/s/thread    =                   122.27
+Operation type  =              keys ranked
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+LU Benchmark Completed.
+Class           =                        C
+Size            =            162x 162x 162
+Iterations      =                      250
+Time in seconds =                    66.26
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 30774.92
+Mop/s/thread    =                  3077.49
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+MG Benchmark Completed.
+Class           =                        C
+Size            =            512x 512x 512
+Iterations      =                       20
+Time in seconds =                     8.03
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 19377.77
+Mop/s/thread    =                  1937.78
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+SP Benchmark Completed.
+Class           =                        C
+Size            =            162x 162x 162
+Iterations      =                      400
+Time in seconds =                    80.16
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 18090.25
+Mop/s/thread    =                  1809.03
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+UA Benchmark Completed.
+Class           =                        C
+Size            =                        8
+Iterations      =                      200
+Time in seconds =                   122.08
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                    71.93
+Mop/s/thread    =                     7.19
+Operation type  =     coll. point advanced
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+DC Benchmark Completed
+Class           =                        B
+Size            =                 10000000
+Iterations      =                        1
+Time in seconds =                    90.53
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                     6.58
+Mop/s/thread    =                     0.66
+Operation type  =         Tuples generated
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+# --------------------
+BT Benchmark Completed.
+Class           =                        C
+Size            =            162x 162x 162
+Iterations      =                      200
+Time in seconds =                    99.39
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 28837.29
+Mop/s/thread    =                  2883.73
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+CG Benchmark Completed.
+Class           =                        C
+Size            =                   150000
+Iterations      =                       75
+Time in seconds =                    30.69
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                  4670.47
+Mop/s/thread    =                   467.05
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+EP Benchmark Completed.
+Class           =                        D
+Size            =             137438953472
+Iterations      =                        0
+Time in seconds =                   450.98
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                   304.76
+Mop/s/thread    =                    30.48
+Operation type  = Random numbers generated
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+FT Benchmark Completed.
+Class           =                        C
+Size            =            512x 512x 512
+Iterations      =                       20
+Time in seconds =                    22.12
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 17916.31
+Mop/s/thread    =                  1791.63
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+IS Benchmark Completed
+Class           =                        C
+Size            =                134217728
+Iterations      =                       10
+Time in seconds =                     1.09
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                  1226.72
+Mop/s/thread    =                   122.67
+Operation type  =              keys ranked
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+LU Benchmark Completed.
+Class           =                        C
+Size            =            162x 162x 162
+Iterations      =                      250
+Time in seconds =                    66.85
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 30501.11
+Mop/s/thread    =                  3050.11
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+MG Benchmark Completed.
+Class           =                        C
+Size            =            512x 512x 512
+Iterations      =                       20
+Time in seconds =                     8.01
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 19432.84
+Mop/s/thread    =                  1943.28
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+SP Benchmark Completed.
+Class           =                        C
+Size            =            162x 162x 162
+Iterations      =                      400
+Time in seconds =                    75.85
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 19118.15
+Mop/s/thread    =                  1911.82
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+UA Benchmark Completed.
+Class           =                        C
+Size            =                        8
+Iterations      =                      200
+Time in seconds =                   123.76
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                    70.95
+Mop/s/thread    =                     7.09
+Operation type  =     coll. point advanced
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+DC Benchmark Completed
+Class           =                        B
+Size            =                 10000000
+Iterations      =                        1
+Time in seconds =                    92.00
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                     6.47
+Mop/s/thread    =                     0.65
+Operation type  =         Tuples generated
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+# --------------------
+BT Benchmark Completed.
+Class           =                        C
+Size            =            162x 162x 162
+Iterations      =                      200
+Time in seconds =                   101.27
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 28303.78
+Mop/s/thread    =                  2830.38
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+CG Benchmark Completed.
+Class           =                        C
+Size            =                   150000
+Iterations      =                       75
+Time in seconds =                    33.14
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                  4325.70
+Mop/s/thread    =                   432.57
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+EP Benchmark Completed.
+Class           =                        D
+Size            =             137438953472
+Iterations      =                        0
+Time in seconds =                   450.99
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                   304.75
+Mop/s/thread    =                    30.47
+Operation type  = Random numbers generated
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+FT Benchmark Completed.
+Class           =                        C
+Size            =            512x 512x 512
+Iterations      =                       20
+Time in seconds =                    20.09
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 19729.03
+Mop/s/thread    =                  1972.90
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+IS Benchmark Completed
+Class           =                        C
+Size            =                134217728
+Iterations      =                       10
+Time in seconds =                     1.06
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                  1270.39
+Mop/s/thread    =                   127.04
+Operation type  =              keys ranked
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+LU Benchmark Completed.
+Class           =                        C
+Size            =            162x 162x 162
+Iterations      =                      250
+Time in seconds =                    65.74
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 31016.48
+Mop/s/thread    =                  3101.65
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+MG Benchmark Completed.
+Class           =                        C
+Size            =            512x 512x 512
+Iterations      =                       20
+Time in seconds =                     8.02
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 19411.23
+Mop/s/thread    =                  1941.12
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+SP Benchmark Completed.
+Class           =                        C
+Size            =            162x 162x 162
+Iterations      =                      400
+Time in seconds =                    75.46
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 19217.57
+Mop/s/thread    =                  1921.76
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+UA Benchmark Completed.
+Class           =                        C
+Size            =                        8
+Iterations      =                      200
+Time in seconds =                   121.16
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                    72.47
+Mop/s/thread    =                     7.25
+Operation type  =     coll. point advanced
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+DC Benchmark Completed
+Class           =                        B
+Size            =                 10000000
+Iterations      =                        1
+Time in seconds =                    93.73
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                     6.35
+Mop/s/thread    =                     0.64
+Operation type  =         Tuples generated
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+# --------------------
+BT Benchmark Completed.
+Class           =                        C
+Size            =            162x 162x 162
+Iterations      =                      200
+Time in seconds =                    99.53
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 28798.06
+Mop/s/thread    =                  2879.81
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+CG Benchmark Completed.
+Class           =                        C
+Size            =                   150000
+Iterations      =                       75
+Time in seconds =                    28.75
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                  4986.75
+Mop/s/thread    =                   498.68
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+EP Benchmark Completed.
+Class           =                        D
+Size            =             137438953472
+Iterations      =                        0
+Time in seconds =                   451.18
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                   304.62
+Mop/s/thread    =                    30.46
+Operation type  = Random numbers generated
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+FT Benchmark Completed.
+Class           =                        C
+Size            =            512x 512x 512
+Iterations      =                       20
+Time in seconds =                    19.43
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 20405.92
+Mop/s/thread    =                  2040.59
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+IS Benchmark Completed
+Class           =                        C
+Size            =                134217728
+Iterations      =                       10
+Time in seconds =                     1.14
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                  1179.96
+Mop/s/thread    =                   118.00
+Operation type  =              keys ranked
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+LU Benchmark Completed.
+Class           =                        C
+Size            =            162x 162x 162
+Iterations      =                      250
+Time in seconds =                    66.02
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 30884.35
+Mop/s/thread    =                  3088.43
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+MG Benchmark Completed.
+Class           =                        C
+Size            =            512x 512x 512
+Iterations      =                       20
+Time in seconds =                    11.51
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 13530.49
+Mop/s/thread    =                  1353.05
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+SP Benchmark Completed.
+Class           =                        C
+Size            =            162x 162x 162
+Iterations      =                      400
+Time in seconds =                    77.10
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                 18809.04
+Mop/s/thread    =                  1880.90
+Operation type  =           floating point
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+UA Benchmark Completed.
+Class           =                        C
+Size            =                        8
+Iterations      =                      200
+Time in seconds =                   125.50
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                    69.96
+Mop/s/thread    =                     7.00
+Operation type  =     coll. point advanced
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+--
+DC Benchmark Completed
+Class           =                        B
+Size            =                 10000000
+Iterations      =                        1
+Time in seconds =                   102.35
+Total threads   =                       10
+Avail threads   =                       10
+Mop/s total     =                     5.82
+Mop/s/thread    =                     0.58
+Operation type  =         Tuples generated
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              28 May 2018
+# --------------------

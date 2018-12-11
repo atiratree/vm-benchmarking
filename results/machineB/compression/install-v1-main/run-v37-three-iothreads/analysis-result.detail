@@ -1,0 +1,191 @@
+# DISTRO=centos
+# IMAGE_FORMAT=qcow2
+# LIBVIRT_URI=qemu:///system
+# RUN_POOL_LOCATION=/home/ansy/images-run
+# SPARSE_IMAGES=no
+# VERBOSE_FILE=/dev/null
+#
+# DATA_FILENAME_COMPRESSED="enwiki-20170820-pages-articles-multistream.xml.bz2"
+# DATA_FILENAME="enwiki-20170820-pages-articles-multistream.xml"
+# DATA_TORRENT="http://itorrents.org/torrent/09EED43E8A9C5E086F3728F66F986CFE3B9FD0DD.torrent"
+# --------------------
+compressing enwiki-20170820-pages-articles-multistream.xml to bz2
+real 3743.97
+user 10959.01
+sys 240.57
+decompressing enwiki-20170820-pages-articles-multistream.xml.bz2
+real 1471.42
+user 3980.77
+sys 13.84
+compressing enwiki-20170820-pages-articles-multistream.xml to gz
+real 1423.85
+user 3584.12
+sys 14.31
+decompressing enwiki-20170820-pages-articles-multistream.xml.gz
+real 1134.43
+user 491.42
+sys 78.76
+done
+# --------------------
+compressing enwiki-20170820-pages-articles-multistream.xml to bz2
+real 3758.54
+user 10999.81
+sys 240.93
+decompressing enwiki-20170820-pages-articles-multistream.xml.bz2
+real 1475.45
+user 3993.38
+sys 13.53
+compressing enwiki-20170820-pages-articles-multistream.xml to gz
+real 1433.35
+user 3600.99
+sys 14.46
+decompressing enwiki-20170820-pages-articles-multistream.xml.gz
+real 1139.81
+user 490.79
+sys 78.97
+done
+# --------------------
+compressing enwiki-20170820-pages-articles-multistream.xml to bz2
+real 3739.39
+user 10943.89
+sys 244.61
+decompressing enwiki-20170820-pages-articles-multistream.xml.bz2
+real 1469.53
+user 3968.32
+sys 13.79
+compressing enwiki-20170820-pages-articles-multistream.xml to gz
+real 1445.48
+user 3604.01
+sys 14.00
+decompressing enwiki-20170820-pages-articles-multistream.xml.gz
+real 1147.46
+user 490.95
+sys 78.89
+done
+# --------------------
+compressing enwiki-20170820-pages-articles-multistream.xml to bz2
+real 3775.16
+user 11053.42
+sys 236.18
+decompressing enwiki-20170820-pages-articles-multistream.xml.bz2
+real 1471.49
+user 3956.75
+sys 14.02
+compressing enwiki-20170820-pages-articles-multistream.xml to gz
+real 1436.62
+user 3614.25
+sys 13.91
+decompressing enwiki-20170820-pages-articles-multistream.xml.gz
+real 1140.33
+user 492.06
+sys 77.02
+done
+# --------------------
+compressing enwiki-20170820-pages-articles-multistream.xml to bz2
+real 3756.06
+user 10995.16
+sys 239.53
+decompressing enwiki-20170820-pages-articles-multistream.xml.bz2
+real 1485.22
+user 3992.22
+sys 13.68
+compressing enwiki-20170820-pages-articles-multistream.xml to gz
+real 1433.13
+user 3603.50
+sys 14.14
+decompressing enwiki-20170820-pages-articles-multistream.xml.gz
+real 1134.71
+user 490.76
+sys 77.25
+done
+# --------------------
+compressing enwiki-20170820-pages-articles-multistream.xml to bz2
+real 3749.46
+user 10979.01
+sys 239.90
+decompressing enwiki-20170820-pages-articles-multistream.xml.bz2
+real 1474.98
+user 3989.85
+sys 13.69
+compressing enwiki-20170820-pages-articles-multistream.xml to gz
+real 1432.28
+user 3591.16
+sys 14.19
+decompressing enwiki-20170820-pages-articles-multistream.xml.gz
+real 1141.25
+user 491.64
+sys 77.25
+done
+# --------------------
+compressing enwiki-20170820-pages-articles-multistream.xml to bz2
+real 3749.23
+user 10956.06
+sys 246.01
+decompressing enwiki-20170820-pages-articles-multistream.xml.bz2
+real 1509.33
+user 4011.63
+sys 13.67
+compressing enwiki-20170820-pages-articles-multistream.xml to gz
+real 1462.18
+user 3575.59
+sys 14.98
+decompressing enwiki-20170820-pages-articles-multistream.xml.gz
+real 1200.99
+user 491.23
+sys 77.52
+done
+# --------------------
+compressing enwiki-20170820-pages-articles-multistream.xml to bz2
+real 3747.40
+user 10967.83
+sys 244.67
+decompressing enwiki-20170820-pages-articles-multistream.xml.bz2
+real 1474.50
+user 3989.60
+sys 13.63
+compressing enwiki-20170820-pages-articles-multistream.xml to gz
+real 1428.27
+user 3584.11
+sys 14.49
+decompressing enwiki-20170820-pages-articles-multistream.xml.gz
+real 1135.74
+user 490.93
+sys 78.59
+done
+# --------------------
+compressing enwiki-20170820-pages-articles-multistream.xml to bz2
+real 3750.74
+user 10979.39
+sys 240.83
+decompressing enwiki-20170820-pages-articles-multistream.xml.bz2
+real 1483.83
+user 3996.86
+sys 13.74
+compressing enwiki-20170820-pages-articles-multistream.xml to gz
+real 1427.05
+user 3579.42
+sys 15.99
+decompressing enwiki-20170820-pages-articles-multistream.xml.gz
+real 1132.30
+user 492.27
+sys 78.16
+done
+# --------------------
+compressing enwiki-20170820-pages-articles-multistream.xml to bz2
+real 3773.36
+user 11043.33
+sys 238.28
+decompressing enwiki-20170820-pages-articles-multistream.xml.bz2
+real 1478.28
+user 3993.40
+sys 13.66
+compressing enwiki-20170820-pages-articles-multistream.xml to gz
+real 1431.72
+user 3579.28
+sys 14.34
+decompressing enwiki-20170820-pages-articles-multistream.xml.gz
+real 1134.89
+user 491.63
+sys 77.00
+done
+# --------------------

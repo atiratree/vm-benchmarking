@@ -1,0 +1,5 @@
+--- /home/ansy/optimization/benchmarking/bin/generated/libvirt.xml.4-native-thread.preparing    2018-05-22 02:04:19.272190060 +0200
++++ /home/ansy/optimization/benchmarking/bin/generated/libvirt.xml.4-native-thread      2018-05-22 02:06:13.374493372 +0200
+@@ -18 +18 @@
+-      <driver name='qemu' type='qcow2'/>
++      <driver name='qemu' type='qcow2' io='native' cache='directsync'/>

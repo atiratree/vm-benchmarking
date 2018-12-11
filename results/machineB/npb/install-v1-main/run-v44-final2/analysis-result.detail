@@ -1,0 +1,160 @@
+# DISTRO=centos
+# IMAGE_FORMAT=qcow2
+# LIBVIRT_URI=qemu:///system
+# RUN_POOL_LOCATION=/home/ansy/images-run
+# SPARSE_IMAGES=no
+# VERBOSE_FILE=/dev/null
+#
+# BT=C
+# CG=C
+# DC=B
+# EP=D
+# FFLAGS=""
+# FT=C
+# IS=C
+# LU=C
+# MG=C
+# SP=C
+# THREADS=3
+# UA=C
+# --------------------
+DC Benchmark Completed
+Class           =                        B
+Size            =                 10000000
+Iterations      =                        1
+Time in seconds =                   432.86
+Total threads   =                        3
+Avail threads   =                        3
+Mop/s total     =                     1.38
+Mop/s/thread    =                     0.46
+Operation type  =         Tuples generated
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              24 May 2018
+# --------------------
+DC Benchmark Completed
+Class           =                        B
+Size            =                 10000000
+Iterations      =                        1
+Time in seconds =                   435.82
+Total threads   =                        3
+Avail threads   =                        3
+Mop/s total     =                     1.37
+Mop/s/thread    =                     0.46
+Operation type  =         Tuples generated
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              24 May 2018
+# --------------------
+DC Benchmark Completed
+Class           =                        B
+Size            =                 10000000
+Iterations      =                        1
+Time in seconds =                   437.59
+Total threads   =                        3
+Avail threads   =                        3
+Mop/s total     =                     1.36
+Mop/s/thread    =                     0.45
+Operation type  =         Tuples generated
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              24 May 2018
+# --------------------
+DC Benchmark Completed
+Class           =                        B
+Size            =                 10000000
+Iterations      =                        1
+Time in seconds =                   438.26
+Total threads   =                        3
+Avail threads   =                        3
+Mop/s total     =                     1.36
+Mop/s/thread    =                     0.45
+Operation type  =         Tuples generated
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              24 May 2018
+# --------------------
+DC Benchmark Completed
+Class           =                        B
+Size            =                 10000000
+Iterations      =                        1
+Time in seconds =                   441.09
+Total threads   =                        3
+Avail threads   =                        3
+Mop/s total     =                     1.35
+Mop/s/thread    =                     0.45
+Operation type  =         Tuples generated
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              24 May 2018
+# --------------------
+DC Benchmark Completed
+Class           =                        B
+Size            =                 10000000
+Iterations      =                        1
+Time in seconds =                   442.43
+Total threads   =                        3
+Avail threads   =                        3
+Mop/s total     =                     1.35
+Mop/s/thread    =                     0.45
+Operation type  =         Tuples generated
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              24 May 2018
+# --------------------
+DC Benchmark Completed
+Class           =                        B
+Size            =                 10000000
+Iterations      =                        1
+Time in seconds =                   439.88
+Total threads   =                        3
+Avail threads   =                        3
+Mop/s total     =                     1.35
+Mop/s/thread    =                     0.45
+Operation type  =         Tuples generated
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              24 May 2018
+# --------------------
+DC Benchmark Completed
+Class           =                        B
+Size            =                 10000000
+Iterations      =                        1
+Time in seconds =                   438.73
+Total threads   =                        3
+Avail threads   =                        3
+Mop/s total     =                     1.36
+Mop/s/thread    =                     0.45
+Operation type  =         Tuples generated
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              24 May 2018
+# --------------------
+DC Benchmark Completed
+Class           =                        B
+Size            =                 10000000
+Iterations      =                        1
+Time in seconds =                   435.81
+Total threads   =                        3
+Avail threads   =                        3
+Mop/s total     =                     1.37
+Mop/s/thread    =                     0.46
+Operation type  =         Tuples generated
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              24 May 2018
+# --------------------
+DC Benchmark Completed
+Class           =                        B
+Size            =                 10000000
+Iterations      =                        1
+Time in seconds =                   441.96
+Total threads   =                        3
+Avail threads   =                        3
+Mop/s total     =                     1.35
+Mop/s/thread    =                     0.45
+Operation type  =         Tuples generated
+Verification    =               SUCCESSFUL
+Version         =                    3.3.1
+Compile date    =              24 May 2018
+# --------------------

@@ -1,0 +1,7 @@
+--- /home/ansy/optimization/benchmarking/bin/generated/libvirt.xml.3-one-iothread.preparing     2018-05-22 02:07:03.305501467 +0200
++++ /home/ansy/optimization/benchmarking/bin/generated/libvirt.xml.3-one-iothread       2018-05-22 02:08:05.676760892 +0200
+@@ -14,0 +15 @@
++  <iothreads>1</iothreads>
+@@ -18 +19 @@
+-      <driver name='qemu' type='qcow2'/>
++      <driver name='qemu' type='qcow2' io='threads'/>

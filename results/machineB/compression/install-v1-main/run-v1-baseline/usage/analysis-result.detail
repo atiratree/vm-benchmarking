@@ -1,0 +1,29 @@
+# DISTRO=centos
+# IMAGE_FORMAT=qcow2
+# LIBVIRT_URI=qemu:///system
+# RUN_POOL_LOCATION=/home/ansy/images-run
+# SPARSE_IMAGES=no
+# VERBOSE_FILE=/dev/null
+#
+# DATA_FILENAME_COMPRESSED="enwiki-20170820-pages-articles-multistream.xml.bz2"
+# DATA_FILENAME="enwiki-20170820-pages-articles-multistream.xml"
+# DATA_TORRENT="http://itorrents.org/torrent/09EED43E8A9C5E086F3728F66F986CFE3B9FD0DD.torrent"
+# --------------------
+compressing enwiki-20170820-pages-articles-multistream.xml to bz2
+real 3877.92
+user 11219.13
+sys 281.52
+decompressing enwiki-20170820-pages-articles-multistream.xml.bz2
+real 1607.95
+user 4252.91
+sys 14.39
+compressing enwiki-20170820-pages-articles-multistream.xml to gz
+real 1385.11
+user 3603.08
+sys 19.61
+decompressing enwiki-20170820-pages-articles-multistream.xml.gz
+real 983.76
+user 506.20
+sys 71.38
+done
+# --------------------

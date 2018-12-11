@@ -1,0 +1,26 @@
+# DISTRO=centos
+# IMAGE_FORMAT=qcow2
+# LIBVIRT_URI=qemu:///system
+# RUN_POOL_LOCATION=/home/ansy/images-run
+# SPARSE_IMAGES=no
+# VERBOSE_FILE=/dev/null
+#
+# APACHE_MAVEN_MIRROR="http://apache.miloslavbrada.cz/maven/maven-3/3.5.3/binaries/apache-maven-3.5.3-bin.tar.gz"
+# APACHE_MAVEN_VERSION="3.5.3"
+# IPV4_TCP_FIN_TIMEOUT=5
+# JAVA_MAX_MEM=5g
+# JAVA_MIN_MEM=1g
+# JAVA_MIN_METASPACE_MEM=256m
+# QUOTES=15000
+# USERS=2000
+# --------------------
+# --------------------
+# --------------------
+# --------------------
+# --------------------
+# --------------------
+# --------------------
+# --------------------
+# --------------------
+# --------------------
+# --------------------

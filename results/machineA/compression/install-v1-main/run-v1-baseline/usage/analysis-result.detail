@@ -1,0 +1,22 @@
+# DATA_FILENAME_COMPRESSED="enwiki-20170820-pages-articles-multistream.xml.bz2"
+# DATA_FILENAME="enwiki-20170820-pages-articles-multistream.xml"
+# DATA_TORRENT="http://itorrents.org/torrent/09EED43E8A9C5E086F3728F66F986CFE3B9FD0DD.torrent"
+# --------------------
+compressing enwiki-20170820-pages-articles-multistream.xml to bz2
+real 745.74
+user 6754.92
+sys 114.61
+decompressing enwiki-20170820-pages-articles-multistream.xml.bz2
+real 230.86
+user 2100.10
+sys 28.30
+compressing enwiki-20170820-pages-articles-multistream.xml to gz
+real 257.51
+user 2490.67
+sys 36.17
+decompressing enwiki-20170820-pages-articles-multistream.xml.gz
+real 250.57
+user 310.94
+sys 48.86
+done
+# --------------------

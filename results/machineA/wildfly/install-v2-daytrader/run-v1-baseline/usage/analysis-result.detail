@@ -1,0 +1,16 @@
+# DISTRO=centos
+# IMAGE_FORMAT=qcow2
+# IMAGES_CACHE_LOCATION=/home/ansy/images-cache
+# LIBVIRT_URI=qemu:///system
+# RUN_POOL_LOCATION=/home/ansy/images-run
+# SPARSE_IMAGES=no
+# VERBOSE_FILE=/dev/null
+#
+# IPV4_TCP_FIN_TIMEOUT=5
+# JAVA_MAX_MEM=100g
+# JAVA_MIN_MEM=4g
+# JAVA_MIN_METASPACE_MEM=2g
+# QUOTES=15000
+# USERS=2000
+# --------------------
+# --------------------
